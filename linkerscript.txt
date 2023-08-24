@@ -1,0 +1,31 @@
+ENTRY(_start)
+SECTIONS {
+    . = 0x8000;
+    _start_text = . ;
+    .text : {
+        *(.text)
+    }
+    _end_text = .;
+    . = ALIGN(4096);
+    _start_rodata = .;
+    .rodata : {
+        *(.rodata*)
+        *(.rdata*)
+        *(.constdata*)
+    }
+    _end_rodata = .;
+    . = ALIGN(4096);
+    _start_data = .;
+    .data : {
+        *(.data)
+    }
+    _end_data = .;
+    . = ALIGN(4096);
+    _start_bss = .;
+    .bss : {
+        *(.bss)
+        *(COMMON);
+    }
+    _end_bss = .;
+    . = ALIGN(4096);
+}

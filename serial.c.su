@@ -1,0 +1,2 @@
+serial.c:5:serial_init	0	static
+serial.c:9:serial_putc	4	static
