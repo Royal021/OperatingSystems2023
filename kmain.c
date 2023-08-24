@@ -1,3 +1,4 @@
+
 __asm__(
     ".global _start\n"
     "_start:\n"
@@ -7,17 +8,14 @@ __asm__(
 
 #include "serial.h"
 #include "utils.h"
+#include "console.h"
+#include "kprintf.h"
 
 
 void kmain(){
     bss_init();
     serial_init();
-    serial_putc('H');
-    serial_putc('e');
-    serial_putc('l');
-    serial_putc('l');
-    serial_putc('o');
-    serial_putc('\n');
+    kprintf("We the People of the United States\n");
     while(1){
     }
 }
