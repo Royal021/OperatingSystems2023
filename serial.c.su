@@ -1,2 +1,2 @@
-serial.c:5:serial_init	0	static
-serial.c:9:serial_putc	4	static
+serial.c:29:serial_init	0	static
+serial.c:50:serial_putc	4	static

@@ -3,17 +3,26 @@
     8000        0        0     1 _start_text = .
     8000     8000       10     4 .ARM.exidx
     8000     8000       10     4         <internal>:(.ARM.exidx)
-    8010     8010       24     4 .text
-    8010     8010       10     4         kmain.c.o:(.text)
+    8010     8010      1a0     4 .text
+    8010     8010       58     4         kmain.c.o:(.text)
     8010     8010        0     1                 $a.0
     8010     8010        0     1                 _start
-    8018     8018        8     1                 kmain
-    8020     8020       14     4         serial.c.o:(.text)
-    8020     8020        0     1                 $a.0
-    8020     8020        4     1                 serial_init
-    8024     8024       10     1                 serial_putc
-    8034     8034        0     1 _end_text = .
-    8034     8034      fcc     1 . = ALIGN ( 4096 )
+    8018     8018       50     1                 kmain
+    8068     8068       94     4         serial.c.o:(.text)
+    8068     8068        0     1                 $a.0
+    8068     8068       54     1                 serial_init
+    80ac     80ac        0     1                 $d.1
+    80bc     80bc        0     1                 $a.2
+    80bc     80bc       40     1                 serial_putc
+    80f4     80f4        0     1                 $d.3
+    80fc     80fc       b4     4         utils.c.o:(.text)
+    80fc     80fc        0     1                 $a.0
+    80fc     80fc       48     1                 bss_init
+    813c     813c        0     1                 $d.1
+    8144     8144        0     1                 $a.2
+    8144     8144       6c     1                 kmemset
+    81b0     81b0        0     1 _end_text = .
+    81b0     81b0      e50     1 . = ALIGN ( 4096 )
     9000     9000        0     1 _start_rodata = .
     9000     9000        0     1 _end_rodata = .
     9000     9000        0     1 . = ALIGN ( 4096 )
@@ -23,13 +32,15 @@
     9000     9000        0     1 _start_bss = .
     9000     9000        0     1 _end_bss = .
     9000     9000        0     1 . = ALIGN ( 4096 )
+    9000     9000        8     4 .got
+    9000     9000        8     4         <internal>:(.got)
        0        0       29     1 .comment
        0        0       29     1         <internal>:(.comment)
        0        0       4a     1 .ARM.attributes
        0        0       4a     1         kmain.c.o:(.ARM.attributes)
-       0        0      110     4 .symtab
-       0        0      110     4         <internal>:(.symtab)
-       0        0       45     1 .shstrtab
-       0        0       45     1         <internal>:(.shstrtab)
-       0        0       9b     1 .strtab
-       0        0       9b     1         <internal>:(.strtab)
+       0        0      1a0     4 .symtab
+       0        0      1a0     4         <internal>:(.symtab)
+       0        0       4a     1 .shstrtab
+       0        0       4a     1         <internal>:(.shstrtab)
+       0        0       d2     1 .strtab
+       0        0       d2     1         <internal>:(.strtab)

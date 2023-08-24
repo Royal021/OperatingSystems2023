@@ -6,8 +6,11 @@ __asm__(
 );
 
 #include "serial.h"
+#include "utils.h"
+
 
 void kmain(){
+    bss_init();
     serial_init();
     serial_putc('H');
     serial_putc('e');
