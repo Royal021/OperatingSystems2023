@@ -4,4 +4,4 @@
 #include "utils.h"
 
 void video_init();
-void video_draw_character(char ch, unsigned x, unsigned y);
+void video_draw_character(unsigned char ch, unsigned x, unsigned y);

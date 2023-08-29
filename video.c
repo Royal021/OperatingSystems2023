@@ -114,7 +114,7 @@ void video_set_pixel( unsigned x, unsigned y, struct Pixel pix)
         return;
 
     // go to start of row that we are drawing into
-    volatile struct Pixel* row = (volatile struct u8*)(framebuffer + y * pitch);
+    volatile struct Pixel* row = (volatile struct Pixel*)(framebuffer + y * pitch);
     
     row[x] = pix;
 }
@@ -127,7 +127,7 @@ void video_set_pixel( unsigned x, unsigned y, struct Pixel pix)
 
 
 
-void video_draw_character(char ch, unsigned x, unsigned y)
+void video_draw_character(unsigned char ch, unsigned x, unsigned y)
 {
     for(unsigned row=0; row<CHAR_HEIGHT;++row)
     {
