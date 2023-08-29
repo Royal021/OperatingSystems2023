@@ -1,3 +1,4 @@
+#include "memory.h"
 void memory_barrier()
 {
     __asm__ volatile (

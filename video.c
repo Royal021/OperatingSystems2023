@@ -1,6 +1,7 @@
 #include "utils.h"
 #include "video.h"
 #include "etec3701_10x20.h"
+#include "memory.h"
 
 #define VIDEO_MAILBOX  (PERIPHERAL_BASE + 0x0000b880)
 #define VIDEO_STATUS   ( (volatile u32*)(VIDEO_MAILBOX+0x18) )
@@ -69,7 +70,7 @@ struct Pixel backgroundColor;
 
 void video_init()
 {
-    struct FBInfo f;
+    struct FBInfo f __attribute__((aligned(16)));
     f.width = WIDTH; 
     f.height = HEIGHT;
     f.virtualWidth = f.width;
@@ -78,7 +79,7 @@ void video_init()
     f.pitch = 0;
     f.xoffset = 0;
     f.yoffset = 0;
-    f.pointer = NULL;
+    f.pointer = 0;
     f.size = 0;
 
     foregroundColor.r = 255;
@@ -89,16 +90,18 @@ void video_init()
     backgroundColor.g = 1;
     backgroundColor.b = 1;
 
-    running = true;
+    int running = 1;
     while(running)
     {
-        mailbox_write(1, f.pointer);
-        if(mailbox_read(1) ==0 && f.pointer != NULL)
+        unsigned write_address = (unsigned)&f;
+        
+        mailbox_write(1, write_address>>4);
+        if(mailbox_read(1) ==0 && f.pointer != 0)
         {
-            running=false;
+            running=0;
         }
     }
-    framebuffer = (struct Pixel*) f.pointer;
+    framebuffer = (struct u8*) f.pointer;
     pitch = f.pitch;
 } 
 
@@ -111,7 +114,7 @@ void video_set_pixel( unsigned x, unsigned y, struct Pixel pix)
         return;
 
     // go to start of row that we are drawing into
-    volatile struct Pixel* row = (volatile struct Pixel*)(framebuffer + y * pitch);
+    volatile struct Pixel* row = (volatile struct u8*)(framebuffer + y * pitch);
     
     row[x] = pix;
 }

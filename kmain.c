@@ -11,14 +11,14 @@ __asm__(
 #include "console.h"
 #include "kprintf.h"
 #include "video.h"
-#include "memory.c"
+#include "memory.h"
 
 
 void kmain(){
     bss_init();
     serial_init();
     video_init();
-    
+    video_draw_character('W', 100,200);
     kprintf("We the People of the United States\n");
     while(1){
     }
