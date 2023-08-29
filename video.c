@@ -62,7 +62,7 @@ static u32 mailbox_read(u32 channel){
 }
 
 
-static volatile struct u8* framebuffer;
+static volatile u8* framebuffer;
 static u32 pitch;
 
 struct Pixel foregroundColor;
@@ -101,7 +101,7 @@ void video_init()
             running=0;
         }
     }
-    framebuffer = (struct u8*) f.pointer;
+    framebuffer = ( u8*) f.pointer;
     pitch = f.pitch;
 } 
 

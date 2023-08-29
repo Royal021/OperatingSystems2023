@@ -1,117 +1,144 @@
      VMA      LMA     Size Align Out     In      Symbol
        0        0     8000     1 . = 0x8000
     8000        0        0     1 _start_text = .
-    8000     8000     2e28     4 .text
-    8000     8000       30     4         kmain.c.o:(.text)
+    8000     8000     3244     4 .text
+    8000     8000       44     4         kmain.c.o:(.text)
     8000     8000        0     1                 $a.0
     8000     8000        0     1                 _start
-    8008     8008       28     1                 kmain
-    802c     802c        0     1                 $d.1
-    8030     8030       94     4         serial.c.o:(.text)
-    8030     8030        0     1                 $a.0
-    8030     8030       54     1                 serial_init
-    8074     8074        0     1                 $d.1
-    8084     8084        0     1                 $a.2
-    8084     8084       40     1                 serial_putc
-    80bc     80bc        0     1                 $d.3
-    80c4     80c4       b4     4         utils.c.o:(.text)
-    80c4     80c4        0     1                 $a.0
-    80c4     80c4       48     1                 bss_init
-    8104     8104        0     1                 $d.1
-    810c     810c        0     1                 $a.2
-    810c     810c       6c     1                 kmemset
-    8178     8178       20     4         console.c.o:(.text)
-    8178     8178        0     1                 $a.0
-    8178     8178       20     1                 console_putc
-    8198     8198     2c90     4         kprintf.c.o:(.text)
-    8198     8198        0     1                 $a.0
-    8198     8198       3c     1                 stbsp_set_separators
-    81cc     81cc        0     1                 $d.1
-    81d4     81d4        0     1                 $a.2
-    81d4     81d4     2178     1                 stbsp_vsprintfcb
-    8418     8418        0     1                 $d.3
-    8518     8518        0     1                 $a.4
-    8800     8800        0     1                 $d.5
-    88c8     88c8        0     1                 $a.6
-    8a38     8a38        0     1                 $d.7
-    8b18     8b18        0     1                 $a.8
-    92fc     92fc        0     1                 $d.9
-    9308     9308        0     1                 $a.10
-    9b3c     9b3c        0     1                 $d.11
-    9b40     9b40        0     1                 $a.12
-    9c18     9c18        0     1                 $d.13
-    9c1c     9c1c        0     1                 $a.14
-    9c50     9c50        0     1                 $d.15
-    9c58     9c58        0     1                 $a.16
-    9cd4     9cd4        0     1                 $d.17
-    9cd8     9cd8        0     1                 $a.18
-    9d0c     9d0c        0     1                 $d.19
-    9d14     9d14        0     1                 $a.20
-    9f44     9f44        0     1                 $d.21
-    9f48     9f48        0     1                 $a.22
-    a0c4     a0c4        0     1                 $d.23
-    a0c8     a0c8        0     1                 $a.24
-    a170     a170        0     1                 $d.25
-    a174     a174        0     1                 $a.26
-    a1dc     a1dc        0     1                 $d.27
-    a1e0     a1e0        0     1                 $a.28
-    a314     a314        0     1                 $d.29
-    a318     a318        0     1                 $a.30
-    a340     a340        0     1                 $d.31
-    a34c     a34c      168     1                 stbsp__strlen_limited
-    a34c     a34c        0     1                 $a.32
-    a4ac     a4ac        0     1                 $d.33
-    a4b4     a4b4       f8     1                 mod64
-    a4b4     a4b4        0     1                 $a.34
-    a5ac     a5ac      128     1                 div64
-    a6d4     a6d4       ac     1                 mod
-    a780     a780       c8     1                 div
-    a848     a848       ac     1                 stbsp__lead_sign
-    a8f4     a8f4       60     1                 stbsp_sprintf
-    a954     a954      114     1                 stbsp_vsnprintf
-    aa60     aa60        0     1                 $d.35
-    aa68     aa68       3c     1                 stbsp__count_clamp_callback
-    aa68     aa68        0     1                 $a.36
-    aaa4     aaa4      17c     1                 stbsp__clamp_callback
-    ac20     ac20       54     1                 stbsp_snprintf
-    ac74     ac74       40     1                 stbsp_vsprintf
-    acb4     acb4       68     1                 kprintf
-    ad18     ad18        0     1                 $d.37
-    ad1c     ad1c       68     1                 callback
-    ad1c     ad1c        0     1                 $a.38
-    ad84     ad84       50     1                 ksprintf
-    add4     add4       54     1                 ksnprintf
-    ae28     ae28        0     1 _end_text = .
-    ae28     ae28       10     4 .ARM.exidx
-    ae28     ae28       10     4         <internal>:(.ARM.exidx)
-    ae38     ae38      1c8     1 . = ALIGN ( 4096 )
-    b000     b000        0     1 _start_rodata = .
-    b000     b000       32     1 .rodata
-    b000     b000       32     1         <internal>:(.rodata)
-    b032     b032        0     1 _end_rodata = .
-    b034     b034        8     4 .got
-    b034     b034        8     4         <internal>:(.got)
-    b03c     b03c      fc4     1 . = ALIGN ( 4096 )
-    c000     c000        0     1 _start_data = .
-    c000     c000       f4     2 .data
-    c000     c000       f4     2         kprintf.c.o:(.data)
-    c000     c000        1     1                 stbsp__period
-    c001     c001        1     1                 stbsp__comma
-    c002     c002       13     1                 stbsp_vsprintfcb.hex
-    c015     c015       13     1                 stbsp_vsprintfcb.hexu
-    c028     c028       cc     1                 stbsp__digitpair
-    c0f4     c0f4        0     1 _end_data = .
-    c0f4     c0f4      f0c     1 . = ALIGN ( 4096 )
-    d000     d000        0     1 _start_bss = .
-    d000     d000        0     1 _end_bss = .
-    d000     d000        0     1 . = ALIGN ( 4096 )
+    8008     8008       3c     1                 kmain
+    8040     8040        0     1                 $d.1
+    8044     8044       94     4         serial.c.o:(.text)
+    8044     8044        0     1                 $a.0
+    8044     8044       54     1                 serial_init
+    8088     8088        0     1                 $d.1
+    8098     8098        0     1                 $a.2
+    8098     8098       40     1                 serial_putc
+    80d0     80d0        0     1                 $d.3
+    80d8     80d8       b4     4         utils.c.o:(.text)
+    80d8     80d8        0     1                 $a.0
+    80d8     80d8       48     1                 bss_init
+    8118     8118        0     1                 $d.1
+    8120     8120        0     1                 $a.2
+    8120     8120       6c     1                 kmemset
+    818c     818c       20     4         console.c.o:(.text)
+    818c     818c        0     1                 $a.0
+    818c     818c       20     1                 console_putc
+    81ac     81ac     2c90     4         kprintf.c.o:(.text)
+    81ac     81ac        0     1                 $a.0
+    81ac     81ac       3c     1                 stbsp_set_separators
+    81e0     81e0        0     1                 $d.1
+    81e8     81e8        0     1                 $a.2
+    81e8     81e8     2178     1                 stbsp_vsprintfcb
+    842c     842c        0     1                 $d.3
+    852c     852c        0     1                 $a.4
+    8814     8814        0     1                 $d.5
+    88dc     88dc        0     1                 $a.6
+    8a4c     8a4c        0     1                 $d.7
+    8b2c     8b2c        0     1                 $a.8
+    9310     9310        0     1                 $d.9
+    931c     931c        0     1                 $a.10
+    9b50     9b50        0     1                 $d.11
+    9b54     9b54        0     1                 $a.12
+    9c2c     9c2c        0     1                 $d.13
+    9c30     9c30        0     1                 $a.14
+    9c64     9c64        0     1                 $d.15
+    9c6c     9c6c        0     1                 $a.16
+    9ce8     9ce8        0     1                 $d.17
+    9cec     9cec        0     1                 $a.18
+    9d20     9d20        0     1                 $d.19
+    9d28     9d28        0     1                 $a.20
+    9f58     9f58        0     1                 $d.21
+    9f5c     9f5c        0     1                 $a.22
+    a0d8     a0d8        0     1                 $d.23
+    a0dc     a0dc        0     1                 $a.24
+    a184     a184        0     1                 $d.25
+    a188     a188        0     1                 $a.26
+    a1f0     a1f0        0     1                 $d.27
+    a1f4     a1f4        0     1                 $a.28
+    a328     a328        0     1                 $d.29
+    a32c     a32c        0     1                 $a.30
+    a354     a354        0     1                 $d.31
+    a360     a360      168     1                 stbsp__strlen_limited
+    a360     a360        0     1                 $a.32
+    a4c0     a4c0        0     1                 $d.33
+    a4c8     a4c8       f8     1                 mod64
+    a4c8     a4c8        0     1                 $a.34
+    a5c0     a5c0      128     1                 div64
+    a6e8     a6e8       ac     1                 mod
+    a794     a794       c8     1                 div
+    a85c     a85c       ac     1                 stbsp__lead_sign
+    a908     a908       60     1                 stbsp_sprintf
+    a968     a968      114     1                 stbsp_vsnprintf
+    aa74     aa74        0     1                 $d.35
+    aa7c     aa7c       3c     1                 stbsp__count_clamp_callback
+    aa7c     aa7c        0     1                 $a.36
+    aab8     aab8      17c     1                 stbsp__clamp_callback
+    ac34     ac34       54     1                 stbsp_snprintf
+    ac88     ac88       40     1                 stbsp_vsprintf
+    acc8     acc8       68     1                 kprintf
+    ad2c     ad2c        0     1                 $d.37
+    ad30     ad30       68     1                 callback
+    ad30     ad30        0     1                 $a.38
+    ad98     ad98       50     1                 ksprintf
+    ade8     ade8       54     1                 ksnprintf
+    ae3c     ae3c      3f4     4         video.c.o:(.text)
+    ae3c     ae3c        0     1                 $a.0
+    ae3c     ae3c      120     1                 video_init
+    af4c     af4c        0     1                 $d.1
+    af5c     af5c       64     1                 mailbox_write
+    af5c     af5c        0     1                 $a.2
+    afb8     afb8        0     1                 $d.3
+    afc0     afc0       80     1                 mailbox_read
+    afc0     afc0        0     1                 $a.4
+    b038     b038        0     1                 $d.5
+    b040     b040        0     1                 $a.6
+    b040     b040       9c     1                 video_set_pixel
+    b0d4     b0d4        0     1                 $d.7
+    b0dc     b0dc        0     1                 $a.8
+    b0dc     b0dc      154     1                 video_draw_character
+    b224     b224        0     1                 $d.9
+    b230     b230       14     4         memory.c.o:(.text)
+    b230     b230        0     1                 $a.0
+    b230     b230       14     1                 memory_barrier
+    b244     b244        0     1 _end_text = .
+    b244     b244       10     4 .ARM.exidx
+    b244     b244       10     4         <internal>:(.ARM.exidx)
+    b254     b254      dac     1 . = ALIGN ( 4096 )
+    c000     c000        0     1 _start_rodata = .
+    c000     c000     5034     4 .rodata
+    c000     c000       32     1         <internal>:(.rodata)
+    c034     c034     5000     4         video.c.o:(.rodata)
+    c034     c034     5000     1                 font_data
+   11034    11034        0     1 _end_rodata = .
+   11034    11034       10     4 .got
+   11034    11034       10     4         <internal>:(.got)
+   11044    11044      fbc     1 . = ALIGN ( 4096 )
+   12000    12000        0     1 _start_data = .
+   12000    12000       f4     2 .data
+   12000    12000       f4     2         kprintf.c.o:(.data)
+   12000    12000        1     1                 stbsp__period
+   12001    12001        1     1                 stbsp__comma
+   12002    12002       13     1                 stbsp_vsprintfcb.hex
+   12015    12015       13     1                 stbsp_vsprintfcb.hexu
+   12028    12028       cc     1                 stbsp__digitpair
+   120f4    120f4        0     1 _end_data = .
+   120f4    120f4      f0c     1 . = ALIGN ( 4096 )
+   13000    13000        0     1 _start_bss = .
+   13000    13000       10     4 .bss
+   13000    13000       10     4         video.c.o:(.bss)
+   13000    13000        3     1                 foregroundColor
+   13003    13003        3     1                 backgroundColor
+   13008    13008        4     1                 framebuffer
+   1300c    1300c        4     1                 pitch
+   13010    13010        0     1 _end_bss = .
+   13010    13010      ff0     1 . = ALIGN ( 4096 )
        0        0       29     1 .comment
        0        0       29     1         <internal>:(.comment)
        0        0       4a     1 .ARM.attributes
        0        0       4a     1         kmain.c.o:(.ARM.attributes)
-       0        0      5d0     4 .symtab
-       0        0      5d0     4         <internal>:(.symtab)
-       0        0       58     1 .shstrtab
-       0        0       58     1         <internal>:(.shstrtab)
-       0        0      327     1 .strtab
-       0        0      327     1         <internal>:(.strtab)
+       0        0      750     4 .symtab
+       0        0      750     4         <internal>:(.symtab)
+       0        0       5d     1 .shstrtab
+       0        0       5d     1         <internal>:(.shstrtab)
+       0        0      405     1 .strtab
+       0        0      405     1         <internal>:(.strtab)
