@@ -1,7 +1,7 @@
      VMA      LMA     Size Align Out     In      Symbol
        0        0     8000     1 . = 0x8000
     8000        0        0     1 _start_text = .
-    8000     8000     352c     4 .text
+    8000     8000     3528     4 .text
     8000     8000      328     4         kmain.c.o:(.text)
     8000     8000        0     1                 $a.0
     8000     8000        0     1                 _start
@@ -81,29 +81,29 @@
     b014     b014        0     1                 $a.38
     b07c     b07c       50     1                 ksprintf
     b0cc     b0cc       54     1                 ksnprintf
-    b120     b120      3f8     4         video.c.o:(.text)
+    b120     b120      3f4     4         video.c.o:(.text)
     b120     b120        0     1                 $a.0
-    b120     b120      124     1                 video_init
-    b234     b234        0     1                 $d.1
-    b244     b244       64     1                 mailbox_write
-    b244     b244        0     1                 $a.2
-    b2a0     b2a0        0     1                 $d.3
-    b2a8     b2a8       80     1                 mailbox_read
-    b2a8     b2a8        0     1                 $a.4
-    b320     b320        0     1                 $d.5
-    b328     b328        0     1                 $a.6
-    b328     b328       9c     1                 video_set_pixel
-    b3bc     b3bc        0     1                 $d.7
-    b3c4     b3c4        0     1                 $a.8
-    b3c4     b3c4      154     1                 video_draw_character
-    b50c     b50c        0     1                 $d.9
-    b518     b518       14     4         memory.c.o:(.text)
-    b518     b518        0     1                 $a.0
-    b518     b518       14     1                 memory_barrier
-    b52c     b52c        0     1 _end_text = .
-    b52c     b52c       10     4 .ARM.exidx
-    b52c     b52c       10     4         <internal>:(.ARM.exidx)
-    b53c     b53c      ac4     1 . = ALIGN ( 4096 )
+    b120     b120      120     1                 video_init
+    b230     b230        0     1                 $d.1
+    b240     b240       64     1                 mailbox_write
+    b240     b240        0     1                 $a.2
+    b29c     b29c        0     1                 $d.3
+    b2a4     b2a4       80     1                 mailbox_read
+    b2a4     b2a4        0     1                 $a.4
+    b31c     b31c        0     1                 $d.5
+    b324     b324        0     1                 $a.6
+    b324     b324       9c     1                 video_set_pixel
+    b3b8     b3b8        0     1                 $d.7
+    b3c0     b3c0        0     1                 $a.8
+    b3c0     b3c0      154     1                 video_draw_character
+    b508     b508        0     1                 $d.9
+    b514     b514       14     4         memory.c.o:(.text)
+    b514     b514        0     1                 $a.0
+    b514     b514       14     1                 memory_barrier
+    b528     b528        0     1 _end_text = .
+    b528     b528       10     4 .ARM.exidx
+    b528     b528       10     4         <internal>:(.ARM.exidx)
+    b538     b538      ac8     1 . = ALIGN ( 4096 )
     c000     c000        0     1 _start_rodata = .
     c000     c000     5018     4 .rodata
     c000     c000       16     1         <internal>:(.rodata)
