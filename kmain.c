@@ -14,7 +14,7 @@ __asm__(
 #include "memory.h"
 
 
-
+//extern void sweet();
 
 void kmain(){
     bss_init();
@@ -51,6 +51,7 @@ void kmain(){
     video_draw_character('t', start_X+cw*31, start_Y);
     video_draw_character('e', start_X+cw*32, start_Y);
     video_draw_character('s', start_X+cw*33, start_Y); 
+    //run suite
     kprintf("\n");
     kprintf("DONE\n");
     while(1){
