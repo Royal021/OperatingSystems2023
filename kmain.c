@@ -6,6 +6,7 @@ __asm__(
     "b kmain"
 );
 
+
 #include "serial.h"
 #include "utils.h"
 #include "console.h"
@@ -21,7 +22,7 @@ void kmain(){
     serial_init();
     video_init();
     unsigned cw = 10;
-    unsigned start_X = 110;
+    unsigned start_X = 109;
     unsigned start_Y= 200;
     video_draw_character('W', start_X,start_Y);
     video_draw_character('e', start_X+cw, start_Y);
@@ -51,9 +52,8 @@ void kmain(){
     video_draw_character('t', start_X+cw*31, start_Y);
     video_draw_character('e', start_X+cw*32, start_Y);
     video_draw_character('s', start_X+cw*33, start_Y); 
-    //run suite
-    kprintf("\n");
-    kprintf("DONE\n");
+    //run sweet()
+    kprintf("\nDONE\n")
     while(1){
     }
 }

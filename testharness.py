@@ -40,6 +40,8 @@ async def doImageComparison(P):
     if exp == actual:
         print("Images match! Good!")
     else:
+        #with open("expected.ppm","wb") as fp:
+        #    fp.write(exp)
         print("Output does not match expected results")
 
 async def main():

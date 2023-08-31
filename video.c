@@ -86,9 +86,9 @@ void video_init()
     foregroundColor.g = 255;
     foregroundColor.b = 255;
 
-    backgroundColor.r = 1;
-    backgroundColor.g = 1;
-    backgroundColor.b = 1;
+    backgroundColor.r = 0;
+    backgroundColor.g = 0;
+    backgroundColor.b = 0;
 
     int running = 1;
     while(running)
@@ -121,8 +121,6 @@ void video_set_pixel( unsigned x, unsigned y, struct Pixel pix)
 
 //return true if bit ii is 1 in value x
 #define IS_BIT_SET(x,i) ((1<<i) & x)
-
-//IS_BIT_SET(font_data[ch][row], col)
 
 
 

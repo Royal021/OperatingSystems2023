@@ -2,4 +2,4 @@ video.c:71:video_init	64	static
 video.c:39:mailbox_write	24	static
 video.c:50:mailbox_read	24	static
 video.c:109:video_set_pixel	20	static
-video.c:130:video_draw_character	56	static
+video.c:128:video_draw_character	56	static
