@@ -76,7 +76,7 @@ void video_init()
     f.virtualWidth = f.width;
     f.virtualHeight = f.height;
     f.depth = 24;
-    f.pitch = 0;
+    f.pitch = 90;
     f.xoffset = 0;
     f.yoffset = 0;
     f.pointer = 0;
@@ -131,9 +131,9 @@ void video_draw_character(unsigned char ch, unsigned x, unsigned y)
 {
     for(unsigned row=0; row<CHAR_HEIGHT;++row)
     {
-        for(unsigned col=0; col<CHAR_WIDTH;++col)
+        for(unsigned col=CHAR_WIDTH; 0<col;--col)
         {
-            unsigned xx = x+col;
+            unsigned xx = x-col;
             unsigned yy = y+row;
             
             video_set_pixel(xx,yy, 
