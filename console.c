@@ -3,9 +3,9 @@
 #include "etec3701_10x20.h"
 #include "utils.h"
 
-static int curr_col;
-static int curr_row;
-static int max_col = 80;
+//static int curr_col;
+//static int curr_row;
+//static int max_col = 80;
 //tab 5, new line 8
 //if (c == '\n')
 //col = 0; row++;

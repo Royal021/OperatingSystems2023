@@ -53,7 +53,7 @@ void kmain(){
     video_draw_character('e', start_X+cw*32, start_Y);
     video_draw_character('s', start_X+cw*33, start_Y); 
     //run sweet()
-    kprintf("\nDONE\n")
+    kprintf("\nDONE\n");
     while(1){
     }
 }
