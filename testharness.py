@@ -23,6 +23,7 @@ async def testIt():
         if actual == None:
             return
         if not await compareImage(actual):
+            
             print("Image mismatch")
             return
     finally:
@@ -48,6 +49,7 @@ async def testIt():
     finally:
         with open("testsuite.c","w") as fp:
             fp.write(ts)
+            
 
 async def getImage(P):
     for i in range(1000):
@@ -81,6 +83,8 @@ async def getImage(P):
 
 async def compareImage(actual):
     exp = bz2.decompress(base64.b64decode(expected))
+    with open("expected.ppm","wb") as fp:
+       fp.write(exp)
     if exp == actual:
         return True
     else:
