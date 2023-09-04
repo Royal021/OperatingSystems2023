@@ -23,7 +23,14 @@ void kmain()
     serial_init();
     video_init();
     sweet();
-    kprintf("\nDONE\n");
+    serial_putc('\n');
+    serial_putc('D');
+    serial_putc('O');
+    serial_putc('N');
+    serial_putc('E');
+    serial_putc('\n');
+
+
     while(1){
     }
 }

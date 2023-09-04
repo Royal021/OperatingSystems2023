@@ -131,7 +131,7 @@ void video_draw_character(unsigned char ch, unsigned x, unsigned y)
     {
         for(unsigned col=0; col<CHAR_WIDTH;++col)
         {
-            unsigned xx = x-col;
+            unsigned xx = x-col-1;
             unsigned yy = y+row;
             
             video_set_pixel(xx,yy, 

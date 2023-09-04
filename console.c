@@ -11,29 +11,28 @@ extern u32 pitch;
 void console_putc(unsigned char ch)
 {
     
-    static unsigned int col;
+    static unsigned int col = 1;
     static unsigned int row;
-    static unsigned int max_col = 80;
+    static unsigned int max_col = 81;
     serial_putc(ch);    
 
     if(col>=max_col)
     {
-        col=0; 
+        col=1; 
         row++;
     }
     if (ch == '\n')
     {
         row++;
-        col = 0; 
-        
+        col = 1; 
     }
     else if (ch == '\r')
     {
-        col=0;
+        col=1;
     }
     else if(ch == '\f')
     {
-        col = 0; 
+        col = 1; 
         row=0;
         //kmemset(framebuffer,0,pitch*HEIGHT);
     }
@@ -43,10 +42,10 @@ void console_putc(unsigned char ch)
     }
     else if(ch=='\x7f')
     {
-        if(row ==0 && col == 0 )
+        if(row ==0 && col == 1 )
             return;
         
-        else if(col > 0 )
+        else if(col > 1 )
         {
             col -=1; 
             video_draw_character(' ',col*CHAR_WIDTH,row*CHAR_HEIGHT);  
@@ -60,7 +59,7 @@ void console_putc(unsigned char ch)
     }
     else if (ch=='\t')
     {
-        col+=8-col%8;
+        col+=8-(col-1)%8;
     }
     else
     {
