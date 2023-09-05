@@ -1,7 +1,6 @@
 #include "serial.h"
 #include "console.h"
 #include "etec3701_10x20.h"
-#include "utils.h"
 #include "video.h"
 
 
@@ -47,8 +46,8 @@ void console_putc(unsigned char ch)
     }
     else if(ch == '\e')
     {
-
         //setflag
+
         return; // NEXT WEEK
     }
     else if(ch=='\x7f')
@@ -78,13 +77,15 @@ void console_putc(unsigned char ch)
         col+=1;
     }
 
-    // if(row ==30)
-    // {
-    //      kmemcpy(framebuffer, framebuffer+pitch* CHAR_HEIGHT, (600-CHAR_HEIGHT)*pitch);
-    //      for(i in range  80)
-    //             video_draw_character(' ', col*CHAR_WIDTH,row*CHAR_HEIGHT);
-    //      col = 0;
-    //      row = 29;
-    // }
+    if(row ==30)
+    {
+         kmemcpy(framebuffer, framebuffer+pitch* CHAR_HEIGHT, (600-CHAR_HEIGHT)*pitch);
+         for(int f = 0;f<80;f++)
+         {
+                video_draw_character(' ', col*CHAR_WIDTH,row*CHAR_HEIGHT);
+         }
+         col = 0;
+         row = 29;
+    }
     
 }
