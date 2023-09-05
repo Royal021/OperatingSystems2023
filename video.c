@@ -62,8 +62,9 @@ static u32 mailbox_read(u32 channel){
 }
 
 
-static volatile u8* framebuffer;
-static u32 pitch;
+volatile u8* framebuffer;
+u32 pitch;
+
 
 struct Pixel foregroundColor;
 struct Pixel backgroundColor;

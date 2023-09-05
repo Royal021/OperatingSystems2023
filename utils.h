@@ -6,3 +6,4 @@ typedef unsigned u32;
 
 void bss_init();
 void kmemset(void* p, u8 val, u32 count);
+void kmemcpy( void* dest, const void* src, unsigned count);

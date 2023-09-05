@@ -5,16 +5,25 @@
 #include "video.h"
 
 
-extern volatile u8* framebuffer;
-extern u32 pitch;
+#pragma pack(push,1)
+struct Color{
+    u8 r,g,b;
+};
+#pragma pack(pop)
+
 
 void console_putc(unsigned char ch)
 {
     
     static unsigned int col = 1;
     static unsigned int row;
+    //static struct Color curr_fg;
+    //static struct Color curr_bg;
     static unsigned int max_col = 81;
     serial_putc(ch);    
+
+    //are we doing color, do color
+    //
 
     if(col>=max_col)
     {
@@ -34,10 +43,12 @@ void console_putc(unsigned char ch)
     {
         col = 1; 
         row=0;
-        //kmemset(framebuffer,0,pitch*HEIGHT);
+        kmemset(framebuffer,0,pitch*HEIGHT);
     }
     else if(ch == '\e')
     {
+
+        //setflag
         return; // NEXT WEEK
     }
     else if(ch=='\x7f')
@@ -66,5 +77,14 @@ void console_putc(unsigned char ch)
         video_draw_character(ch, col*CHAR_WIDTH,row*CHAR_HEIGHT);
         col+=1;
     }
+
+    // if(row ==30)
+    // {
+    //      kmemcpy(framebuffer, framebuffer+pitch* CHAR_HEIGHT, (600-CHAR_HEIGHT)*pitch);
+    //      for(i in range  80)
+    //             video_draw_character(' ', col*CHAR_WIDTH,row*CHAR_HEIGHT);
+    //      col = 0;
+    //      row = 29;
+    // }
     
 }

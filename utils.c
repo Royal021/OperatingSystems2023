@@ -18,3 +18,15 @@ void kmemset(void* p, u8 val, u32 count)
         *c = val;
     }
 }
+
+void kmemcpy( void* dest, const void* src, unsigned count)
+{
+    //frame
+    //precondition, no overlap or src>dest
+    char *d = (char*) dest;
+    char *s = (char*) src;
+    while(count-->0)
+    {
+        *d++ = *s++;
+    }
+}
