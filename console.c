@@ -10,6 +10,10 @@ struct Color{
 };
 #pragma pack(pop)
 
+int getValue(int I, int bit)
+{
+    return 1;
+}
 
 void console_putc(unsigned char ch)
 {
