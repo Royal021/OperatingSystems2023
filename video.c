@@ -83,13 +83,13 @@ void video_init()
     f.pointer = 0;
     f.size = 0;
 
-    foregroundColor.r = 255;
-    foregroundColor.g = 255;
-    foregroundColor.b = 255;
+    foregroundColor.r = 172;
+    foregroundColor.g = 172;
+    foregroundColor.b = 172;
 
     backgroundColor.r = 0;
     backgroundColor.g = 0;
-    backgroundColor.b = 0;
+    backgroundColor.b = 172;
 
     int running = 1;
     while(running)
@@ -126,8 +126,14 @@ void video_set_pixel( unsigned x, unsigned y, struct Pixel pix)
 
 
 
-void video_draw_character(unsigned char ch, unsigned x, unsigned y)
+void video_draw_character(unsigned char ch, unsigned x, unsigned y, struct Color fg, struct Color bg )
 {
+    foregroundColor.r = fg.r;
+    foregroundColor.g = fg.g;
+    foregroundColor.b = fg.b;
+    backgroundColor.r = bg.r;
+    backgroundColor.g = bg.g;
+    backgroundColor.b = bg.b;
     for(unsigned row=0; row<CHAR_HEIGHT;++row)
     {
         for(unsigned col=0; col<CHAR_WIDTH;++col)

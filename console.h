@@ -6,4 +6,5 @@
 
 extern u32 pitch;
 extern u8* framebuffer;
+
 void console_putc(unsigned char ch);

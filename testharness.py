@@ -86,6 +86,8 @@ async def getImage(P):
 
 async def compareImage(actual):
     exp = bz2.decompress(base64.b64decode(expectedColor))
+    with open("expected.ppm","wb") as fp:
+       fp.write(exp)
     if exp == actual:
         return True,True
 

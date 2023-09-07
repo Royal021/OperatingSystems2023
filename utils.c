@@ -30,3 +30,17 @@ void kmemcpy( void* dest, const void* src, unsigned count)
         *d++ = *s++;
     }
 }
+
+
+u8 getValue(u8 i, u8 color)
+{
+
+    if(!color && !i)
+        return 0;
+    if(!color && i)
+        return 82;
+    if(color && !i)
+        return 172;
+    else
+        return 255;
+}
