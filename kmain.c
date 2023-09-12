@@ -13,6 +13,7 @@ __asm__(
 #include "kprintf.h"
 #include "video.h"
 #include "memory.h"
+#include "interrupt.h"
 
 
 extern void sweet();
@@ -22,6 +23,7 @@ void kmain()
     bss_init();
     serial_init();
     video_init();
+    interrupt_init();
     sweet();
     serial_putc('\n');
     serial_putc('D');
