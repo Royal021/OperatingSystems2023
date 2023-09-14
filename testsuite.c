@@ -14,5 +14,8 @@ void sweet()
     #elif INTERRUPT_TEST == 2
         kprintf("\nUndefined test\n");
         __asm__ volatile(".word 0xf7f0a000");
+    #elif INTERRUPT_TEST == 3
+        kprintf("SVC test\n");
+        __asm__ volatile("svc #1");
     #endif
 }

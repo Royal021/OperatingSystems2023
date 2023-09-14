@@ -1,1 +1,10 @@
-interrupt.c:44:interrupt_init	24	static
+interrupt.c:94:interrupt_init	24	static
+interrupt.c:101:halt	0	static
+interrupt.c:109:handler_reset	8	static
+interrupt.c:114:handler_undefined	8	static
+interrupt.c:119:handler_svc	8	static
+interrupt.c:124:handler_prefetch_abort	8	static
+interrupt.c:129:handler_data_abort	8	static
+interrupt.c:134:handler_reserved	8	static
+interrupt.c:139:handler_irq	8	static
+interrupt.c:144:handler_fiq	8	static
