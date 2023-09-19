@@ -44,3 +44,9 @@ u8 getValue(u8 i, u8 color)
     else
         return 255;
 }
+
+void panic(const char *s)
+{
+    kprintf("PANIC PANIC PANIC AT THE DISCO\n");
+    while(1){;}
+}

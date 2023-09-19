@@ -3,19 +3,25 @@
 #endif
 
 #include "kprintf.h"
+void halt();
+unsigned get_uptime();
+
+unsigned div1000(unsigned numerator){
+    //0.001 * 2**32
+    unsigned long long magic = 4294967;
+    unsigned long long tmp = magic * (numerator+500);
+    return tmp >>32;
+}
 
 void sweet()
 {
-    #if INTERRUPT_TEST == 0
-        kprintf("\nNo interrupt\n");
-    #elif INTERRUPT_TEST == 1
-        kprintf("\nPrefetch abort test\n");
-        __asm__ volatile("bkpt");
-    #elif INTERRUPT_TEST == 2
-        kprintf("\nUndefined test\n");
-        __asm__ volatile(".word 0xf7f0a000");
-    #elif INTERRUPT_TEST == 3
-        kprintf("SVC test\n");
-        __asm__ volatile("svc #1");
-    #endif
+    unsigned nextprint=0;
+    while(1){
+        unsigned t = get_uptime();
+        if( t >= nextprint ){
+            kprintf("Uptime (seconds): %d\n", div1000(t) );
+            nextprint = t + 1000;
+        }
+        halt();
+    }
 }

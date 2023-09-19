@@ -139,10 +139,53 @@ void handler_reserved()
 void handler_irq()
 {
     kprintf("IRQ\n");
-    halt();
+    for(int i =0; i<numHandlers;i++)
+    {
+        //what needs to be done
+        handlers[i];
+    }
 }
 void handler_fiq()
 {
     kprintf("FIQ\n");
     halt();
+}
+
+
+
+typedef void (*InterruptHandler)(void);
+static int numHandlers=0;
+static InterruptHandler handlers[MAX_HANDLERS];
+
+
+void interrupt_enable()
+{
+      __asm__ volatile(
+        "mrs r0,cpsr\n"
+        "and r0,r0,#0xffffff7f\n"
+        "msr cpsr,r0"
+        : : : "r0"
+    );
+}
+
+void register_interrupt_handler(int irq, InterruptHandler h)
+{
+    if(numHandlers >=MAX_HANDLERS)
+    {
+        panic("too many interupts!")
+    }
+    else
+    {
+        handlers[numHandlers++]=h;
+        //ask jim about enable1
+        if (irq<=31)
+        {
+            *ENABLE0 |= 1<<irq;
+        }
+        else
+        {
+            *ENABLE1 |= 1<<(irq-31);
+        }
+    }
+
 }

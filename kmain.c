@@ -24,6 +24,8 @@ void kmain()
     serial_init();
     video_init();
     interrupt_init();
+    timer_init();
+    interrupt_enable();
     sweet();
     serial_putc('\n');
     serial_putc('D');
