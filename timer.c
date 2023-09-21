@@ -1,28 +1,29 @@
 #include "timer.h"
-
 //1MS
 
 unsigned delta = 10000;
+unsigned jiffies = 0;
 void timer_init()
 {
     *COMPARE = *CURRENT + delta;
-    register_interrupt_handler(2, timer_interrupt);
+    register_interrupt_handler(1, timer_interrupt);
 
 }
 
 void timer_interrupt()
 {
-    v = *CONTROLLER_BASE
+    u32 v = *CONTROL_STATUS;
     if(v & 2)
     {
         *COMPARE = 0;
         //WRITE 2 TO CONTROL STATUS
         *CONTROL_STATUS |= 1<<1;
-        //write/2 to control stactus to
+        jiffies+=1;
+
     }
 }
 
 unsigned get_uptime()
 {
-    return 1;
+    return jiffies * delta;
 }

@@ -14,6 +14,7 @@ __asm__(
 #include "video.h"
 #include "memory.h"
 #include "interrupt.h"
+#include "timer.h"
 
 
 extern void sweet();

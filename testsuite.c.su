@@ -1,1 +1,2 @@
-testsuite.c:8:sweet	8	static
+testsuite.c:6:div1000	24	static
+testsuite.c:13:sweet	16	static

@@ -1,7 +1,4 @@
-#include "utils.h"
 #include "video.h"
-#include "etec3701_10x20.h"
-#include "memory.h"
 
 #define VIDEO_MAILBOX  (PERIPHERAL_BASE + 0x0000b880)
 #define VIDEO_STATUS   ( (volatile u32*)(VIDEO_MAILBOX+0x18) )

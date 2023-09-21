@@ -1,5 +1,6 @@
 #pragma once
 
+#include "kprintf.h"
 #define PERIPHERAL_BASE (0x20000000)
 typedef unsigned char u8;
 typedef unsigned u32;

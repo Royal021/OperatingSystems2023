@@ -1,7 +1,8 @@
 #pragma once
-
-
 #include "utils.h"
+
+#include "etec3701_10x20.h"
+#include "memory.h"
 typedef unsigned char u8;
 struct Color{
     u8 r,g,b,i;

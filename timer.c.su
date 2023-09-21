@@ -1,0 +1,3 @@
+timer.c:6:timer_init	8	static
+timer.c:13:timer_interrupt	4	static
+timer.c:26:get_uptime	0	static

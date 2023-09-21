@@ -91,6 +91,11 @@ __asm__ (
 #include "interrupt.h"
 extern void* interrupt_table_begin;
 extern void* interrupt_table_end;
+
+//typedef void (*InterruptHandler)(void);
+static int numHandlers=0;
+static InterruptHandler handlers[MAX_HANDLERS];
+
 void interrupt_init(){
     unsigned start = (unsigned) &interrupt_table_begin;
     unsigned end = (unsigned) &interrupt_table_end;
@@ -138,11 +143,11 @@ void handler_reserved()
 }
 void handler_irq()
 {
-    kprintf("IRQ\n");
+    //kprintf("IRQ\n");
     for(int i =0; i<numHandlers;i++)
     {
         //what needs to be done
-        handlers[i];
+        handlers[i]();
     }
 }
 void handler_fiq()
@@ -153,9 +158,6 @@ void handler_fiq()
 
 
 
-typedef void (*InterruptHandler)(void);
-static int numHandlers=0;
-static InterruptHandler handlers[MAX_HANDLERS];
 
 
 void interrupt_enable()
@@ -172,12 +174,11 @@ void register_interrupt_handler(int irq, InterruptHandler h)
 {
     if(numHandlers >=MAX_HANDLERS)
     {
-        panic("too many interupts!")
+        panic("too many interupts!");
     }
     else
     {
         handlers[numHandlers++]=h;
-        //ask jim about enable1
         if (irq<=31)
         {
             *ENABLE0 |= 1<<irq;

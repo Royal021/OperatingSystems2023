@@ -1,8 +1,5 @@
-#ifndef INTERRUPT_TEST
-#define INTERRUPT_TEST 0
-#endif
-
 #include "kprintf.h"
+
 void halt();
 unsigned get_uptime();
 
@@ -10,7 +7,7 @@ unsigned div1000(unsigned numerator){
     //0.001 * 2**32
     unsigned long long magic = 4294967;
     unsigned long long tmp = magic * (numerator+500);
-    return tmp >>32;
+    return tmp >> 32;
 }
 
 void sweet()

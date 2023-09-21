@@ -1,11 +1,6 @@
-#include "serial.h"
 #include "console.h"
-#include "etec3701_10x20.h"
-#include "video.h"
-
 
 int doingColor = 0;
-
 
 void console_putc(unsigned char ch)
 {
