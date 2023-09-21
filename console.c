@@ -7,7 +7,7 @@ void console_putc(unsigned char ch)
     
     static unsigned int col = 1;
     static unsigned int row;
-    static struct Color curr_fg;
+    static struct Color curr_fg = {255,255,255};
     static struct Color curr_bg;
     static unsigned int max_col = 81;
     serial_putc(ch);    

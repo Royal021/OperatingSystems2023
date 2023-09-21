@@ -21,6 +21,7 @@ extern void sweet();
 
 void kmain()
 {
+    kprintf("\f");
     bss_init();
     serial_init();
     video_init();

@@ -15,9 +15,9 @@ void timer_interrupt()
     u32 v = *CONTROL_STATUS;
     if(v & 2)
     {
-        *COMPARE = 0;
+        *COMPARE = *CURRENT + delta;
         //WRITE 2 TO CONTROL STATUS
-        *CONTROL_STATUS |= 1<<1;
+        *CONTROL_STATUS =2;
         jiffies+=1;
 
     }
@@ -25,5 +25,5 @@ void timer_interrupt()
 
 unsigned get_uptime()
 {
-    return jiffies * delta;
+    return jiffies * delta/1000;
 }
