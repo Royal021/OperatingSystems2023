@@ -54,10 +54,13 @@ for filename in os.listdir("."):
 
 doIt( [link] + linkflags + objectfiles )
 
+doIt( [python, "fool.zip", "sd.img", "create", "64"] )
+
 doIt( [ qemu,
     "-m", "512",                #memory (512MB)
     "-M", "raspi0",             #machine (raspberry pi 0)
     "-kernel", "kernel.elf",    #kernel file
     "-echr", "126",             #escape character (~)
-    "-serial", "mon:stdio"      #connect serial to console
+    "-serial", "mon:stdio",      #connect serial to console
+    "-drive", "file=sd.img,if=sd,format=raw"
 ])

@@ -2,6 +2,8 @@
 
 #include "kprintf.h"
 #define PERIPHERAL_BASE (0x20000000)
+#define NULL ((void*)0)
+
 typedef unsigned char u8;
 typedef unsigned u32;
 
