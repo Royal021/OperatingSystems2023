@@ -86,26 +86,26 @@
     8ffc     8ffc       10     1                 interrupt_enable
     900c     900c       d4     1                 register_interrupt_handler
     90c4     90c4        0     1                 $d.21
-    9100     9100      108     4         timer.c.o:(.text)
+    9100     9100      1ec     4         utils.c.o:(.text)
     9100     9100        0     1                 $a.0
-    9100     9100       4c     1                 timer_init
-    913c     913c        0     1                 $d.1
-    914c     914c        0     1                 $a.2
-    914c     914c       84     1                 timer_interrupt
-    91c0     91c0        0     1                 $d.3
-    91d0     91d0        0     1                 $a.4
-    91d0     91d0       38     1                 get_uptime
-    91fc     91fc        0     1                 $d.5
-    9208     9208      1ec     4         utils.c.o:(.text)
-    9208     9208        0     1                 $a.0
-    9208     9208       48     1                 bss_init
-    9248     9248        0     1                 $d.1
-    9250     9250        0     1                 $a.2
-    9250     9250       6c     1                 kmemset
-    92bc     92bc       68     1                 kmemcpy
-    9324     9324       a8     1                 getValue
-    93cc     93cc       28     1                 panic
-    93f0     93f0        0     1                 $d.3
+    9100     9100       48     1                 bss_init
+    9140     9140        0     1                 $d.1
+    9148     9148        0     1                 $a.2
+    9148     9148       6c     1                 kmemset
+    91b4     91b4       68     1                 kmemcpy
+    921c     921c       a8     1                 getValue
+    92c4     92c4       28     1                 panic
+    92e8     92e8        0     1                 $d.3
+    92ec     92ec      108     4         timer.c.o:(.text)
+    92ec     92ec        0     1                 $a.0
+    92ec     92ec       4c     1                 timer_init
+    9328     9328        0     1                 $d.1
+    9338     9338        0     1                 $a.2
+    9338     9338       84     1                 timer_interrupt
+    93ac     93ac        0     1                 $d.3
+    93bc     93bc        0     1                 $a.4
+    93bc     93bc       38     1                 get_uptime
+    93e8     93e8        0     1                 $d.5
     93f4     93f4     2c90     4         kprintf.c.o:(.text)
     93f4     93f4        0     1                 $a.0
     93f4     93f4       3c     1                 stbsp_set_separators
