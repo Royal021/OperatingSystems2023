@@ -16,6 +16,7 @@ __asm__(
 #include "interrupt.h"
 #include "timer.h"
 #include "sd.h"
+#include "fs.h"
 
 
 extern void sweet();
@@ -29,7 +30,7 @@ void kmain()
     timer_init();
     interrupt_enable();
     sd_init();
-
+    disk_init();
     char buffery[512];
     sd_read_sector(0, buffery);
 

@@ -86,43 +86,44 @@
     9048     9048       10     1                 interrupt_enable
     9058     9058       d4     1                 register_interrupt_handler
     9110     9110        0     1                 $d.21
-    914c     914c      9cc     4         sd.c.o:(.text)
+    914c     914c        0     4         errno.c.o:(.text)
+    914c     914c      1ec     4         utils.c.o:(.text)
     914c     914c        0     1                 $a.0
-    914c     914c      2a0     1                 sd_init
-    93b4     93b4        0     1                 $d.1
-    93ec     93ec        0     1                 $a.2
-    93ec     93ec       50     1                 delay_millisec
-    943c     943c      1c8     1                 setClock
-    95f0     95f0        0     1                 $d.3
-    9604     9604      194     1                 sendCommand
-    9604     9604        0     1                 $a.4
-    9778     9778        0     1                 $d.5
-    9798     9798       6c     1                 sendAppCommand
-    9798     9798        0     1                 $a.6
-    9804     9804       c0     1                 waitForStatusBitsToBeZero
-    98b4     98b4        0     1                 $d.7
-    98c4     98c4       cc     1                 waitForInterrupt
-    98c4     98c4        0     1                 $a.8
-    9984     9984        0     1                 $d.9
-    9990     9990        0     1                 $a.10
-    9990     9990       b8     1                 sd_read_sector
-    9a3c     9a3c        0     1                 $d.11
-    9a48     9a48        0     1                 $a.12
-    9a48     9a48       b8     1                 sd_write_sector
-    9af8     9af8        0     1                 $d.13
-    9b00     9b00       18     1                 getHostControllerVersion
-    9b00     9b00        0     1                 $a.14
-    9b14     9b14        0     1                 $d.15
-    9b18     9b18      1ec     4         utils.c.o:(.text)
-    9b18     9b18        0     1                 $a.0
-    9b18     9b18       48     1                 bss_init
-    9b58     9b58        0     1                 $d.1
-    9b60     9b60        0     1                 $a.2
-    9b60     9b60       6c     1                 kmemset
-    9bcc     9bcc       68     1                 kmemcpy
-    9c34     9c34       a8     1                 getValue
-    9cdc     9cdc       28     1                 panic
-    9d00     9d00        0     1                 $d.3
+    914c     914c       48     1                 bss_init
+    918c     918c        0     1                 $d.1
+    9194     9194        0     1                 $a.2
+    9194     9194       6c     1                 kmemset
+    9200     9200       68     1                 kmemcpy
+    9268     9268       a8     1                 getValue
+    9310     9310       28     1                 panic
+    9334     9334        0     1                 $d.3
+    9338     9338      9cc     4         sd.c.o:(.text)
+    9338     9338        0     1                 $a.0
+    9338     9338      2a0     1                 sd_init
+    95a0     95a0        0     1                 $d.1
+    95d8     95d8        0     1                 $a.2
+    95d8     95d8       50     1                 delay_millisec
+    9628     9628      1c8     1                 setClock
+    97dc     97dc        0     1                 $d.3
+    97f0     97f0      194     1                 sendCommand
+    97f0     97f0        0     1                 $a.4
+    9964     9964        0     1                 $d.5
+    9984     9984       6c     1                 sendAppCommand
+    9984     9984        0     1                 $a.6
+    99f0     99f0       c0     1                 waitForStatusBitsToBeZero
+    9aa0     9aa0        0     1                 $d.7
+    9ab0     9ab0       cc     1                 waitForInterrupt
+    9ab0     9ab0        0     1                 $a.8
+    9b70     9b70        0     1                 $d.9
+    9b7c     9b7c        0     1                 $a.10
+    9b7c     9b7c       b8     1                 sd_read_sector
+    9c28     9c28        0     1                 $d.11
+    9c34     9c34        0     1                 $a.12
+    9c34     9c34       b8     1                 sd_write_sector
+    9ce4     9ce4        0     1                 $d.13
+    9cec     9cec       18     1                 getHostControllerVersion
+    9cec     9cec        0     1                 $a.14
+    9d00     9d00        0     1                 $d.15
     9d04     9d04      108     4         timer.c.o:(.text)
     9d04     9d04        0     1                 $a.0
     9d04     9d04       4c     1                 timer_init
@@ -133,7 +134,6 @@
     9dd4     9dd4        0     1                 $a.4
     9dd4     9dd4       38     1                 get_uptime
     9e00     9e00        0     1                 $d.5
-    9e0c     9e0c        0     4         errno.c.o:(.text)
     9e0c     9e0c     2c90     4         kprintf.c.o:(.text)
     9e0c     9e0c        0     1                 $a.0
     9e0c     9e0c       3c     1                 stbsp_set_separators
