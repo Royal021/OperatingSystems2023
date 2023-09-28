@@ -22,6 +22,41 @@ struct GPTEntry{
 };
 #pragma pack(pop)
 
+#pragma pack(push,1)
+struct VBR{
+    char jmp[3];
+    char oem[8];
+    u16 bytes_per_sector;
+    u8 sectors_per_cluster;
+    u16 reserved_sectors;
+    u8 num_fats;
+    u16 UNUSED_num_root_dir_entries;
+    u16 UNUSED_num_sectors_small;
+    u8 id ;
+    u16 UNUSED_sectors_per_fat_12_16;
+    u16 sectors_per_track;
+    u16 num_heads;
+    u32 first_sector;
+    u32 num_sectors;
+    u32 sectors_per_fat;
+    u16 flags;
+    u16 version;
+    u32 root_cluster;
+    u16 fsinfo_sector;
+    u16 backup_boot_sector;
+    char reservedField[12];
+    u8 drive_number;
+    u8 flags2;
+    u8 signature;
+    u32 serial_number;
+    char label[11];
+    char identifier[8];
+    char code[420];
+    u16 checksum;
+};
+#pragma pack(pop)
+
+static struct VBR vbr;
 static unsigned first_sector;
 static char sectorbuffer[512];
 int disk_init()
@@ -29,7 +64,25 @@ int disk_init()
     int rv = sd_read_sector(2, sectorbuffer);
     if(rv<0)
         return rv;
-    struct GPTEntry* G= (struct GPTEntry *)sectorbuffer;
-    first_sector = G->first_sector;  //G[0]. , (*G).
+    struct GPTEntry* G = (struct GPTEntry *)sectorbuffer;
+    first_sector = G[0].firstSector;  //G[0]. , (*G)., G->
+    rv = sd_read_sector( first_sector, &vbr);
+    if(rv<0)
+        return rv;
+    rv = sd_read_sector( clusterNumberToSectorNumber(2), sectorbuffer);
+    if(rv<0)
+        return rv;
+    for(int i = 0; i<512; i++)
+    {
+        //kprintf("k");
+        kprintf("%c", sectorbuffer[i]);
+    }
     return SUCCESS;
+}
+
+unsigned clusterNumberToSectorNumber( unsigned clnum )
+{
+    unsigned curSector = first_sector;
+    curSector += vbr.sectors_per_fat *vbr.num_fats + vbr.reserved_sectors + vbr.sectors_per_cluster*(clnum-2);
+    return curSector;
 }

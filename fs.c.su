@@ -1,0 +1,2 @@
+fs.c:62:disk_init	24	static
+fs.c:83:clusterNumberToSectorNumber	8	static

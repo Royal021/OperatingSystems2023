@@ -30,14 +30,9 @@ void kmain()
     timer_init();
     interrupt_enable();
     sd_init();
+    kprintf("START\n");
+ 
     disk_init();
-    char buffery[512];
-    sd_read_sector(0, buffery);
-
-    for(int i = 0; i<512; i++)
-    {
-        kprintf("%c", buffery[i]);
-    }
     //sweet();
     serial_putc('\n');
     serial_putc('D');

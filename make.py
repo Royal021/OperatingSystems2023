@@ -54,7 +54,17 @@ for filename in os.listdir("."):
 
 doIt( [link] + linkflags + objectfiles )
 
-doIt( [python, "fool.zip", "sd.img", "create", "64"] )
+doIt( [python, "fool.zip", "sd.img",
+    "create", "64",
+    "cp", "about.txt", "ABOUT.TXT",
+    "cp", "article1.txt", "ARTICLE1.TXT",
+    "cp", "article2.txt", "ARTICLE2.TXT",
+    "cp", "article3.txt", "ARTICLE3.TXT",
+    "cp", "article4.txt", "ARTICLE4.TXT",
+    "cp", "article5.txt", "ARTICLE5.TXT",
+    "cp", "article6.txt", "ARTICLE6.TXT",
+    "cp", "billofrights.txt", "bill of rights.txt"
+])
 
 doIt( [ qemu,
     "-m", "512",                #memory (512MB)
