@@ -56,6 +56,37 @@ struct VBR{
 };
 #pragma pack(pop)
 
+#pragma pack(push,1)
+struct DirEntry {
+    char base[8];
+    char ext[3];
+    unsigned char attributes;
+    unsigned char reserved;
+    unsigned char creationTimeCentiseconds;
+    unsigned short creationTime;
+    unsigned short creationDate;
+    unsigned short lastAccessDate;
+    unsigned short clusterHigh;
+    unsigned short lastModifiedTime;
+    unsigned short lastModifiedDate;
+    unsigned short clusterLow;
+    unsigned int size;
+};
+#pragma pack(pop)
+
+#pragma pack(push,1)
+struct LFNEntry {
+    unsigned char sequenceNumber;
+    char name0[10];             //5 characters
+    char attribute;             //always 15
+    char zero;                  //always zero
+    char checksum;
+    char name1[12];             //6 characters
+    unsigned short alsozero;    //always zero
+    char name2[4];              //2 characters
+};
+#pragma pack(pop)
+
 static struct VBR vbr;
 static unsigned first_sector;
 static char sectorbuffer[512];
