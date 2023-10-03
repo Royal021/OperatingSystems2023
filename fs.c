@@ -90,6 +90,9 @@ struct LFNEntry {
 static struct VBR vbr;
 static unsigned first_sector;
 static char sectorbuffer[512];
+//char buff[4096];
+char buff[4096];
+char buff2[4096];
 
 int disk_init()
 {
@@ -101,14 +104,38 @@ int disk_init()
     rv = sd_read_sector( first_sector, &vbr);
     if(rv<0)
         return rv;
-    rv = sd_read_sector( clusterNumberToSectorNumber(2), sectorbuffer);
+
+    for(unsigned int p = 0; p<8;p++)
+    {
+    rv = sd_read_sector( clusterNumberToSectorNumber(2)+p, buff);
+    struct DirEntry * d = (struct DirEntry*) buff;
     if(rv<0)
         return rv;
-    for(int i = 0; i<512; i++)
+    for(int i = 0; i<4096; i++)
     {
-        //kprintf("k");
-        kprintf("%c", sectorbuffer[i]);
+        
+        if(d[i].base[0] == 0x00)
+        {
+            //kprintf("\n");
+            break;
+        }
+        if(d[i].attributes ==15 || d[i].base[0] == 0xe5)
+        {
+            continue;
+        }
+        else
+        {
+            int k = 0;
+            while(d[i].base[k]!=' ' && k<8)
+            {
+                kprintf("%c", d[i].base[k]);
+                k++;
+            }
+        kprintf(".%s\n", d[i].ext);
+        }        
     }
+    }
+    
     return SUCCESS;
 }
 

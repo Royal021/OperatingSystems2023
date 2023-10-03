@@ -34,14 +34,7 @@ void kmain()
  
     disk_init();
     //sweet();
-    serial_putc('\n');
-    serial_putc('D');
-    serial_putc('O');
-    serial_putc('N');
-    serial_putc('E');
-    serial_putc('\n');
-
-
+    kprintf("\nDONE\n");
     while(1){
     }
 }
