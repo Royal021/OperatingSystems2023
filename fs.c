@@ -90,6 +90,7 @@ struct LFNEntry {
 static struct VBR vbr;
 static unsigned first_sector;
 static char sectorbuffer[512];
+
 int disk_init()
 {
     int rv = sd_read_sector(2, sectorbuffer);
