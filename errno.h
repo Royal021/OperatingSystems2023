@@ -2,7 +2,9 @@
 
 #define SUCCESS     0
 #define EIO         -1      //generic I/O error
-
+#define EMFILE      -2      // reading max files
+#define ENOENT       -3        //no such directory entry
+#define EINVAL         -4
 #define COMMAND_IS_MULTIBLOCK                   ( 1<<5  )
 #define COMMAND_WRITES_TO_CARD                  ( 0     )
 

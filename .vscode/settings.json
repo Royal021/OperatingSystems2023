@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "serial.h": "c"
+        "serial.h": "c",
+        "fs.h": "c"
     }
 }

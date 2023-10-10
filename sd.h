@@ -3,6 +3,7 @@
 #include "timer.h"
 #include "utils.h"
 #include "errno.h"
+#include "file.h"
 
 #define EMMC_BASE  (PERIPHERAL_BASE+0x00300000)
 #define CONTROL0  ( (volatile u32*)(EMMC_BASE+0x28) )
@@ -96,3 +97,4 @@ void sd_init();
 
 int sd_write_sector(unsigned sector, const void* buffer);
 int sd_read_sector(unsigned sector, void* buffer);
+int read_cluster(int clnum, void*buffer);

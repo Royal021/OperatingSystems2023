@@ -10,230 +10,39 @@ import time
 import random
 import io
 import re
+import zlib
 
-TIMEOUT=10
+TIMEOUT=3
 
-class Expectation:
-    def __init__(self,a,b):
-        self.shortname=a
-        self.longname=b
-        self.shortok=False
-        self.longok=False
 
+with open("testsuite.c","r") as fp:
+    ts = fp.read()
+
+if zlib.crc32(ts.strip().encode()) != 0x343a2354:
+    print("testsuite.c doesn't match what we expect")
+    sys.exit(1)
 
 async def testIt():
-
-    os.environ["FOOL_NOW"] = "2023-Sep-08 01:02:04"
-    expectedDate = os.getenv("FOOL_NOW",None)
-
-    points=0
-    summary=io.StringIO()
-    names=[]
-
-
-    with open("lab11.py") as fp:
-        lab11=fp.read()
     try:
-
-        with open("lab11.py","w") as fp:
-            print("import subprocess",file=fp)
-            print("def copy(python,imgfile):",file=fp)
-            print('    subprocess.check_call([python, "fool.zip", imgfile,',file=fp)
-
-
-            toDelete = random.randrange(1,7)
-            deletedFname = f"ARTICLE{toDelete}.TXT"
-
-            for i,n in enumerate([7,1,2,3,4,5,6]):
-                fname = "article{}.txt".format(n)
-                mixedcasefname = fname[:i] + fname[i].upper()+fname[i+1:]
-                print('"cp","{}","{}",'.format(fname,mixedcasefname), file=fp)
-                if i != toDelete:
-                    names.append( (fname.upper(),mixedcasefname) )
-            print('"cp","const.txt","cOnst.txt",', file=fp)
-            names.append( ("CONST.TXT","cOnst.txt") )
-            print('"cp","article2.txt","my fancy filename.txt",',file=fp)
-            names.append( ("MYFANC~1.TXT","my fancy filename.txt" ) )
-            print('"cp","article3.txt","this is a really long filename.c",',file=fp)
-            names.append( ("THISIS~1.C","this is a really long filename.c") )
-            print('"cp","billofrights.txt","BILL.TXT",',file=fp)
-            names.append( ("BILL.TXT","BILL.TXT") )
-            print('"cp","billofrights.txt","BILL.XA",',file=fp)
-            names.append( ("BILL.XA","BILL.XA") )
-
-            now=time.time()
-            t=now-int(now)
-            t *= 1000
-            t = int(t)
-            t = "%03d" % t
-            n = "A"+t+".TXT"
-            print('"cp","billofrights.txt","{}",'.format(n),file=fp )
-            names.append( (n,n) )
-
-
-            name2L = "a" + t + "c def ghij klmn opq.txt"
-            name2S = "A" + t + "CD~1.TXT"
-            print('"cp","billofrights.txt","{}",'.format(name2L),file=fp )
-            names.append( ( name2S, name2L ) )
-
-            print(f'"rm","{deletedFname}"',file=fp )
-
-            print("])",file=fp)
-
+        with open("testsuite.c") as fp:
+            tmp=fp.read()
+        idx=tmp.find("//!!");
+        assert idx != -1
+        r = random.randint(0,10000)
+        tmp = tmp[:idx]+f'kprintf("{r}");'+tmp[idx:]
+        with open("testsuite.c","w") as fp:
+            fp.write(tmp)
         P = await runIt()
         try:
-            await waitForLine(P,"START")
-            lines=[]
-            while True:
-                tmp = await readline(P)
-                if tmp == "DONE\n":
-                    break
-                lines.append(tmp)
+            await waitForLine(P,f"{r}All OK")
         finally:
             await quitQemu(P)
     finally:
-        with open("lab11.py","w") as fp:
-            fp.write(lab11)
+        with open("testsuite.c","w") as fp:
+            fp.write(ts)
 
-
-
-
-
-    print("Note: Deleted file",deletedFname)
-
-    expected=[]
-    for s,l in names:
-        expected.append( Expectation( s,l ) )
-
-
-    gotTimes = True;
-    timerex = re.compile(r"(\d{4})-(\d{2})-(\d{2})\s+(\d{1,2}):(\d{2}):(\d{2})");
-
-    if expectedDate == None:
-        assert 0,"expectedDate is none!"
-    else:
-        expectedDate = time.mktime(time.strptime(expectedDate,"%Y-%b-%d %H:%M:%S"))
-
-    for line in lines:
-        ok=False
-
-        for exp in expected:
-            shortname = exp.shortname
-            longname = exp.longname
-            i = line.find(shortname)
-            if i != -1:
-                if exp.shortok:
-                    print("Duplicate short name: " + shortname)
-                    return
-                j = i+len(shortname)
-                if j < len(line) and line[j] not in " \t\n\r":
-                    pass
-                else:
-                    exp.shortok = True
-                    ok = True
-
-            i = line.find(longname)
-            if i != -1:
-                if exp.longok:
-                    print("Duplicate long name: " + longname)
-                    return
-                j = i+len(longname)
-                if j < len(line) and line[j] not in " \t\n\r":
-                    pass
-                else:
-                    exp.longok = True
-                    ok = True
-
-        if ok:
-            # ~ print("OK:",line)
-            if gotTimes:
-                M = timerex.search(line)
-                if M:
-                    year = int(M.group(1))
-                    month = int(M.group(2))
-                    day = int(M.group(3))
-                    hour = int(M.group(4))
-                    minute = int(M.group(5))
-                    second = int(M.group(6))
-                    T = time.mktime((
-                        year,
-                        month,
-                        day,
-                        hour,
-                        minute,
-                        second,
-                        0,
-                        0,
-                        -1
-                    ))
-                    timeDiff = abs( expectedDate - T )
-                    if(timeDiff > 4):
-                        print("Bad time on line " + line)
-                        gotTimes = False
-                else:
-                    print("No creation time on line " + line)
-                    gotTimes = False
-        else:
-            pass
-            # ~ print("Extraneous line:", line)
-            # ~ return
-
-    for line in lines:
-        if line.find(deletedFname[1:]) != -1:
-            print("Deleted file (",deletedFname,") appears in output.")
-            return
-
-
-    longNamesOK=True
-    for exp in expected:
-        if exp.longok == False:
-            longNamesOK = False;
-            print("No bonus: Missing long name "+exp.longname)
-            break
-    else:
-        print("Long names seem to be OK")
-
-    #if the long names are OK, we don't care about the short ones.
-    if not longNamesOK:
-        for exp in expected:
-            if exp.shortok == False:
-                print("Missing short name " + exp.shortname)
-                return
-
-    print()
-    print()
-    print()
-
-
-    if expectedDate == now:
-        print("Note: Used current date/time for checks")
-    else:
-        print("Note: Using forged date/time")
-
-    print()
-    print()
-    print()
-
-    score = 100
-    print(    "Basic lab                     +100%")
-
-    if(longNamesOK):
-        print("Long name bonus:              + 75%")
-        score += 75
-    else:
-        print("No long name bonus:           +  0%")
-
-    if(gotTimes) :
-        print("Creation time bonus:          + 25%")
-        score += 25
-    else:
-        print("No creation time bonus:       +  0%")
-
-    print("Total score:                  ",str(score)+"%")
-
-
-
-
+    print("\n\n\nOK!")
+    return
 
 
 async def waitForLine(P,txt):
