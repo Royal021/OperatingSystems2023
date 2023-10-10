@@ -10,6 +10,7 @@
 #define O_TRUNC  512
 #define O_APPEND 1024
 
+
 int file_open(const char* fname, int flags);
 int file_close(int fd);
-int scanForMatchingFilename(char* fname, struct DirEntry ents[]);
+int scanForMatchingFilename(const char* fname, struct DirEntry ents[]);

@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "serial.h": "c",
-        "fs.h": "c"
+        "fs.h": "c",
+        "utils.h": "c",
+        "errno.h": "c"
     }
 }

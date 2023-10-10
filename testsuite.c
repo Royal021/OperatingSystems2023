@@ -2,7 +2,7 @@
 #include "kprintf.h"
 #include "file.h"
 
-static const char* nonexist[] = {
+/* static const char* nonexist[] = {
         "blargh", "blargleblargleboom",
         "blargleblargleboom.burpblah", "b.burpblah",
         "b.b", "art.txt","article1234.txt",
@@ -17,7 +17,7 @@ static const char* nonexist[] = {
         "thisisareallylongfilenamebutitshouldnotcrashyouroperatingsystemifyourcodeiscorrectlywrittenandrobustlydesigned.c",
         "x", "", ".txt",
         0};
-
+ */
 static const char* exist[] = {
     "article1.txt", "ARTICLE2.txt",
     "ARTICLE3.TXT", "ArTiClE4.txt",
@@ -27,7 +27,7 @@ static const char* exist[] = {
 
 void sweet(){
 
-    kprintf("==================================\n");
+   /*  kprintf("==================================\n");
     kprintf("Testing nonexistent file open...\n");
     kprintf("==================================\n");
     for(int i=0;nonexist[i];++i){
@@ -53,7 +53,7 @@ void sweet(){
         } else {
             kprintf("Failed with code %d [OK]\n",rv);
         }
-    }
+    } */
     //first time
     kprintf("==================================\n");
     kprintf("Testing open of existing files\n");

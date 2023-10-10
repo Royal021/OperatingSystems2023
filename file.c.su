@@ -1,0 +1,3 @@
+file.c:14:file_open	40	static
+file.c:81:scanForMatchingFilename	56	static
+file.c:137:file_close	8	static

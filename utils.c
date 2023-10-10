@@ -50,3 +50,30 @@ void panic(const char *s)
     kprintf("PANIC PANIC PANIC AT THE DISCO\n");
     while(1){;}
 }
+
+char toupper(char c)
+{
+    if( c>= 'a' && c <= 'z')
+    {
+        c-=32;
+    }
+    return c;
+}
+
+//compare blocks of memory pointed to by a and b , look at count bytes
+//return negative if a<b, zero if a == b, positive if a>b
+int kmemcmp(const void* a, const void* b, unsigned count)
+{
+    char *ap = (char*) a;
+    char *bp = (char*) b;
+    while(count>0){
+        if(*ap<*bp)
+            return -1;
+        if(*ap>*bp)
+            return 1;
+        --count;
+        ap++;
+        bp++;
+    }
+    return 0;
+}

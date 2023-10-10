@@ -268,16 +268,3 @@ int sd_write_sector(unsigned sector, const void* buffer)
     }
     return SUCCESS;
 }
-
-int read_cluster(int clnum, void* buffer)
-{
-    char *p = (char*) buffer;
-    int secnum = clusterNumberToSectorNumber(clnum);
-    for(int i = 0; i<8; i++)
-    {
-        int rv = sd_read_sector(secnum+i, p+i*512);
-        if(rv!=SUCCESS)
-            return rv;
-    }
-    return SUCCESS;
-}

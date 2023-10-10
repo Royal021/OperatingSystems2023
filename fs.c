@@ -1,5 +1,5 @@
 #include "fs.h"
-#include "errno.h"
+
 
 static struct VBR vbr;
 static unsigned first_sector;
@@ -58,4 +58,18 @@ unsigned clusterNumberToSectorNumber( unsigned clnum )
     unsigned curSector = first_sector;
     curSector += vbr.sectors_per_fat *vbr.num_fats + vbr.reserved_sectors + vbr.sectors_per_cluster*(clnum-2);
     return curSector;
+}
+
+
+int read_cluster(unsigned clnum, void* buffer)
+{
+    char *p = (char*) buffer;
+    unsigned secnum = clusterNumberToSectorNumber(clnum);
+    for(unsigned i = 0; i<8; i++)
+    {
+        int rv = sd_read_sector(secnum+i, p+i*512);
+        if(rv!=SUCCESS)
+            return rv;
+    }
+    return SUCCESS;
 }

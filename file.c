@@ -13,9 +13,10 @@ struct File fileTable[MAX_FILES];
 
 int file_open(const char* fname, int flags)
 {
-    if(fname[0]==NULL)
+    if(fname[0]=='\0')
     {
-        return;
+        kprintf("here");
+        return EMFILE;
     }
     int i;
     
@@ -35,14 +36,18 @@ int file_open(const char* fname, int flags)
     static char clusterBuffer[4096];  // static so not on stack, goes onto the heap
     err = read_cluster(2,clusterBuffer);
     if(err)
-    {
+    {   
+        
         goto cleanup;
     }
 
-    struct Dirntry* D = (struct DirEntry*) clusterBuffer;
+    struct DirEntry* D = (struct DirEntry*) clusterBuffer;
+    
+    //heres the problem
     int matchIndex = scanForMatchingFilename(fname, D);
     if(matchIndex<0)
     {
+        
         err = matchIndex;
         goto cleanup;
     }
@@ -71,15 +76,61 @@ int file_open(const char* fname, int flags)
 //input list of dir entries to look at
 //out put index of matching entry
 // else error code(negative)
-int scanForMatchingFilename(char* fname, struct DirEntry ents[])
-{
-    for(int i = 0; i<256; i++)
+//write a function that takes a filename and a list of dir entries and converts the filename a 8 character base and 3 character extension
+    //then compares the base and extension to the base and extension of each dir entry
+int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
+    char base[9];
+    char ext[4];
+    for(int s = 0; s<256; s++)
     {
-        if(ents+i ==  fname)
-        {
-            return i;
-        } 
+    int i;
+    for(i = 0; i<8; i++)
+    {
+        if(fname[i]=='.' || fname[i]=='\0')
+            break;
+        base[i] = toupper(fname[i]);
     }
+    int k = i;
+    if(i<8)
+    {
+        for(;k<8;k++)
+        {
+            base[k] = ' ';
+        }
+    }
+    base[k] = '\0';
+    if(fname[i]=='.')
+    {
+        i++;
+        int j;
+        for(j = 0; j<3; j++)
+        {
+            ext[j] = toupper(fname[i+j]);
+        }
+        ext[j] = '\0';
+    }
+    else
+    {
+        return -1;
+    }
+   
+
+   
+    kprintf("entbase: %s\n", ents[s].base);
+    kprintf("entext: %s\n", ents[s].ext);
+    
+    if(kmemcmp(base, ents[s].base,8) !=0)
+    {
+        continue;
+    }
+    if(kmemcmp(ext,ents[s].ext,3) !=0)
+    {
+        continue;
+    }
+        return i;
+    }
+    kprintf("base: %s\n", base);
+    kprintf("ext: %s\n", ext);
     return -1;
 }
 

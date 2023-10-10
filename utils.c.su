@@ -3,3 +3,5 @@ utils.c:13:kmemset	20	static
 utils.c:22:kmemcpy	20	static
 utils.c:35:getValue	4	static
 utils.c:48:panic	16	static
+utils.c:54:toupper	4	static
+utils.c:65:kmemcmp	24	static
