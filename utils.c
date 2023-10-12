@@ -77,3 +77,8 @@ int kmemcmp(const void* a, const void* b, unsigned count)
     }
     return 0;
 }
+
+u32 Min32(u32 X,u32 Y) 
+{
+   return (((X) < (Y)) ? (X) : (Y));
+}

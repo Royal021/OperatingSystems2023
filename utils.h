@@ -14,3 +14,4 @@ void kmemcpy( void* dest, const void* src, unsigned count);
 u8 getValue(u8 i, u8 color);
 void panic(const char *s);
 int kmemcmp(const void* a, const void* b, unsigned count);
+u32 Min32(u32 X,u32 Y);

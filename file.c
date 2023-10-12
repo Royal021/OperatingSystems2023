@@ -63,7 +63,7 @@ int file_open(const char* fname, int flags)
         goto cleanup;
     }
 
-    fileTable[i].firstCluster = (D[matchIndex].clusterHigh <<16) + D[matchIndex].clusterLow;
+    fileTable[i].firstCluster = (u16)(D[matchIndex].clusterHigh <<16) + D[matchIndex].clusterLow;
     fileTable[i].size = D[matchIndex].size;
     
     fileTable[i].flags = flags; //flags is a parameter
@@ -229,9 +229,9 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     if(fd < 0)
         return -1;  // put error code
     if(fileTable[fd].in_use<0)
-        return -1;  //error code
+        return EINVAL;  //error code
     if(capacity == 0)
-        return 0;
+        return EINVAL;
 
     if(capacity == fileTable[fd].size)
         return 0;
@@ -246,12 +246,12 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     
     unsigned offsetInBuffer = fileTable[fd].offset % 4096;
     unsigned remaingingBytesInCB = 4096-offsetInBuffer;
-    unsigned numToCopy = min(remaingingBytesInCB, capacity);
+    unsigned numToCopy = Min32(remaingingBytesInCB, capacity);
     unsigned bytesLeftInFile = fileTable->size - offsetInBuffer;
-    numToCopy = min(numToCopy, bytesLeftInFile);
+    numToCopy = Min32(numToCopy, bytesLeftInFile);
     kmemcpy(buf, clusterBuffer+offsetInBuffer, numToCopy);
     fileTable[fd].offset += numToCopy;
-    return numToCopy;
+    return (int)numToCopy;
 
     //return ENOSYS;
 }
@@ -271,21 +271,21 @@ int file_seek(int fd, int delta, int whence)
     {
         if(delta<0)
             return EINVAL;
-        fileTable[fd].offset = delta;
+        fileTable[fd].offset = (unsigned) delta;
     }   
     //seek_cur
     else if(whence ==1)
     {
         if (delta<0)
         {
-            unsigned tmp = fileTable[fd].offset+delta;
+            unsigned tmp = fileTable[fd].offset+ (unsigned) delta;
             if(tmp>fileTable[fd].offset){
                 return EINVAL;
             }
             fileTable[fd].offset=tmp;
         } else{
             //overflow case
-              unsigned tmp = fileTable[fd].offset+delta;
+              unsigned tmp = fileTable[fd].offset+ (unsigned) delta;
             if(tmp<fileTable[fd].offset){
                 //overflow
                 return EINVAL;
@@ -297,14 +297,14 @@ int file_seek(int fd, int delta, int whence)
     {
         if (delta<0)
         {
-            unsigned tmp = fileTable[fd].size+delta;
+            unsigned tmp = fileTable[fd].size+(unsigned) delta;
             if(tmp>fileTable[fd].size){
                 return EINVAL;
             }
             fileTable[fd].offset=tmp;
         } else{
             //overflow case
-              unsigned tmp = fileTable[fd].size+delta;
+              unsigned tmp = fileTable[fd].size+ (unsigned) delta;
             if(tmp<fileTable[fd].size){
                 //overflow
                 return EINVAL;
@@ -312,9 +312,10 @@ int file_seek(int fd, int delta, int whence)
             fileTable[fd].offset=tmp;
         }
     }
+    return -1;
 }
 
 int file_tell(int fd, unsigned* offset)
 {
-    
+    return-1;
 }
