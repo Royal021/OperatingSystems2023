@@ -14,3 +14,5 @@
 int file_open(const char* fname, int flags);
 int file_close(int fd);
 int scanForMatchingFilename(const char* fname, struct DirEntry ents[]);
+int file_read(  int fd,void* buf, unsigned count  );
+int file_tell(int fd, unsigned* offset);

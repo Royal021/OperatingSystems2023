@@ -5,6 +5,7 @@
 #define EMFILE      -2      // reading max files
 #define ENOENT       -3        //no such directory entry
 #define EINVAL         -4
+#define ENOSYS         -5
 #define COMMAND_IS_MULTIBLOCK                   ( 1<<5  )
 #define COMMAND_WRITES_TO_CARD                  ( 0     )
 

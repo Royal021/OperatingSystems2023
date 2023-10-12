@@ -18,11 +18,12 @@ TIMEOUT=3
 with open("testsuite.c","r") as fp:
     ts = fp.read()
 
-if zlib.crc32(ts.strip().encode()) != 0x343a2354:
+if zlib.crc32(ts.strip().encode()) != 0x4f5f09f5:
     print("testsuite.c doesn't match what we expect")
     sys.exit(1)
 
 async def testIt():
+
     try:
         with open("testsuite.c") as fp:
             tmp=fp.read()
