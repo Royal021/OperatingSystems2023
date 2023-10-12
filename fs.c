@@ -4,7 +4,6 @@
 static struct VBR vbr;
 static unsigned first_sector;
 static char sectorbuffer[512];
-//char buff[4096];
 char buff[4096];
 char buff2[4096];
 

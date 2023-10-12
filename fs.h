@@ -8,6 +8,8 @@ typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
 
+
+
 int disk_init();
 unsigned clusterNumberToSectorNumber( unsigned clnum );
 int read_cluster(unsigned clnum, void*buffer);

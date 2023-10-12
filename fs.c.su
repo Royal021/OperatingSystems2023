@@ -1,3 +1,3 @@
-fs.c:11:disk_init	48	static
-fs.c:56:clusterNumberToSectorNumber	8	static
-fs.c:64:read_cluster	40	static
+fs.c:10:disk_init	48	static
+fs.c:55:clusterNumberToSectorNumber	8	static
+fs.c:63:read_cluster	40	static

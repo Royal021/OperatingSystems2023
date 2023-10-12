@@ -1,4 +1,5 @@
 #include "file.h"
+
 struct File
 {
     int in_use;
@@ -44,7 +45,9 @@ int file_open(const char* fname, int flags)
     struct DirEntry* D = (struct DirEntry*) clusterBuffer;
     
     //heres the problem
+  
     int matchIndex = scanForMatchingFilename(fname, D);
+   
     if(matchIndex<0)
     {
         
@@ -79,13 +82,27 @@ int file_open(const char* fname, int flags)
 //write a function that takes a filename and a list of dir entries and converts the filename a 8 character base and 3 character extension
     //then compares the base and extension to the base and extension of each dir entry
 int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
+
+  
     char base[9];
     char ext[4];
     for(int s = 0; s<256; s++)
     {
+
+    if (ents[s].base[0] == '\0')
+    {
+        continue;
+
+    }
+    if(ents[s].ext[0] == '\0')
+    {
+        continue;
+    }
     int i;
     for(i = 0; i<8; i++)
     {
+        if(fname[i]==' ')
+            return -1;
         if(fname[i]=='.' || fname[i]=='\0')
             break;
         base[i] = toupper(fname[i]);
@@ -98,26 +115,75 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
             base[k] = ' ';
         }
     }
+    if(fname[i] != '.')
+        {
+            kprintf("period here");
+            return -1;
+        }
     base[k] = '\0';
+    
     if(fname[i]=='.')
     {
         i++;
-        int j;
-        for(j = 0; j<3; j++)
+        int j = 0;
+        int good = 1;
+    
+        while(good)
         {
+            if(fname[i+j]==' ')
+            {
+            kprintf("ext too short here1");
+                return -1;
+            }
+            if(j>=3)
+            {
+                if(fname[i+j]!='\0')
+                {
+                    kprintf("ext too long here2");
+                    return -1;
+                }
+                good = 0;
+                break;
+            }
+            if(fname[i+j]=='\0')
+            {
+                good = 0;
+                break;
+            }
             ext[j] = toupper(fname[i+j]);
+            j++;
+        }
+        while(j<3)
+        {
+            ext[j]=' ';
+            j++;
         }
         ext[j] = '\0';
+        /* if(fname[i+j] != '\0')
+        {
+            kprintf("ext too long here");
+            return -1;
+        } */
+        ext[j] = '\0';
+        if (ext[0] == '\0'|| ext[1] =='\0' || ext[2] == '\0')
+        {
+            kprintf("ext too short here3");
+            return -1;
+        }
+        
+        
     }
     else
     {
+        kprintf("theres not a period in file");
         return -1;
     }
+    
    
 
-   
-    kprintf("entbase: %s\n", ents[s].base);
-    kprintf("entext: %s\n", ents[s].ext);
+ 
+    //kprintf("entbase: %s\n", ents[s].base);
+    //kprintf("entext: %s\n", ents[s].ext);
     
     if(kmemcmp(base, ents[s].base,8) !=0)
     {

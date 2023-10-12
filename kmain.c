@@ -32,7 +32,7 @@ void kmain()
     sd_init();
     kprintf("START\n");
  
-    //disk_init();
+    disk_init();
     sweet();
     kprintf("\nDONE\n");
     while(1){
