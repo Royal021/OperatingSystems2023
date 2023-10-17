@@ -258,7 +258,11 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     fileTable[fd].offset += numToCopy;
 //firstsector+reserve sector, count sectors per fat, static u32 fat)
 //firstsector+reserve sector, count sectors per fat, static u32 fat)
-
+//clusterToskip - f = first cluster
+// 0 = f  the want f is c
+// FAT[f] 1 second cluster in file
+// FAT[FAT[f]] 2  third cluster in file
+// FAT[FAT[FAT[f]]] 3 fourth cluster in file
     return (int)numToCopy;
 
 
