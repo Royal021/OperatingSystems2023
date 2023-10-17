@@ -193,7 +193,7 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
     {
         continue;
     }
-        return i;
+        return k;
     }
     kprintf("base: %s\n", base);
     kprintf("ext: %s\n", ext);
