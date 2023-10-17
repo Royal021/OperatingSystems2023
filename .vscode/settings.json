@@ -3,6 +3,9 @@
         "serial.h": "c",
         "fs.h": "c",
         "utils.h": "c",
-        "errno.h": "c"
+        "errno.h": "c",
+        "initializer_list": "c",
+        "type_traits": "c",
+        "xutility": "c"
     }
 }

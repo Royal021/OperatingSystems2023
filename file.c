@@ -21,7 +21,8 @@ static char clusterBuffer[4096];  // static so not on stack, goes onto the heap
 
 int file_open(const char* fname, int flags)
 {
-   fileTable->offset=0;
+
+   
     if(fname[0]=='\0')
     {
         kprintf("here");
@@ -63,19 +64,12 @@ int file_open(const char* fname, int flags)
         goto cleanup;
     }
 
-    fileTable[i].firstCluster = (u16)(D[matchIndex].clusterHigh <<16) + D[matchIndex].clusterLow;
-    fileTable[i].size = D[matchIndex].size;
     
+   fileTable[i].offset = 0;
+    fileTable[i].firstCluster = (u16)(D[matchIndex].clusterHigh <<16) + D[matchIndex].clusterLow;
+    //fileTable[i].offset +=fileTable[i].firstCluster;
+    fileTable[i].size = D[matchIndex].size;
     fileTable[i].flags = flags; //flags is a parameter
-
-    /* if(D[matchIndex].attributes& ATTRIB_READONLY){
-        if(flags==O_WRONLY || flags == O_RDWR)
-        {
-            err = EPERM;
-            goto cleanup;
-        }
-    }  */
-
     return i; //return file descriptor
 
     cleanup:
@@ -99,7 +93,7 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
     char ext[4];
     for(int s = 0; s<256; s++)
     {
-
+    
     if (ents[s].base[0] == '\0')
     {
         continue;
@@ -226,6 +220,7 @@ int file_close(int fd)
 
 int file_read(  int fd, void* buf,  unsigned capacity )
 {
+    
     if(fd < 0)
         return -1;  // put error code
     if(fileTable[fd].in_use<0)
@@ -234,37 +229,49 @@ int file_read(  int fd, void* buf,  unsigned capacity )
         return EINVAL;
 
     if(capacity == fileTable[fd].size)
+    {
+        kprintf("here1\n");
         return 0;
+    }
     if(fileTable[fd].offset >= fileTable[fd].size)
+    {
+        kprintf("fileTable[fd].offset: %d\n", fileTable[fd].offset);
+        kprintf("fileTable[fd].size: %d\n", fileTable[fd].size);
+        kprintf("here 2\n");
         return 0;
-    
-    
+    } 
+
     int err = read_cluster( fileTable[fd].firstCluster,clusterBuffer);
     if(err != SUCCESS)
         return err;
     
     
+    fileTable[fd].size = capacity;
+    
+    
     unsigned offsetInBuffer = fileTable[fd].offset % 4096;
     unsigned remaingingBytesInCB = 4096-offsetInBuffer;
     unsigned numToCopy = Min32(remaingingBytesInCB, capacity);
-    unsigned bytesLeftInFile = fileTable->size - offsetInBuffer;
-    numToCopy = Min32(numToCopy, bytesLeftInFile);
+    unsigned bytesLeftInFile = fileTable[fd].size - offsetInBuffer;
+    numToCopy = Min32(numToCopy, bytesLeftInFile); 
     kmemcpy(buf, clusterBuffer+offsetInBuffer, numToCopy);
     fileTable[fd].offset += numToCopy;
     return (int)numToCopy;
-
-    //return ENOSYS;
 }
 
 
 int file_seek(int fd, int delta, int whence)
 {
+    if(whence<0||whence>2)
+        return EINVAL;
     if(fd < 0)
-        return -1;  // put error code
+        return EINVAL;  // put error code
     if(fileTable[fd].in_use<0)
-        return -1;  //error code
+        return EINVAL;  //error code
     if(fileTable[fd].offset >= fileTable[fd].size)
-        return 0;
+    {
+        return EINVAL;
+    }
 
     //seek_set
     if(whence == 0)
@@ -312,10 +319,29 @@ int file_seek(int fd, int delta, int whence)
             fileTable[fd].offset=tmp;
         }
     }
-    return -1;
+    return SUCCESS;
 }
+
+
 
 int file_tell(int fd, unsigned* offset)
 {
-    return-1;
+    //store file offset to offset pointer
+    if(fd<0)
+        return -1;
+    
+    else
+    {
+        *offset = fileTable[fd].offset;
+        return 0;
+    }
+    
+}
+
+int file_write( int fd,             //file to write to
+                const void* buf,    //buffer for data
+                unsigned count      //capacity of buf
+){
+    //no such system call
+    return ENOSYS;
 }
