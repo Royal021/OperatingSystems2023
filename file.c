@@ -69,6 +69,7 @@ int file_open(const char* fname, int flags)
     fileTable[i].firstCluster = (u16)(D[matchIndex].clusterHigh <<16) + D[matchIndex].clusterLow;
     //fileTable[i].offset +=fileTable[i].firstCluster;
     fileTable[i].size = D[matchIndex].size;
+    kprintf("size /n %d", fileTable[i].size);
     fileTable[i].flags = flags; //flags is a parameter
     return i; //return file descriptor
 
@@ -176,13 +177,14 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
             return -1;
         }
         
-        
+        return s;
     }
     else
     {
         kprintf("theres not a period in file");
         return -1;
     }
+   
     
    
 
@@ -228,9 +230,8 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     if(capacity == 0)
         return EINVAL;
 
-    if(capacity == fileTable[fd].size)
+    if(capacity == 0)
     {
-        kprintf("here1\n");
         return 0;
     }
     if(fileTable[fd].offset >= fileTable[fd].size)
@@ -256,6 +257,8 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     numToCopy = Min32(numToCopy, bytesLeftInFile); 
     kmemcpy(buf, clusterBuffer+offsetInBuffer, numToCopy);
     fileTable[fd].offset += numToCopy;
+    kprintf("fileTable[fd].offset: %d\n", fileTable[fd].offset);
+    kprintf("numto coy %d\n", numToCopy);
     return (int)numToCopy;
 }
 
