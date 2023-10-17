@@ -268,3 +268,17 @@ int sd_write_sector(unsigned sector, const void* buffer)
     }
     return SUCCESS;
 }
+
+int disc_read_sectors( unsigned sector, unsigned count, void *buffer)
+{
+    char* p = buffer;
+    for (unsigned i=0;i<count;++i)
+    {
+        int err = sd_read_sector(sector+i, p);
+        if(err!= SUCCESS)
+            return err;
+            p+=512;
+    }
+    return SUCCESS;
+}
+

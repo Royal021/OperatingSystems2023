@@ -18,7 +18,7 @@ TIMEOUT=3
 with open("testsuite.c","r") as fp:
     ts = fp.read()
 
-if zlib.crc32(ts.strip().encode()) != 0x4f5f09f5:
+if zlib.crc32(ts.strip().encode()) != 0x9fa9d320:
     print("testsuite.c doesn't match what we expect")
     sys.exit(1)
 

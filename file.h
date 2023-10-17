@@ -12,6 +12,19 @@
 #define O_APPEND 1024
 
 
+//up to 100MB disk...
+#define MAX_DISK_SIZE_MB 100
+
+//fixed cluster size
+#define CLUSTER_SIZE 4096
+
+//Assumes fixed cluster size
+#define MAX_FAT_ENTRIES (MAX_DISK_SIZE_MB * 1024 * 1024 / CLUSTER_SIZE)
+
+static u32 fat[MAX_FAT_ENTRIES];
+
+
+
 int file_open(const char* fname, int flags);
 int file_close(int fd);
 int scanForMatchingFilename(const char* fname, struct DirEntry ents[]);
