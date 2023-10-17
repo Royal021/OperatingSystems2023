@@ -249,7 +249,7 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     fileTable[fd].size = capacity;
     
     
-    unsigned offsetInBuffer = fileTable[fd].offset % 4096;   //bytes to skip
+    unsigned offsetInBuffer = fileTable[fd].offset % 4096;   //bytes to skip to skip
     unsigned remaingingBytesInCB = 4096-offsetInBuffer;
     unsigned numToCopy = Min32(remaingingBytesInCB, capacity);
     unsigned bytesLeftInFile = fileTable[fd].size - offsetInBuffer;
