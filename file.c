@@ -81,13 +81,8 @@ int file_open(const char* fname, int flags)
     
 }
 
-//InputL filename to scan for
-//input list of dir entries to look at
-//out put index of matching entry
-// else error code(negative)
-//write a function that takes a filename and a list of dir entries and converts the filename a 8 character base and 3 character extension
-    //then compares the base and extension to the base and extension of each dir entry
-int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
+int scanForMatchingFilename(const char* fname, struct DirEntry ents[])
+{
 
   
     char base[9];
@@ -123,7 +118,7 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
     }
     if(fname[i] != '.')
         {
-            kprintf("period here");
+            
             return -1;
         }
     base[k] = '\0';
@@ -138,14 +133,14 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
         {
             if(fname[i+j]==' ')
             {
-            kprintf("ext too short here1");
+            
                 return -1;
             }
             if(j>=3)
             {
                 if(fname[i+j]!='\0')
                 {
-                    kprintf("ext too long here2");
+                    
                     return -1;
                 }
                 good = 0;
@@ -165,33 +160,20 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
             j++;
         }
         ext[j] = '\0';
-        /* if(fname[i+j] != '\0')
-        {
-            kprintf("ext too long here");
-            return -1;
-        } */
+        
         ext[j] = '\0';
         if (ext[0] == '\0'|| ext[1] =='\0' || ext[2] == '\0')
         {
-            kprintf("ext too short here3");
             return -1;
         }
         
-        return s;
+        return k;
     }
     else
     {
-        kprintf("theres not a period in file");
+        
         return -1;
     }
-   
-    
-   
-
- 
-    //kprintf("entbase: %s\n", ents[s].base);
-    //kprintf("entext: %s\n", ents[s].ext);
-    
     if(kmemcmp(base, ents[s].base,8) !=0)
     {
         continue;
@@ -200,12 +182,12 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
     {
         continue;
     }
-        return i;
+        return k;
     }
-    kprintf("base: %s\n", base);
-    kprintf("ext: %s\n", ext);
     return -1;
 }
+
+
 
 int file_close(int fd)
 {
@@ -258,7 +240,7 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     kmemcpy(buf, clusterBuffer+offsetInBuffer, numToCopy);
     fileTable[fd].offset += numToCopy;
     kprintf("fileTable[fd].offset: %d\n", fileTable[fd].offset);
-    kprintf("numto coy %d\n", numToCopy);
+    kprintf("num to copy %d\n", numToCopy);
     return (int)numToCopy;
 }
 
