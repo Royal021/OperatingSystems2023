@@ -249,14 +249,20 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     fileTable[fd].size = capacity;
     
     
-    unsigned offsetInBuffer = fileTable[fd].offset % 4096;
+    unsigned offsetInBuffer = fileTable[fd].offset % 4096;   //bytes to skip
     unsigned remaingingBytesInCB = 4096-offsetInBuffer;
     unsigned numToCopy = Min32(remaingingBytesInCB, capacity);
     unsigned bytesLeftInFile = fileTable[fd].size - offsetInBuffer;
     numToCopy = Min32(numToCopy, bytesLeftInFile); 
     kmemcpy(buf, clusterBuffer+offsetInBuffer, numToCopy);
     fileTable[fd].offset += numToCopy;
+//firstsector+reserve sector, count sectors per fat, static u32 fat)
+//firstsector+reserve sector, count sectors per fat, static u32 fat)
+
     return (int)numToCopy;
+
+
+
 }
 
 
@@ -345,3 +351,6 @@ int file_write( int fd,             //file to write to
     //no such system call
     return ENOSYS;
 }
+
+
+//offset/4096 = cluster toskip
