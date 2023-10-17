@@ -70,6 +70,7 @@ int file_open(const char* fname, int flags)
     //fileTable[i].offset +=fileTable[i].firstCluster;
     fileTable[i].size = D[matchIndex].size;
     kprintf("size /n %d", fileTable[i].size);
+kprintf("base /n %s", D[matchIndex].base);    
     fileTable[i].flags = flags; //flags is a parameter
     return i; //return file descriptor
 
@@ -166,8 +167,6 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[])
         {
             return -1;
         }
-        
-        return k;
     }
     else
     {
@@ -182,7 +181,7 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[])
     {
         continue;
     }
-        return k;
+        return s;
     }
     return -1;
 }
@@ -210,12 +209,9 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     if(fileTable[fd].in_use<0)
         return EINVAL;  //error code
     if(capacity == 0)
-        return EINVAL;
-
-    if(capacity == 0)
-    {
         return 0;
-    }
+
+    
     if(fileTable[fd].offset >= fileTable[fd].size)
     {
         kprintf("fileTable[fd].offset: %d\n", fileTable[fd].offset);
@@ -229,7 +225,7 @@ int file_read(  int fd, void* buf,  unsigned capacity )
         return err;
     
     
-    fileTable[fd].size = capacity;
+    
     
     
     unsigned offsetInBuffer = fileTable[fd].offset % 4096;
