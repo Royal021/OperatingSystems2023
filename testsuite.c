@@ -1,6 +1,6 @@
 
 //change this to 1 to get lots of debugging messages
-#define VERBOSE 1
+#define VERBOSE 0
 
 
 

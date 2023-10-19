@@ -228,6 +228,7 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     unsigned offsetInBuffer = fileTable[fd].offset % 4096;
     unsigned remaingingBytesInCB = 4096-offsetInBuffer;
     unsigned numToCopy = Min32(remaingingBytesInCB, capacity);
+   
     unsigned bytesLeftInFile = fileTable[fd].size - offsetInBuffer;
     numToCopy = Min32(numToCopy, bytesLeftInFile); 
     kmemcpy(buf, clusterBuffer+offsetInBuffer, numToCopy);
@@ -247,10 +248,7 @@ int file_seek(int fd, int delta, int whence)
         kprintf("9");
         return EINVAL;
     }  
-    if(delta<0)
-    {
-        return EINVAL;
-    }
+    
     if(fileTable[fd].in_use<0)
     {
     kprintf("1");
@@ -267,7 +265,6 @@ int file_seek(int fd, int delta, int whence)
     if(whence == 0)
     {
         if(delta<0)
-        kprintf("3");
             return EINVAL;
         fileTable[fd].offset = (unsigned) delta;
     }   
@@ -331,7 +328,7 @@ int file_tell(int fd, unsigned* offset)
     else
     {
         *offset = fileTable[fd].offset;
-        kprintf(" %d", offset[0]);
+        
         return 0;
     }
     
