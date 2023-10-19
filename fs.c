@@ -41,10 +41,10 @@ int disk_init()
             int k = 0;
             while(d[i].base[k]!=' ' && k<8)
             {
-                kprintf("%c", d[i].base[k]);
+                //kprintf("%c", d[i].base[k]);
                 k++;
             }
-        kprintf(".%s\n", d[i].ext);
+        //kprintf(".%s\n", d[i].ext);
         }        
     }
     }
