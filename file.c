@@ -25,7 +25,7 @@ int file_open(const char* fname, int flags)
    
     if(fname[0]=='\0')
     {
-        kprintf("here");
+        
         return EMFILE;
     }
     int i;
@@ -69,8 +69,7 @@ int file_open(const char* fname, int flags)
     fileTable[i].firstCluster = (u16)(D[matchIndex].clusterHigh <<16) + D[matchIndex].clusterLow;
     //fileTable[i].offset +=fileTable[i].firstCluster;
     fileTable[i].size = D[matchIndex].size;
-    kprintf("size /n %d", fileTable[i].size);
-kprintf("base /n %s", D[matchIndex].base);    
+    
     fileTable[i].flags = flags; //flags is a parameter
     return i; //return file descriptor
 
@@ -214,9 +213,7 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     
     if(fileTable[fd].offset >= fileTable[fd].size)
     {
-        kprintf("fileTable[fd].offset: %d\n", fileTable[fd].offset);
-        kprintf("fileTable[fd].size: %d\n", fileTable[fd].size);
-        kprintf("here 2\n");
+        
         return 0;
     } 
 
@@ -235,8 +232,6 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     numToCopy = Min32(numToCopy, bytesLeftInFile); 
     kmemcpy(buf, clusterBuffer+offsetInBuffer, numToCopy);
     fileTable[fd].offset += numToCopy;
-    kprintf("fileTable[fd].offset: %d\n", fileTable[fd].offset);
-    kprintf("num to copy %d\n", numToCopy);
     return (int)numToCopy;
 }
 
@@ -244,20 +239,35 @@ int file_read(  int fd, void* buf,  unsigned capacity )
 int file_seek(int fd, int delta, int whence)
 {
     if(whence<0||whence>2)
+    {
+        kprintf("11");
         return EINVAL;
-    if(fd < 0)
-        return EINVAL;  // put error code
-    if(fileTable[fd].in_use<0)
-        return EINVAL;  //error code
-    if(fileTable[fd].offset >= fileTable[fd].size)
+    }
+    if(fd < 0){
+        kprintf("9");
+        return EINVAL;
+    }  
+    if(delta<0)
     {
         return EINVAL;
     }
+    if(fileTable[fd].in_use<0)
+    {
+    kprintf("1");
+        return EINVAL;  
+    }
+   /*  if(fileTable[fd].offset >= fileTable[fd].size)
+    {
+        kprintf("2");
+        return EINVAL;
+    } */
+
 
     //seek_set
     if(whence == 0)
     {
         if(delta<0)
+        kprintf("3");
             return EINVAL;
         fileTable[fd].offset = (unsigned) delta;
     }   
@@ -268,6 +278,7 @@ int file_seek(int fd, int delta, int whence)
         {
             unsigned tmp = fileTable[fd].offset+ (unsigned) delta;
             if(tmp>fileTable[fd].offset){
+                kprintf("4");
                 return EINVAL;
             }
             fileTable[fd].offset=tmp;
@@ -276,17 +287,18 @@ int file_seek(int fd, int delta, int whence)
               unsigned tmp = fileTable[fd].offset+ (unsigned) delta;
             if(tmp<fileTable[fd].offset){
                 //overflow
-                return EINVAL;
+                return -2;
             }
             fileTable[fd].offset=tmp;
         }
     }
-    if(whence== 2)
+    else if(whence== 2)
     {
         if (delta<0)
         {
             unsigned tmp = fileTable[fd].size+(unsigned) delta;
             if(tmp>fileTable[fd].size){
+                kprintf("6");
                 return EINVAL;
             }
             fileTable[fd].offset=tmp;
@@ -295,6 +307,7 @@ int file_seek(int fd, int delta, int whence)
               unsigned tmp = fileTable[fd].size+ (unsigned) delta;
             if(tmp<fileTable[fd].size){
                 //overflow
+                kprintf("7");
                 return EINVAL;
             }
             fileTable[fd].offset=tmp;
@@ -308,12 +321,17 @@ int file_seek(int fd, int delta, int whence)
 int file_tell(int fd, unsigned* offset)
 {
     //store file offset to offset pointer
+    if(offset==NULL)
+    {
+        return EINVAL;
+    }
     if(fd<0)
         return -1;
     
     else
     {
         *offset = fileTable[fd].offset;
+        kprintf(" %d", offset[0]);
         return 0;
     }
     
