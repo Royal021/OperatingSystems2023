@@ -25,7 +25,7 @@ int file_open(const char* fname, int flags)
    
     if(fname[0]=='\0')
     {
-        kprintf("here");
+        
         return EMFILE;
     }
     int i;
@@ -69,6 +69,7 @@ int file_open(const char* fname, int flags)
     fileTable[i].firstCluster = (u16)(D[matchIndex].clusterHigh <<16) + D[matchIndex].clusterLow;
     //fileTable[i].offset +=fileTable[i].firstCluster;
     fileTable[i].size = D[matchIndex].size;
+    
     fileTable[i].flags = flags; //flags is a parameter
     return i; //return file descriptor
 
@@ -80,13 +81,8 @@ int file_open(const char* fname, int flags)
     
 }
 
-//InputL filename to scan for
-//input list of dir entries to look at
-//out put index of matching entry
-// else error code(negative)
-//write a function that takes a filename and a list of dir entries and converts the filename a 8 character base and 3 character extension
-    //then compares the base and extension to the base and extension of each dir entry
-int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
+int scanForMatchingFilename(const char* fname, struct DirEntry ents[])
+{
 
   
     char base[9];
@@ -122,7 +118,7 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
     }
     if(fname[i] != '.')
         {
-            kprintf("period here");
+            
             return -1;
         }
     base[k] = '\0';
@@ -137,14 +133,14 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
         {
             if(fname[i+j]==' ')
             {
-            kprintf("ext too short here1");
+            
                 return -1;
             }
             if(j>=3)
             {
                 if(fname[i+j]!='\0')
                 {
-                    kprintf("ext too long here2");
+                    
                     return -1;
                 }
                 good = 0;
@@ -164,32 +160,18 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
             j++;
         }
         ext[j] = '\0';
-        /* if(fname[i+j] != '\0')
-        {
-            kprintf("ext too long here");
-            return -1;
-        } */
+        
         ext[j] = '\0';
         if (ext[0] == '\0'|| ext[1] =='\0' || ext[2] == '\0')
         {
-            kprintf("ext too short here3");
             return -1;
         }
-        
-        
     }
     else
     {
-        kprintf("theres not a period in file");
+        
         return -1;
     }
-    
-   
-
- 
-    //kprintf("entbase: %s\n", ents[s].base);
-    //kprintf("entext: %s\n", ents[s].ext);
-    
     if(kmemcmp(base, ents[s].base,8) !=0)
     {
         continue;
@@ -198,12 +180,12 @@ int scanForMatchingFilename(const char* fname, struct DirEntry ents[]){
     {
         continue;
     }
-        return i;
+        return s;
     }
-    kprintf("base: %s\n", base);
-    kprintf("ext: %s\n", ext);
     return -1;
 }
+
+
 
 int file_close(int fd)
 {
@@ -226,18 +208,12 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     if(fileTable[fd].in_use<0)
         return EINVAL;  //error code
     if(capacity == 0)
-        return EINVAL;
-
-    if(capacity == fileTable[fd].size)
-    {
-        kprintf("here1\n");
         return 0;
-    }
+
+    
     if(fileTable[fd].offset >= fileTable[fd].size)
     {
-        kprintf("fileTable[fd].offset: %d\n", fileTable[fd].offset);
-        kprintf("fileTable[fd].size: %d\n", fileTable[fd].size);
-        kprintf("here 2\n");
+        
         return 0;
     } 
 
@@ -246,12 +222,13 @@ int file_read(  int fd, void* buf,  unsigned capacity )
         return err;
     
     
-    fileTable[fd].size = capacity;
+    
     
     
     unsigned offsetInBuffer = fileTable[fd].offset % 4096;   //bytes to skip to skip
     unsigned remaingingBytesInCB = 4096-offsetInBuffer;
     unsigned numToCopy = Min32(remaingingBytesInCB, capacity);
+   
     unsigned bytesLeftInFile = fileTable[fd].size - offsetInBuffer;
     numToCopy = Min32(numToCopy, bytesLeftInFile); 
     kmemcpy(buf, clusterBuffer+offsetInBuffer, numToCopy);
@@ -273,15 +250,26 @@ int file_read(  int fd, void* buf,  unsigned capacity )
 int file_seek(int fd, int delta, int whence)
 {
     if(whence<0||whence>2)
-        return EINVAL;
-    if(fd < 0)
-        return EINVAL;  // put error code
-    if(fileTable[fd].in_use<0)
-        return EINVAL;  //error code
-    if(fileTable[fd].offset >= fileTable[fd].size)
     {
+        kprintf("11");
         return EINVAL;
     }
+    if(fd < 0){
+        kprintf("9");
+        return EINVAL;
+    }  
+    
+    if(fileTable[fd].in_use<0)
+    {
+    kprintf("1");
+        return EINVAL;  
+    }
+   /*  if(fileTable[fd].offset >= fileTable[fd].size)
+    {
+        kprintf("2");
+        return EINVAL;
+    } */
+
 
     //seek_set
     if(whence == 0)
@@ -297,6 +285,7 @@ int file_seek(int fd, int delta, int whence)
         {
             unsigned tmp = fileTable[fd].offset+ (unsigned) delta;
             if(tmp>fileTable[fd].offset){
+                kprintf("4");
                 return EINVAL;
             }
             fileTable[fd].offset=tmp;
@@ -305,17 +294,18 @@ int file_seek(int fd, int delta, int whence)
               unsigned tmp = fileTable[fd].offset+ (unsigned) delta;
             if(tmp<fileTable[fd].offset){
                 //overflow
-                return EINVAL;
+                return -2;
             }
             fileTable[fd].offset=tmp;
         }
     }
-    if(whence== 2)
+    else if(whence== 2)
     {
         if (delta<0)
         {
             unsigned tmp = fileTable[fd].size+(unsigned) delta;
             if(tmp>fileTable[fd].size){
+                kprintf("6");
                 return EINVAL;
             }
             fileTable[fd].offset=tmp;
@@ -324,6 +314,7 @@ int file_seek(int fd, int delta, int whence)
               unsigned tmp = fileTable[fd].size+ (unsigned) delta;
             if(tmp<fileTable[fd].size){
                 //overflow
+                kprintf("7");
                 return EINVAL;
             }
             fileTable[fd].offset=tmp;
@@ -337,12 +328,17 @@ int file_seek(int fd, int delta, int whence)
 int file_tell(int fd, unsigned* offset)
 {
     //store file offset to offset pointer
+    if(offset==NULL)
+    {
+        return EINVAL;
+    }
     if(fd<0)
         return -1;
     
     else
     {
         *offset = fileTable[fd].offset;
+        
         return 0;
     }
     
