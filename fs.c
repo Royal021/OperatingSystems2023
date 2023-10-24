@@ -1,7 +1,7 @@
 #include "fs.h"
 
-
 static struct VBR vbr;
+
 static unsigned first_sector;
 static char sectorbuffer[512];
 char buff[4096];
@@ -72,3 +72,9 @@ int read_cluster(unsigned clnum, void* buffer)
     }
     return SUCCESS;
 }
+
+struct VBR* getVBR()
+{
+    return &vbr;
+};
+

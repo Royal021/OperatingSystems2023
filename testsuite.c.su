@@ -1,3 +1,3 @@
-testsuite.c:204:sweet	208	static
-testsuite.c:178:mystrlen	8	static
-testsuite.c:21:vprintf	4	static
+testsuite.c:428:sweet	240	static
+testsuite.c:418:mystrlen	8	static
+testsuite.c:393:memdump	40	static

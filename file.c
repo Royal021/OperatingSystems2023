@@ -1,5 +1,7 @@
 #include "file.h"
 
+
+
 struct File
 {
     int in_use;
@@ -11,11 +13,13 @@ struct File
     u16 low;
 };
 
+
+
+
 #define MAX_FILES 16        //real OS's use something
                             //like 1000 or so...
 struct File fileTable[MAX_FILES];
-
-static char clusterBuffer[4096];  // static so not on stack, goes onto the heap
+static char clusterBuffer[CLUSTER_SIZE];
 
 //Todo check not too long
 
@@ -221,11 +225,25 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     if(err != SUCCESS)
         return err;
     
-    
-    
-    
-    
+    struct VBR* vbr = getVBR();
+
+    unsigned clustersToSkip = fileTable[fd].offset/4096;
     unsigned offsetInBuffer = fileTable[fd].offset % 4096;   //bytes to skip to skip
+    //unsigned bytesToSkip = offsetInBuffer;
+    // f is first clusters
+    // 
+    unsigned c = fileTable[fd].firstCluster;
+   
+    for(int i = 0; i<clustersToSkip; i++)
+    {
+        c = fat[c];
+    }
+
+    disc_read_sectors(
+        clusterNumberToSectorNumber(c),  
+        vbr->sectors_per_cluster,
+        clusterBuffer
+    );
     unsigned remaingingBytesInCB = 4096-offsetInBuffer;
     unsigned numToCopy = Min32(remaingingBytesInCB, capacity);
    
@@ -233,14 +251,12 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     numToCopy = Min32(numToCopy, bytesLeftInFile); 
     kmemcpy(buf, clusterBuffer+offsetInBuffer, numToCopy);
     fileTable[fd].offset += numToCopy;
+    
+    
+        
 //firstsector+reserve sector, count sectors per fat, static u32 fat)
 //firstsector+reserve sector, count sectors per fat, static u32 fat)
-//clusterToskip - f = first cluster
-// 0 = f  the want f is c
-// FAT[f] 1 second cluster in file
-// FAT[FAT[f]] 2  third cluster in file
-// FAT[FAT[FAT[f]]] 3 fourth cluster in file
-    return (int)numToCopy;
+    return (int) numToCopy;
 
 
 

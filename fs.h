@@ -100,3 +100,4 @@ struct LFNEntry {
 };
 #pragma pack(pop)
 
+struct VBR* getVBR();

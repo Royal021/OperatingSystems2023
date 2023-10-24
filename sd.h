@@ -94,3 +94,4 @@ void delay_millisec(unsigned num);
 void sd_init();
 int sd_write_sector(unsigned sector, const void* buffer);
 int sd_read_sector(unsigned sector, void* buffer);
+int disc_read_sectors( unsigned sector, unsigned count, void *buffer);

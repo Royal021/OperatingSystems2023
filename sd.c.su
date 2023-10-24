@@ -7,4 +7,5 @@ sd.c:221:waitForStatusBitsToBeZero	24	static
 sd.c:199:waitForInterrupt	24	static
 sd.c:244:sd_read_sector	32	static
 sd.c:258:sd_write_sector	32	static
+sd.c:272:disc_read_sectors	40	static
 sd.c:194:getHostControllerVersion	0	static
