@@ -1,7 +1,7 @@
-file.c:26:file_open	40	static
-file.c:88:scanForMatchingFilename	56	static
-file.c:194:file_close	8	static
-file.c:207:file_read	72	static
+file.c:27:file_open	40	static
+file.c:89:scanForMatchingFilename	56	static
+file.c:195:file_close	8	static
+file.c:208:file_read	72	static
 file.c:271:file_seek	40	static
 file.c:349:file_tell	12	static
 file.c:368:file_write	12	static

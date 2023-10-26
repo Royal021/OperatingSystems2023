@@ -21,6 +21,7 @@ struct File
 struct File fileTable[MAX_FILES];
 static char clusterBuffer[CLUSTER_SIZE];
 
+
 //Todo check not too long
 
 int file_open(const char* fname, int flags)
@@ -227,8 +228,12 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     
     struct VBR* vbr = getVBR();
 
-    unsigned clustersToSkip = fileTable[fd].offset/4096;
-    unsigned offsetInBuffer = fileTable[fd].offset % 4096;   //bytes to skip to skip
+    
+    fat[0] = vbr->first_sector + vbr->reserved_sectors;
+
+
+    unsigned clustersToSkip = fileTable[fd].offset/CLUSTER_SIZE;
+    unsigned offsetInBuffer = fileTable[fd].offset % CLUSTER_SIZE;   //bytes to skip to skip
     //unsigned bytesToSkip = offsetInBuffer;
     // f is first clusters
     // 
@@ -238,16 +243,16 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     {
         c = fat[c];
     }
-
+    kprintf("cluster is %u" , c);
     disc_read_sectors(
         clusterNumberToSectorNumber(c),  
         vbr->sectors_per_cluster,
         clusterBuffer
     );
-    unsigned remaingingBytesInCB = 4096-offsetInBuffer;
+    unsigned remaingingBytesInCB = CLUSTER_SIZE-offsetInBuffer;
     unsigned numToCopy = Min32(remaingingBytesInCB, capacity);
    
-    unsigned bytesLeftInFile = fileTable[fd].size - offsetInBuffer;
+    unsigned bytesLeftInFile = fileTable[fd].size - fileTable[fd].offset;
     numToCopy = Min32(numToCopy, bytesLeftInFile); 
     kmemcpy(buf, clusterBuffer+offsetInBuffer, numToCopy);
     fileTable[fd].offset += numToCopy;
