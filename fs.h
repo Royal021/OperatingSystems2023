@@ -100,4 +100,16 @@ struct LFNEntry {
 };
 #pragma pack(pop)
 
+
+//up to 100MB disk...
+#define MAX_DISK_SIZE_MB 100
+
+//fixed cluster size
+#define CLUSTER_SIZE 4096
+
+//Assumes fixed cluster size
+#define MAX_FAT_ENTRIES (MAX_DISK_SIZE_MB * 1024 * 1024 / CLUSTER_SIZE)
+
+extern u32 fat[MAX_FAT_ENTRIES];
+
 struct VBR* getVBR();

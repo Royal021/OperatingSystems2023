@@ -6,6 +6,7 @@ static unsigned first_sector;
 static char sectorbuffer[512];
 char buff[4096];
 char buff2[4096];
+u32 fat[MAX_FAT_ENTRIES];
 
 int disk_init()
 {
@@ -13,7 +14,7 @@ int disk_init()
     if(rv<0)
         return rv;
     struct GPTEntry* G = (struct GPTEntry *)sectorbuffer;
-    first_sector = G[0].firstSector;  //G[0]. , (*G)., G->
+    first_sector = G[0].firstSector;  
     rv = sd_read_sector( first_sector, &vbr);
     if(rv<0)
         return rv;
@@ -48,7 +49,7 @@ int disk_init()
         }        
     }
     }
-    
+    disc_read_sectors(vbr.first_sector + vbr.reserved_sectors, vbr.sectors_per_fat, fat);
     return SUCCESS;
 }
 

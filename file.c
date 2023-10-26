@@ -245,7 +245,7 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     {
         c = fat[c];
     }
-    kprintf("cluster is %u" , c);
+    
     disc_read_sectors(
         clusterNumberToSectorNumber(c),  
         vbr->sectors_per_cluster,
@@ -258,15 +258,7 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     numToCopy = Min32(numToCopy, bytesLeftInFile); 
     kmemcpy(buf, clusterBuffer+offsetInBuffer, numToCopy);
     fileTable[fd].offset += numToCopy;
-    
-    
-        
-//firstsector+reserve sector, count sectors per fat, static u32 fat)
-//firstsector+reserve sector, count sectors per fat, static u32 fat)
     return (int) numToCopy;
-
-
-
 }
 
 
