@@ -22,6 +22,8 @@ struct File fileTable[MAX_FILES];
 static char clusterBuffer[CLUSTER_SIZE];
 
 
+
+
 //Todo check not too long
 
 int file_open(const char* fname, int flags)
@@ -229,7 +231,7 @@ int file_read(  int fd, void* buf,  unsigned capacity )
     struct VBR* vbr = getVBR();
 
     
-    fat[0] = vbr->first_sector + vbr->reserved_sectors;
+
 
 
     unsigned clustersToSkip = fileTable[fd].offset/CLUSTER_SIZE;
