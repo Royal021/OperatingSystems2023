@@ -4,6 +4,9 @@ import os
 import sys
 import lab11
 
+
+
+
 inifile=configparser.ConfigParser()
 inifile.read("config.ini")
 conf=inifile["config"]
@@ -12,6 +15,7 @@ cc=conf["compiler"]
 link=conf["linker"]
 qemu=conf["qemu"]
 python=conf["python"]
+userlinker=conf["userlinker"]
 
 cflags=[
     "-std=c11",                     #Use C-11 standard
@@ -39,6 +43,14 @@ linkflags=[
     "-o", "kernel.elf"              #output file
 ]
 
+
+
+usercflags = cflags[:]
+
+userlinkflags=[
+    "-T", "userlinkerscript.txt"
+]
+
 def doIt(cmd):
     try:
         print(" ".join(cmd))
@@ -55,17 +67,17 @@ for filename in os.listdir("."):
 
 doIt( [link] + linkflags + objectfiles )
 
-doIt( [python,"fool.zip",
-    "sd.img", "create","64",
-    "cp","article7.txt","ARTICLE7.TXT",
-    "cp","article1.txt","ARTICLE1.TXT",
-    "cp","article2.txt","ARTICLE2.TXT",
-    "cp","article3.txt","ARTICLE3.TXT",
-    "cp","article4.txt","ARTICLE4.TXT",
-    "cp","article5.txt","ARTICLE5.TXT",
-    "cp","article6.txt","ARTICLE6.TXT",
-    "cp","billofrights.txt","BILL.TXT",
-    "cp","const.txt","CONST.C",
+for filename in os.listdir("user"):
+    if filename.endswith(".c"):
+        filename = os.path.join("user",filename)
+        obj=filename+".o"
+        exe=filename.replace(".c",".exe")
+        doIt( [cc] + usercflags + ["-c", "-o", obj, filename] )
+        doIt( [userlinker] + userlinkflags + [obj, "-o", exe ])
+
+doIt( [python, "fool.zip", "sd.img",
+    "create", "64",
+    "cp", "user/hello.exe", "HELLO.EXE"
 ])
 
 doIt( [ qemu,

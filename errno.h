@@ -6,6 +6,8 @@
 #define ENOENT       -3        //no such directory entry
 #define EINVAL         -4
 #define ENOSYS         -5
+#define EEEOF          -6
+#define ENOEXEC         -7
 #define COMMAND_IS_MULTIBLOCK                   ( 1<<5  )
 #define COMMAND_WRITES_TO_CARD                  ( 0     )
 

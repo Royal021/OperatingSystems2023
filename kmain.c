@@ -17,7 +17,7 @@ __asm__(
 #include "timer.h"
 #include "sd.h"
 #include "fs.h"
-
+#include "ELF.h"
 
 extern void sweet();
 
@@ -30,11 +30,11 @@ void kmain()
     timer_init();
     interrupt_enable();
     sd_init();
-    kprintf("START\n");
- 
     disk_init();
-    sweet();
-    kprintf("\nDONE\n");
+    int rv = exec("HELLO.EXE");
+    kprintf("exec returned %d\n", rv);
+    //we should not get here
+    panic("Could not exec!");
     while(1){
     }
 }

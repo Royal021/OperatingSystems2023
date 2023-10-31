@@ -12,37 +12,29 @@ import io
 import re
 import zlib
 
-TIMEOUT=3
+TIMEOUT=25
 
 
-with open("testsuite.c","r") as fp:
-    ts = fp.read()
-
-if zlib.crc32(ts.strip().encode()) != 0x9fa9d320:
-    print("testsuite.c doesn't match what we expect")
-    sys.exit(1)
 
 async def testIt():
 
+    P = await runIt()
     try:
-        with open("testsuite.c") as fp:
-            tmp=fp.read()
-        idx=tmp.find("//!!");
-        assert idx != -1
-        r = random.randint(0,10000)
-        tmp = tmp[:idx]+f'kprintf("{r}");'+tmp[idx:]
-        with open("testsuite.c","w") as fp:
-            fp.write(tmp)
-        P = await runIt()
-        try:
-            await waitForLine(P,f"{r}All OK")
-        finally:
-            await quitQemu(P)
+        await waitForLine(P,f"Hello!")
+        time.sleep(0.5)
+        regs = await getRegisters(P)
     finally:
-        with open("testsuite.c","w") as fp:
-            fp.write(ts)
+        await quitQemu(P)
+
+    if regs[13] < 0x700000 or regs[13] > 0x800000:
+        print("\n\nsp is bad:",hex(regs[13]))
+        return
+    if regs[15] < 0x400000 or regs[15] > 0x500000 :
+        print("\n\npc is bad:",hex(regs[15]))
+        return
 
     print("\n\n\nOK!")
+
     return
 
 
@@ -54,20 +46,29 @@ async def waitForLine(P,txt):
     raise Exception(f"Never found expected text: {txt}")
 
 
-async def getModeAndPC(P):
-    P.stdin.write(b"\ninfo registers\n~c\ninfo registers\n")
+async def getRegisters(P):
+    P.stdin.write(b"\ninfo registers\n~c\ninfo registers\n\n")
     await P.stdin.drain()
-    pc=-1
-    mode="?"
+    data=[]
+    inMonitor=False
     while True:
         line = (await readline(P)).strip()
-        if line.startswith("R12="):
-            idx = line.find("R15=")
-            assert idx >= 0
-            pc = int(line[idx+4:],16)
-        elif line.startswith("PSR="):
-            mode = line.split()[-1]
-            return mode,pc
+        if not inMonitor:
+            if line.startswith("(qemu)"):
+                inMonitor=True
+            else:
+                continue
+        if not line.startswith("(qemu)") and " monitor " not in line and line != "":
+            data.append(line)
+        if line.startswith("(qemu)") and len(data) > 0:
+            break
+    data = "\n".join(data)
+    regs = re.findall(r"R\d\d=([A-Fa-f0-9]{8})",data)
+
+    print("data=",data)
+    print("REGS=",regs)
+
+    return [int(q,16) for q in regs]
 
 async def runIt():
     python = sys.executable

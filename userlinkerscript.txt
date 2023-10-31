@@ -1,0 +1,20 @@
+ENTRY(main)
+SECTIONS {
+    . = 0x400000;
+    .text : {
+        *(.text)
+    }
+    .rodata : {
+        *(.rodata*)
+        *(.rdata*)
+        *(.constdata*)
+    }
+    . = ALIGN(4096);
+    .data : {
+        *(.data)
+    }
+    .bss : {
+        *(.bss)
+        *(COMMON);
+    }
+}

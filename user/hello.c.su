@@ -1,0 +1,3 @@
+user\hello.c:7:my_putc	4	static
+user\hello.c:14:my_halt	0	static
+user\hello.c:24:main	24	static

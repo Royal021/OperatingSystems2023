@@ -1,0 +1,2 @@
+ELF.c:3:exec	56	static
+ELF.c:90:file_read_fully	40	static
