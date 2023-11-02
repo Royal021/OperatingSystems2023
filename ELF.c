@@ -47,13 +47,15 @@ int exec(const char* fname)
     if( pentry.type != 1 )
     continue;
 
-    if ( pentry.sizeInRAM > pentry.sizeInFile )
+    if ( pentry.sizeInRAM >= pentry.sizeInFile )
     {
+        rv = (int)file_seek(fd,(int)pentry.offset,SEEK_SET);
         file_read_fully(fd, (void*)pentry.address, pentry.sizeInFile);
         kmemset((void*)(pentry.address+pentry.sizeInFile), 0, pentry.sizeInRAM-pentry.sizeInFile);
     }
     if ( pentry.sizeInFile > pentry.sizeInRAM)
     {
+        rv = (int)file_seek(fd,(int)pentry.offset,SEEK_SET);
         file_read_fully(fd, (void*)pentry.address, pentry.sizeInRAM);
     }
     if (pentry.sizeInFile == 0)

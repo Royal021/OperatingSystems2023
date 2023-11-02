@@ -1,2 +1,6 @@
 ELF.c:3:exec	64	static
+<<<<<<< HEAD
 ELF.c:124:file_read_fully	40	static
+=======
+ELF.c:92:file_read_fully	40	static
+>>>>>>> f208e64ed683178834841e317bc200f12b912830
