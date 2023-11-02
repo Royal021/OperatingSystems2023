@@ -73,13 +73,47 @@ int exec(const char* fname)
 
 
 
-    __asm__ volatile(
+   unsigned temp,temp2;
+
+__asm__ volatile(
+    "mrs %[tempReg1], cpsr\n"
+    "mov %[tempReg2],%[tempReg1]\n"
+    "orr %[tempReg1], #0x1f\n"
+    "msr cpsr, %[tempReg1]\n"
+
     "mov sp, %[stackBaseReg]\n"
-    "bx %[entryPointReg]\n"
-    :   //no outputs
-    : [entryPointReg] "r" (entryPoint),
-      [stackBaseReg]  "r" (EXE_STACK)
-    );
+    "mov lr, #0\n"
+    
+    "msr cpsr, %[tempReg2]\n"
+    
+    "and %[tempReg1], #0xe0\n"
+    "orr %[tempReg1], #0x10\n"
+    "msr spsr, %[tempReg1]\n"
+
+    "mov lr, %[entryPointReg]\n"
+    "and r0, #0\n"
+    "and r1, #0\n"
+    "and r2, #0\n"
+    "and r3, #0\n"
+    "and r4, #0\n"
+    "and r5, #0\n"
+    "and r6, #0\n"
+    "and r7, #0\n"
+    "and r8, #0\n"
+    "and r9, #0\n"
+    "and r10, #0\n"
+    "and r11, #0\n"
+    "and r12, #0\n"
+
+    "subs pc, lr, #0\n"
+
+    : [tempReg1] "+r" (temp),
+      [tempReg2] "+r" (temp2),
+      [entryPointReg] "+r" (entryPoint)
+    : [stackBaseReg]  "r" (EXE_STACK)
+    : "memory","cc"          //clobbers
+);
+
     error:
     file_close(fd);
     return rv;

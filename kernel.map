@@ -127,55 +127,55 @@
     a570     a570       ac     1                 disc_read_sectors
     a61c     a61c       18     1                 getHostControllerVersion
     a630     a630        0     1                 $d.15
-    a634     a634      604     4         ELF.c.o:(.text)
+    a634     a634      d08     4         file.c.o:(.text)
     a634     a634        0     1                 $a.0
-    a634     a634      538     1                 exec
-    ab28     ab28        0     1                 $d.1
-    ab6c     ab6c        0     1                 $a.2
-    ab6c     ab6c       cc     1                 file_read_fully
-    ac38     ac38      338     4         utils.c.o:(.text)
-    ac38     ac38        0     1                 $a.0
-    ac38     ac38       48     1                 bss_init
-    ac78     ac78        0     1                 $d.1
-    ac80     ac80        0     1                 $a.2
-    ac80     ac80       6c     1                 kmemset
-    acec     acec       68     1                 kmemcpy
-    ad54     ad54       a8     1                 getValue
-    adfc     adfc       28     1                 panic
-    ae20     ae20        0     1                 $d.3
-    ae24     ae24        0     1                 $a.4
-    ae24     ae24       44     1                 toupper
-    ae68     ae68       c4     1                 kmemcmp
-    af2c     af2c       44     1                 Min32
-    af70     af70      108     4         timer.c.o:(.text)
-    af70     af70        0     1                 $a.0
-    af70     af70       4c     1                 timer_init
-    afac     afac        0     1                 $d.1
-    afbc     afbc        0     1                 $a.2
-    afbc     afbc       84     1                 timer_interrupt
-    b030     b030        0     1                 $d.3
-    b040     b040        0     1                 $a.4
-    b040     b040       38     1                 get_uptime
-    b06c     b06c        0     1                 $d.5
-    b078     b078      d08     4         file.c.o:(.text)
-    b078     b078        0     1                 $a.0
-    b078     b078      200     1                 file_open
-    b260     b260        0     1                 $d.1
-    b278     b278        0     1                 $a.2
-    b278     b278      3d4     1                 scanForMatchingFilename
-    b64c     b64c       94     1                 file_close
-    b6d8     b6d8        0     1                 $d.3
-    b6e0     b6e0        0     1                 $a.4
-    b6e0     b6e0      27c     1                 file_read
-    b93c     b93c        0     1                 $d.5
-    b95c     b95c        0     1                 $a.6
-    b95c     b95c      388     1                 file_seek
-    bca4     bca4        0     1                 $d.7
-    bce4     bce4        0     1                 $a.8
-    bce4     bce4       80     1                 file_tell
-    bd60     bd60        0     1                 $d.9
-    bd64     bd64        0     1                 $a.10
-    bd64     bd64       1c     1                 file_write
+    a634     a634      200     1                 file_open
+    a81c     a81c        0     1                 $d.1
+    a834     a834        0     1                 $a.2
+    a834     a834      3d4     1                 scanForMatchingFilename
+    ac08     ac08       94     1                 file_close
+    ac94     ac94        0     1                 $d.3
+    ac9c     ac9c        0     1                 $a.4
+    ac9c     ac9c      27c     1                 file_read
+    aef8     aef8        0     1                 $d.5
+    af18     af18        0     1                 $a.6
+    af18     af18      388     1                 file_seek
+    b260     b260        0     1                 $d.7
+    b2a0     b2a0        0     1                 $a.8
+    b2a0     b2a0       80     1                 file_tell
+    b31c     b31c        0     1                 $d.9
+    b320     b320        0     1                 $a.10
+    b320     b320       1c     1                 file_write
+    b33c     b33c      338     4         utils.c.o:(.text)
+    b33c     b33c        0     1                 $a.0
+    b33c     b33c       48     1                 bss_init
+    b37c     b37c        0     1                 $d.1
+    b384     b384        0     1                 $a.2
+    b384     b384       6c     1                 kmemset
+    b3f0     b3f0       68     1                 kmemcpy
+    b458     b458       a8     1                 getValue
+    b500     b500       28     1                 panic
+    b524     b524        0     1                 $d.3
+    b528     b528        0     1                 $a.4
+    b528     b528       44     1                 toupper
+    b56c     b56c       c4     1                 kmemcmp
+    b630     b630       44     1                 Min32
+    b674     b674      108     4         timer.c.o:(.text)
+    b674     b674        0     1                 $a.0
+    b674     b674       4c     1                 timer_init
+    b6b0     b6b0        0     1                 $d.1
+    b6c0     b6c0        0     1                 $a.2
+    b6c0     b6c0       84     1                 timer_interrupt
+    b734     b734        0     1                 $d.3
+    b744     b744        0     1                 $a.4
+    b744     b744       38     1                 get_uptime
+    b770     b770        0     1                 $d.5
+    b77c     b77c      604     4         ELF.c.o:(.text)
+    b77c     b77c        0     1                 $a.0
+    b77c     b77c      538     1                 exec
+    bc70     bc70        0     1                 $d.1
+    bcb4     bcb4        0     1                 $a.2
+    bcb4     bcb4       cc     1                 file_read_fully
     bd80     bd80     2c90     4         kprintf.c.o:(.text)
     bd80     bd80        0     1                 $a.0
     bd80     bd80       3c     1                 stbsp_set_separators
@@ -315,14 +315,14 @@
    42b00    42b00     1000     1                 reserved_stack
    43b00    43b00     1000     1                 irq_stack
    44b00    44b00     1000     1                 fiq_stack
-   45b00    45b00       54     4         ELF.c.o:(.bss)
-   45b00    45b00       34     1                 exec.elfHeader
-   45b34    45b34       20     1                 exec.pentry
-   45b54    45b54        4     4         timer.c.o:(.bss)
-   45b54    45b54        4     1                 jiffies
-   45b58    45b58     1180     4         file.c.o:(.bss)
-   45b58    45b58      180     1                 fileTable
-   45cd8    45cd8     1000     1                 clusterBuffer
+   45b00    45b00     1180     4         file.c.o:(.bss)
+   45b00    45b00      180     1                 fileTable
+   45c80    45c80     1000     1                 clusterBuffer
+   46c80    46c80        4     4         timer.c.o:(.bss)
+   46c80    46c80        4     1                 jiffies
+   46c84    46c84       54     4         ELF.c.o:(.bss)
+   46c84    46c84       34     1                 exec.elfHeader
+   46cb8    46cb8       20     1                 exec.pentry
    46cd8    46cd8        0     1 _end_bss = .
    46cd8    46cd8      328     1 . = ALIGN ( 4096 )
        0        0       29     1 .comment
