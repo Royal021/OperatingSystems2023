@@ -36,6 +36,7 @@ __asm__ (
         "add sp, " STACK_SIZE_STR "\n"
         "sub lr, #4\n"
         "push {r0-r12,lr}\n"
+        "mov r0,lr\n"
         "bl handler_undefined\n"
         "pop {r0-r12,lr}\n"
         "subs pc,lr,#0\n"
@@ -48,7 +49,7 @@ __asm__ (
         "subs pc,lr,#0\n"
     "asm_handler_prefetch_abort:\n"
         "ldr sp, =prefetch_abort_stack\n"
-        "add sp, " STACK_SIZE "\n"
+        "add sp," STACK_SIZE_STR "\n"
         "sub lr, #4\n"
         "push {r0-r12,lr}\n"
         "mov r0,lr\n"                   
@@ -60,6 +61,7 @@ __asm__ (
         "add sp, " STACK_SIZE_STR "\n"
         "sub lr, #8\n"
         "push {r0-r12,lr}\n"
+        "mov r0,lr\n"
         "bl handler_data_abort\n"
         "pop {r0-r12,lr}\n"
         "subs pc,lr,#0\n"
@@ -117,26 +119,28 @@ void handler_reset()
     kprintf("RESET\n");
     halt();
 }
-void handler_undefined()
+void handler_undefined(unsigned faultingAddress)
 {
-    kprintf("UNDEFINED OPCODE\n");
-    halt();
+    kprintf("UNDEFINED ABORT at 0x%x\n", faultingAddress);
+    while(1)
+        halt();
 }
 void handler_svc()
 {
     kprintf("SVC INT\n");
     halt();
 }
-void handler_prefetch_abort()
+void handler_prefetch_abort(unsigned faultingAddress)
 {
     kprintf("PREFETCH ABORT at 0x%x\n", faultingAddress);
     while(1)
         halt();
 }
-void handler_data_abort()
+void handler_data_abort(unsigned faultingAddress)
 {
-    kprintf("DATA ABORT\n");
-    halt();
+    kprintf("Data ABORT at 0x%x\n", faultingAddress);
+    while(1)
+        halt();
 }
 void handler_reserved()
 {
