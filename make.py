@@ -84,7 +84,7 @@ doIt( [ qemu,
     "-m", "512",                #memory (512MB)
     "-M", "raspi0",             #machine (raspberry pi 0)
     "-kernel", "kernel.elf",    #kernel file
-    "-echr", "126",             #escape character (~)
+    "-echr", "65",             #escape character (~)
     "-serial", "mon:stdio",      #connect serial to console
     "-drive", "file=sd.img,if=sd,format=raw"
 ])

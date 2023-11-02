@@ -1,11 +1,7 @@
      VMA      LMA     Size Align Out     In      Symbol
        0        0     8000     1 . = 0x8000
     8000        0        0     1 _start_text = .
-<<<<<<< HEAD
-    8000     8000     6ad0     4 .text
-=======
-    8000     8000     6b50     4 .text
->>>>>>> f208e64ed683178834841e317bc200f12b912830
+    8000     8000     6b38     4 .text
     8000     8000       74     4         kmain.c.o:(.text)
     8000     8000        0     1                 $a.0
     8000     8000        0     1                 _start
@@ -65,7 +61,6 @@
     9838     9838        0     1                 interrupt_table_end
     9838     9838        0     1                 $a.2
     9854     9854        0     1                 asm_handler_undefined
-<<<<<<< HEAD
     9874     9874        0     1                 asm_handler_svc
     988c     988c        0     1                 asm_handler_prefetch_abort
     98ac     98ac        0     1                 asm_handler_data_abort
@@ -103,149 +98,149 @@
     9af4     9af4       10     1                 interrupt_enable
     9b04     9b04       d4     1                 register_interrupt_handler
     9bbc     9bbc        0     1                 $d.21
-    9bf8     9bf8      674     4         ELF.c.o:(.text)
+    9bf8     9bf8      6dc     4         ELF.c.o:(.text)
     9bf8     9bf8        0     1                 $a.0
-    9bf8     9bf8      5a8     1                 exec
-    a15c     a15c        0     1                 $d.1
-    a1a0     a1a0        0     1                 $a.2
-    a1a0     a1a0       cc     1                 file_read_fully
-    a26c     a26c        0     4         errno.c.o:(.text)
-    a26c     a26c      a78     4         sd.c.o:(.text)
-    a26c     a26c        0     1                 $a.0
-    a26c     a26c      2a0     1                 sd_init
-    a4d4     a4d4        0     1                 $d.1
-    a50c     a50c        0     1                 $a.2
-    a50c     a50c       50     1                 delay_millisec
-    a55c     a55c      1c8     1                 setClock
-    a710     a710        0     1                 $d.3
-    a724     a724      194     1                 sendCommand
-    a724     a724        0     1                 $a.4
-    a898     a898        0     1                 $d.5
-    a8b8     a8b8       6c     1                 sendAppCommand
-    a8b8     a8b8        0     1                 $a.6
-    a924     a924       c0     1                 waitForStatusBitsToBeZero
-    a9d4     a9d4        0     1                 $d.7
-    a9e4     a9e4       cc     1                 waitForInterrupt
-    a9e4     a9e4        0     1                 $a.8
-    aaa4     aaa4        0     1                 $d.9
-    aab0     aab0        0     1                 $a.10
-    aab0     aab0       b8     1                 sd_read_sector
-    ab5c     ab5c        0     1                 $d.11
-    ab68     ab68        0     1                 $a.12
-    ab68     ab68       b8     1                 sd_write_sector
-    ac18     ac18        0     1                 $d.13
-    ac20     ac20        0     1                 $a.14
-    ac20     ac20       ac     1                 disc_read_sectors
-    accc     accc       18     1                 getHostControllerVersion
-    ace0     ace0        0     1                 $d.15
-    ace4     ace4      d08     4         file.c.o:(.text)
-    ace4     ace4        0     1                 $a.0
-    ace4     ace4      200     1                 file_open
-    aecc     aecc        0     1                 $d.1
-    aee4     aee4        0     1                 $a.2
-    aee4     aee4      3d4     1                 scanForMatchingFilename
-    b2b8     b2b8       94     1                 file_close
-    b344     b344        0     1                 $d.3
-    b34c     b34c        0     1                 $a.4
-    b34c     b34c      27c     1                 file_read
-    b5a8     b5a8        0     1                 $d.5
-    b5c8     b5c8        0     1                 $a.6
-    b5c8     b5c8      388     1                 file_seek
-    b910     b910        0     1                 $d.7
-    b950     b950        0     1                 $a.8
-    b950     b950       80     1                 file_tell
-    b9cc     b9cc        0     1                 $d.9
-    b9d0     b9d0        0     1                 $a.10
-    b9d0     b9d0       1c     1                 file_write
-    b9ec     b9ec      338     4         utils.c.o:(.text)
-    b9ec     b9ec        0     1                 $a.0
-    b9ec     b9ec       48     1                 bss_init
-    ba2c     ba2c        0     1                 $d.1
-    ba34     ba34        0     1                 $a.2
-    ba34     ba34       6c     1                 kmemset
-    baa0     baa0       68     1                 kmemcpy
-    bb08     bb08       a8     1                 getValue
-    bbb0     bbb0       28     1                 panic
-    bbd4     bbd4        0     1                 $d.3
-    bbd8     bbd8        0     1                 $a.4
-    bbd8     bbd8       44     1                 toupper
-    bc1c     bc1c       c4     1                 kmemcmp
-    bce0     bce0       44     1                 Min32
-    bd24     bd24      108     4         timer.c.o:(.text)
-    bd24     bd24        0     1                 $a.0
-    bd24     bd24       4c     1                 timer_init
-    bd60     bd60        0     1                 $d.1
-    bd70     bd70        0     1                 $a.2
-    bd70     bd70       84     1                 timer_interrupt
-    bde4     bde4        0     1                 $d.3
-    bdf4     bdf4        0     1                 $a.4
-    bdf4     bdf4       38     1                 get_uptime
-    be20     be20        0     1                 $d.5
-    be2c     be2c     2c90     4         kprintf.c.o:(.text)
-    be2c     be2c        0     1                 $a.0
-    be2c     be2c       3c     1                 stbsp_set_separators
-    be60     be60        0     1                 $d.1
-    be68     be68        0     1                 $a.2
-    be68     be68     2178     1                 stbsp_vsprintfcb
-    c0ac     c0ac        0     1                 $d.3
-    c1ac     c1ac        0     1                 $a.4
-    c494     c494        0     1                 $d.5
-    c55c     c55c        0     1                 $a.6
-    c6cc     c6cc        0     1                 $d.7
-    c7ac     c7ac        0     1                 $a.8
-    cf90     cf90        0     1                 $d.9
-    cf9c     cf9c        0     1                 $a.10
-    d7d0     d7d0        0     1                 $d.11
-    d7d4     d7d4        0     1                 $a.12
-    d8ac     d8ac        0     1                 $d.13
-    d8b0     d8b0        0     1                 $a.14
-    d8e4     d8e4        0     1                 $d.15
-    d8ec     d8ec        0     1                 $a.16
-    d968     d968        0     1                 $d.17
-    d96c     d96c        0     1                 $a.18
-    d9a0     d9a0        0     1                 $d.19
-    d9a8     d9a8        0     1                 $a.20
-    dbd8     dbd8        0     1                 $d.21
-    dbdc     dbdc        0     1                 $a.22
-    dd58     dd58        0     1                 $d.23
-    dd5c     dd5c        0     1                 $a.24
-    de04     de04        0     1                 $d.25
-    de08     de08        0     1                 $a.26
-    de70     de70        0     1                 $d.27
-    de74     de74        0     1                 $a.28
-    dfa8     dfa8        0     1                 $d.29
-    dfac     dfac        0     1                 $a.30
-    dfd4     dfd4        0     1                 $d.31
-    dfe0     dfe0      168     1                 stbsp__strlen_limited
-    dfe0     dfe0        0     1                 $a.32
-    e140     e140        0     1                 $d.33
-    e148     e148       f8     1                 mod64
-    e148     e148        0     1                 $a.34
-    e240     e240      128     1                 div64
-    e368     e368       ac     1                 mod
-    e414     e414       c8     1                 div
-    e4dc     e4dc       ac     1                 stbsp__lead_sign
-    e588     e588       60     1                 stbsp_sprintf
-    e5e8     e5e8      114     1                 stbsp_vsnprintf
-    e6f4     e6f4        0     1                 $d.35
-    e6fc     e6fc       3c     1                 stbsp__count_clamp_callback
-    e6fc     e6fc        0     1                 $a.36
-    e738     e738      17c     1                 stbsp__clamp_callback
-    e8b4     e8b4       54     1                 stbsp_snprintf
-    e908     e908       40     1                 stbsp_vsprintf
-    e948     e948       68     1                 kprintf
-    e9ac     e9ac        0     1                 $d.37
-    e9b0     e9b0       68     1                 callback
-    e9b0     e9b0        0     1                 $a.38
-    ea18     ea18       50     1                 ksprintf
-    ea68     ea68       54     1                 ksnprintf
-    eabc     eabc       14     4         memory.c.o:(.text)
-    eabc     eabc        0     1                 $a.0
-    eabc     eabc       14     1                 memory_barrier
-    ead0     ead0        0     1 _end_text = .
-    ead0     ead0       10     4 .ARM.exidx
-    ead0     ead0       10     4         <internal>:(.ARM.exidx)
-    eae0     eae0      520     1 . = ALIGN ( 4096 )
+    9bf8     9bf8      610     1                 exec
+    a1c4     a1c4        0     1                 $d.1
+    a208     a208        0     1                 $a.2
+    a208     a208       cc     1                 file_read_fully
+    a2d4     a2d4        0     4         errno.c.o:(.text)
+    a2d4     a2d4      a78     4         sd.c.o:(.text)
+    a2d4     a2d4        0     1                 $a.0
+    a2d4     a2d4      2a0     1                 sd_init
+    a53c     a53c        0     1                 $d.1
+    a574     a574        0     1                 $a.2
+    a574     a574       50     1                 delay_millisec
+    a5c4     a5c4      1c8     1                 setClock
+    a778     a778        0     1                 $d.3
+    a78c     a78c      194     1                 sendCommand
+    a78c     a78c        0     1                 $a.4
+    a900     a900        0     1                 $d.5
+    a920     a920       6c     1                 sendAppCommand
+    a920     a920        0     1                 $a.6
+    a98c     a98c       c0     1                 waitForStatusBitsToBeZero
+    aa3c     aa3c        0     1                 $d.7
+    aa4c     aa4c       cc     1                 waitForInterrupt
+    aa4c     aa4c        0     1                 $a.8
+    ab0c     ab0c        0     1                 $d.9
+    ab18     ab18        0     1                 $a.10
+    ab18     ab18       b8     1                 sd_read_sector
+    abc4     abc4        0     1                 $d.11
+    abd0     abd0        0     1                 $a.12
+    abd0     abd0       b8     1                 sd_write_sector
+    ac80     ac80        0     1                 $d.13
+    ac88     ac88        0     1                 $a.14
+    ac88     ac88       ac     1                 disc_read_sectors
+    ad34     ad34       18     1                 getHostControllerVersion
+    ad48     ad48        0     1                 $d.15
+    ad4c     ad4c      d08     4         file.c.o:(.text)
+    ad4c     ad4c        0     1                 $a.0
+    ad4c     ad4c      200     1                 file_open
+    af34     af34        0     1                 $d.1
+    af4c     af4c        0     1                 $a.2
+    af4c     af4c      3d4     1                 scanForMatchingFilename
+    b320     b320       94     1                 file_close
+    b3ac     b3ac        0     1                 $d.3
+    b3b4     b3b4        0     1                 $a.4
+    b3b4     b3b4      27c     1                 file_read
+    b610     b610        0     1                 $d.5
+    b630     b630        0     1                 $a.6
+    b630     b630      388     1                 file_seek
+    b978     b978        0     1                 $d.7
+    b9b8     b9b8        0     1                 $a.8
+    b9b8     b9b8       80     1                 file_tell
+    ba34     ba34        0     1                 $d.9
+    ba38     ba38        0     1                 $a.10
+    ba38     ba38       1c     1                 file_write
+    ba54     ba54      338     4         utils.c.o:(.text)
+    ba54     ba54        0     1                 $a.0
+    ba54     ba54       48     1                 bss_init
+    ba94     ba94        0     1                 $d.1
+    ba9c     ba9c        0     1                 $a.2
+    ba9c     ba9c       6c     1                 kmemset
+    bb08     bb08       68     1                 kmemcpy
+    bb70     bb70       a8     1                 getValue
+    bc18     bc18       28     1                 panic
+    bc3c     bc3c        0     1                 $d.3
+    bc40     bc40        0     1                 $a.4
+    bc40     bc40       44     1                 toupper
+    bc84     bc84       c4     1                 kmemcmp
+    bd48     bd48       44     1                 Min32
+    bd8c     bd8c      108     4         timer.c.o:(.text)
+    bd8c     bd8c        0     1                 $a.0
+    bd8c     bd8c       4c     1                 timer_init
+    bdc8     bdc8        0     1                 $d.1
+    bdd8     bdd8        0     1                 $a.2
+    bdd8     bdd8       84     1                 timer_interrupt
+    be4c     be4c        0     1                 $d.3
+    be5c     be5c        0     1                 $a.4
+    be5c     be5c       38     1                 get_uptime
+    be88     be88        0     1                 $d.5
+    be94     be94     2c90     4         kprintf.c.o:(.text)
+    be94     be94        0     1                 $a.0
+    be94     be94       3c     1                 stbsp_set_separators
+    bec8     bec8        0     1                 $d.1
+    bed0     bed0        0     1                 $a.2
+    bed0     bed0     2178     1                 stbsp_vsprintfcb
+    c114     c114        0     1                 $d.3
+    c214     c214        0     1                 $a.4
+    c4fc     c4fc        0     1                 $d.5
+    c5c4     c5c4        0     1                 $a.6
+    c734     c734        0     1                 $d.7
+    c814     c814        0     1                 $a.8
+    cff8     cff8        0     1                 $d.9
+    d004     d004        0     1                 $a.10
+    d838     d838        0     1                 $d.11
+    d83c     d83c        0     1                 $a.12
+    d914     d914        0     1                 $d.13
+    d918     d918        0     1                 $a.14
+    d94c     d94c        0     1                 $d.15
+    d954     d954        0     1                 $a.16
+    d9d0     d9d0        0     1                 $d.17
+    d9d4     d9d4        0     1                 $a.18
+    da08     da08        0     1                 $d.19
+    da10     da10        0     1                 $a.20
+    dc40     dc40        0     1                 $d.21
+    dc44     dc44        0     1                 $a.22
+    ddc0     ddc0        0     1                 $d.23
+    ddc4     ddc4        0     1                 $a.24
+    de6c     de6c        0     1                 $d.25
+    de70     de70        0     1                 $a.26
+    ded8     ded8        0     1                 $d.27
+    dedc     dedc        0     1                 $a.28
+    e010     e010        0     1                 $d.29
+    e014     e014        0     1                 $a.30
+    e03c     e03c        0     1                 $d.31
+    e048     e048      168     1                 stbsp__strlen_limited
+    e048     e048        0     1                 $a.32
+    e1a8     e1a8        0     1                 $d.33
+    e1b0     e1b0       f8     1                 mod64
+    e1b0     e1b0        0     1                 $a.34
+    e2a8     e2a8      128     1                 div64
+    e3d0     e3d0       ac     1                 mod
+    e47c     e47c       c8     1                 div
+    e544     e544       ac     1                 stbsp__lead_sign
+    e5f0     e5f0       60     1                 stbsp_sprintf
+    e650     e650      114     1                 stbsp_vsnprintf
+    e75c     e75c        0     1                 $d.35
+    e764     e764       3c     1                 stbsp__count_clamp_callback
+    e764     e764        0     1                 $a.36
+    e7a0     e7a0      17c     1                 stbsp__clamp_callback
+    e91c     e91c       54     1                 stbsp_snprintf
+    e970     e970       40     1                 stbsp_vsprintf
+    e9b0     e9b0       68     1                 kprintf
+    ea14     ea14        0     1                 $d.37
+    ea18     ea18       68     1                 callback
+    ea18     ea18        0     1                 $a.38
+    ea80     ea80       50     1                 ksprintf
+    ead0     ead0       54     1                 ksnprintf
+    eb24     eb24       14     4         memory.c.o:(.text)
+    eb24     eb24        0     1                 $a.0
+    eb24     eb24       14     1                 memory_barrier
+    eb38     eb38        0     1 _end_text = .
+    eb38     eb38       10     4 .ARM.exidx
+    eb38     eb38       10     4         <internal>:(.ARM.exidx)
+    eb48     eb48      4b8     1 . = ALIGN ( 4096 )
     f000     f000        0     1 _start_rodata = .
     f000     f000     b50c     4 .rodata
     f000     f000      364     1         <internal>:(.rodata)
@@ -268,218 +263,6 @@
    1a554    1a554       3c     4 .got
    1a554    1a554       3c     4         <internal>:(.got)
    1a590    1a590      a70     1 . = ALIGN ( 4096 )
-=======
-    9870     9870        0     1                 asm_handler_svc
-    9888     9888        0     1                 asm_handler_prefetch_abort
-    98a4     98a4        0     1                 asm_handler_data_abort
-    98c0     98c0        0     1                 asm_handler_reserved
-    98dc     98dc        0     1                 asm_handler_irq
-    98f8     98f8        0     1                 asm_handler_fiq
-    9914     9914       50     1                 interrupt_init
-    995c     995c        0     1                 $d.3
-    9964     9964        0     1                 $a.4
-    9964     9964        c     1                 halt
-    9970     9970       20     1                 handler_reset
-    998c     998c        0     1                 $d.5
-    9990     9990        0     1                 $a.6
-    9990     9990       20     1                 handler_undefined
-    99ac     99ac        0     1                 $d.7
-    99b0     99b0        0     1                 $a.8
-    99b0     99b0       20     1                 handler_svc
-    99cc     99cc        0     1                 $d.9
-    99d0     99d0        0     1                 $a.10
-    99d0     99d0       20     1                 handler_prefetch_abort
-    99ec     99ec        0     1                 $d.11
-    99f0     99f0        0     1                 $a.12
-    99f0     99f0       20     1                 handler_data_abort
-    9a0c     9a0c        0     1                 $d.13
-    9a10     9a10        0     1                 $a.14
-    9a10     9a10       20     1                 handler_reserved
-    9a2c     9a2c        0     1                 $d.15
-    9a30     9a30        0     1                 $a.16
-    9a30     9a30       68     1                 handler_irq
-    9a90     9a90        0     1                 $d.17
-    9a98     9a98        0     1                 $a.18
-    9a98     9a98       20     1                 handler_fiq
-    9ab4     9ab4        0     1                 $d.19
-    9ab8     9ab8        0     1                 $a.20
-    9ab8     9ab8       10     1                 interrupt_enable
-    9ac8     9ac8       d4     1                 register_interrupt_handler
-    9b80     9b80        0     1                 $d.21
-    9bbc     9bbc        0     4         errno.c.o:(.text)
-    9bbc     9bbc      a78     4         sd.c.o:(.text)
-    9bbc     9bbc        0     1                 $a.0
-    9bbc     9bbc      2a0     1                 sd_init
-    9e24     9e24        0     1                 $d.1
-    9e5c     9e5c        0     1                 $a.2
-    9e5c     9e5c       50     1                 delay_millisec
-    9eac     9eac      1c8     1                 setClock
-    a060     a060        0     1                 $d.3
-    a074     a074      194     1                 sendCommand
-    a074     a074        0     1                 $a.4
-    a1e8     a1e8        0     1                 $d.5
-    a208     a208       6c     1                 sendAppCommand
-    a208     a208        0     1                 $a.6
-    a274     a274       c0     1                 waitForStatusBitsToBeZero
-    a324     a324        0     1                 $d.7
-    a334     a334       cc     1                 waitForInterrupt
-    a334     a334        0     1                 $a.8
-    a3f4     a3f4        0     1                 $d.9
-    a400     a400        0     1                 $a.10
-    a400     a400       b8     1                 sd_read_sector
-    a4ac     a4ac        0     1                 $d.11
-    a4b8     a4b8        0     1                 $a.12
-    a4b8     a4b8       b8     1                 sd_write_sector
-    a568     a568        0     1                 $d.13
-    a570     a570        0     1                 $a.14
-    a570     a570       ac     1                 disc_read_sectors
-    a61c     a61c       18     1                 getHostControllerVersion
-    a630     a630        0     1                 $d.15
-    a634     a634      d08     4         file.c.o:(.text)
-    a634     a634        0     1                 $a.0
-    a634     a634      200     1                 file_open
-    a81c     a81c        0     1                 $d.1
-    a834     a834        0     1                 $a.2
-    a834     a834      3d4     1                 scanForMatchingFilename
-    ac08     ac08       94     1                 file_close
-    ac94     ac94        0     1                 $d.3
-    ac9c     ac9c        0     1                 $a.4
-    ac9c     ac9c      27c     1                 file_read
-    aef8     aef8        0     1                 $d.5
-    af18     af18        0     1                 $a.6
-    af18     af18      388     1                 file_seek
-    b260     b260        0     1                 $d.7
-    b2a0     b2a0        0     1                 $a.8
-    b2a0     b2a0       80     1                 file_tell
-    b31c     b31c        0     1                 $d.9
-    b320     b320        0     1                 $a.10
-    b320     b320       1c     1                 file_write
-    b33c     b33c      338     4         utils.c.o:(.text)
-    b33c     b33c        0     1                 $a.0
-    b33c     b33c       48     1                 bss_init
-    b37c     b37c        0     1                 $d.1
-    b384     b384        0     1                 $a.2
-    b384     b384       6c     1                 kmemset
-    b3f0     b3f0       68     1                 kmemcpy
-    b458     b458       a8     1                 getValue
-    b500     b500       28     1                 panic
-    b524     b524        0     1                 $d.3
-    b528     b528        0     1                 $a.4
-    b528     b528       44     1                 toupper
-    b56c     b56c       c4     1                 kmemcmp
-    b630     b630       44     1                 Min32
-    b674     b674      108     4         timer.c.o:(.text)
-    b674     b674        0     1                 $a.0
-    b674     b674       4c     1                 timer_init
-    b6b0     b6b0        0     1                 $d.1
-    b6c0     b6c0        0     1                 $a.2
-    b6c0     b6c0       84     1                 timer_interrupt
-    b734     b734        0     1                 $d.3
-    b744     b744        0     1                 $a.4
-    b744     b744       38     1                 get_uptime
-    b770     b770        0     1                 $d.5
-    b77c     b77c       c4     4         hello.c.o:(.text)
-    b77c     b77c        0     1                 $a.0
-    b77c     b77c       40     1                 my_putc
-    b7b4     b7b4        0     1                 $d.1
-    b7bc     b7bc        0     1                 $a.2
-    b7bc     b7bc        c     1                 my_halt
-    b7c8     b7c8       78     1                 main
-    b83c     b83c        0     1                 $d.3
-    b840     b840      66c     4         ELF.c.o:(.text)
-    b840     b840        0     1                 $a.0
-    b840     b840      5a0     1                 exec
-    bd9c     bd9c        0     1                 $d.1
-    bde0     bde0        0     1                 $a.2
-    bde0     bde0       cc     1                 file_read_fully
-    beac     beac     2c90     4         kprintf.c.o:(.text)
-    beac     beac        0     1                 $a.0
-    beac     beac       3c     1                 stbsp_set_separators
-    bee0     bee0        0     1                 $d.1
-    bee8     bee8        0     1                 $a.2
-    bee8     bee8     2178     1                 stbsp_vsprintfcb
-    c12c     c12c        0     1                 $d.3
-    c22c     c22c        0     1                 $a.4
-    c514     c514        0     1                 $d.5
-    c5dc     c5dc        0     1                 $a.6
-    c74c     c74c        0     1                 $d.7
-    c82c     c82c        0     1                 $a.8
-    d010     d010        0     1                 $d.9
-    d01c     d01c        0     1                 $a.10
-    d850     d850        0     1                 $d.11
-    d854     d854        0     1                 $a.12
-    d92c     d92c        0     1                 $d.13
-    d930     d930        0     1                 $a.14
-    d964     d964        0     1                 $d.15
-    d96c     d96c        0     1                 $a.16
-    d9e8     d9e8        0     1                 $d.17
-    d9ec     d9ec        0     1                 $a.18
-    da20     da20        0     1                 $d.19
-    da28     da28        0     1                 $a.20
-    dc58     dc58        0     1                 $d.21
-    dc5c     dc5c        0     1                 $a.22
-    ddd8     ddd8        0     1                 $d.23
-    dddc     dddc        0     1                 $a.24
-    de84     de84        0     1                 $d.25
-    de88     de88        0     1                 $a.26
-    def0     def0        0     1                 $d.27
-    def4     def4        0     1                 $a.28
-    e028     e028        0     1                 $d.29
-    e02c     e02c        0     1                 $a.30
-    e054     e054        0     1                 $d.31
-    e060     e060      168     1                 stbsp__strlen_limited
-    e060     e060        0     1                 $a.32
-    e1c0     e1c0        0     1                 $d.33
-    e1c8     e1c8       f8     1                 mod64
-    e1c8     e1c8        0     1                 $a.34
-    e2c0     e2c0      128     1                 div64
-    e3e8     e3e8       ac     1                 mod
-    e494     e494       c8     1                 div
-    e55c     e55c       ac     1                 stbsp__lead_sign
-    e608     e608       60     1                 stbsp_sprintf
-    e668     e668      114     1                 stbsp_vsnprintf
-    e774     e774        0     1                 $d.35
-    e77c     e77c       3c     1                 stbsp__count_clamp_callback
-    e77c     e77c        0     1                 $a.36
-    e7b8     e7b8      17c     1                 stbsp__clamp_callback
-    e934     e934       54     1                 stbsp_snprintf
-    e988     e988       40     1                 stbsp_vsprintf
-    e9c8     e9c8       68     1                 kprintf
-    ea2c     ea2c        0     1                 $d.37
-    ea30     ea30       68     1                 callback
-    ea30     ea30        0     1                 $a.38
-    ea98     ea98       50     1                 ksprintf
-    eae8     eae8       54     1                 ksnprintf
-    eb3c     eb3c       14     4         memory.c.o:(.text)
-    eb3c     eb3c        0     1                 $a.0
-    eb3c     eb3c       14     1                 memory_barrier
-    eb50     eb50        0     1 _end_text = .
-    eb50     eb50       10     4 .ARM.exidx
-    eb50     eb50       10     4         <internal>:(.ARM.exidx)
-    eb60     eb60      4a0     1 . = ALIGN ( 4096 )
-    f000     f000        0     1 _start_rodata = .
-    f000     f000     b500     4 .rodata
-    f000     f000      355     1         <internal>:(.rodata)
-    f358     f358     61a8     4         testsuite.c.o:(.rodata)
-    f358     f358     33cd     1                 article1
-   12725    12725     1713     1                 article2
-   13e38    13e38      829     1                 article3
-   14661    14661      77b     1                 article4
-   14ddc    14ddc      353     1                 article5
-   1512f    1512f      3b6     1                 article6
-   154e8    154e8       18     1                 .L__const.sweet.order
-   15500    15500     5000     4         video.c.o:(.rodata)
-   15500    15500     5000     1                 font_data
-   1a500    1a500        0     1 _end_rodata = .
-   1a500    1a500       48     4 .data.rel.ro
-   1a500    1a500       48     4         testsuite.c.o:(.data.rel.ro)
-   1a500    1a500       18     1                 .L__const.sweet.article_content
-   1a518    1a518       18     1                 .L__const.sweet.filenames
-   1a530    1a530       18     1                 .L__const.sweet.p
-   1a548    1a548       3c     4 .got
-   1a548    1a548       3c     4         <internal>:(.got)
-   1a584    1a584      a7c     1 . = ALIGN ( 4096 )
->>>>>>> f208e64ed683178834841e317bc200f12b912830
    1b000    1b000        0     1 _start_data = .
    1b000    1b000      104     4 .data
    1b000    1b000        c     4         console.c.o:(.data)
@@ -532,7 +315,6 @@
    42b00    42b00     1000     1                 reserved_stack
    43b00    43b00     1000     1                 irq_stack
    44b00    44b00     1000     1                 fiq_stack
-<<<<<<< HEAD
    45b00    45b00       54     4         ELF.c.o:(.bss)
    45b00    45b00       34     1                 exec.elfHeader
    45b34    45b34       20     1                 exec.pentry
@@ -541,25 +323,15 @@
    45cd4    45cd4     1000     1                 clusterBuffer
    46cd4    46cd4        4     4         timer.c.o:(.bss)
    46cd4    46cd4        4     1                 jiffies
-=======
-   45b00    45b00     1180     4         file.c.o:(.bss)
-   45b00    45b00      180     1                 fileTable
-   45c80    45c80     1000     1                 clusterBuffer
-   46c80    46c80        4     4         timer.c.o:(.bss)
-   46c80    46c80        4     1                 jiffies
-   46c84    46c84       54     4         ELF.c.o:(.bss)
-   46c84    46c84       34     1                 exec.elfHeader
-   46cb8    46cb8       20     1                 exec.pentry
->>>>>>> f208e64ed683178834841e317bc200f12b912830
    46cd8    46cd8        0     1 _end_bss = .
    46cd8    46cd8      328     1 . = ALIGN ( 4096 )
        0        0       29     1 .comment
        0        0       29     1         <internal>:(.comment)
        0        0       4a     1 .ARM.attributes
        0        0       4a     1         kmain.c.o:(.ARM.attributes)
-       0        0     1320     4 .symtab
-       0        0     1320     4         <internal>:(.symtab)
+       0        0     12a0     4 .symtab
+       0        0     12a0     4         <internal>:(.symtab)
        0        0       6a     1 .shstrtab
        0        0       6a     1         <internal>:(.shstrtab)
-       0        0      b88     1 .strtab
-       0        0      b88     1         <internal>:(.strtab)
+       0        0      b57     1 .strtab
+       0        0      b57     1         <internal>:(.strtab)
