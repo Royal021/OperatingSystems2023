@@ -48,9 +48,10 @@ __asm__ (
         "subs pc,lr,#0\n"
     "asm_handler_prefetch_abort:\n"
         "ldr sp, =prefetch_abort_stack\n"
-        "add sp, " STACK_SIZE_STR "\n"
+        "add sp, " STACK_SIZE "\n"
         "sub lr, #4\n"
         "push {r0-r12,lr}\n"
+        "mov r0,lr\n"                   
         "bl handler_prefetch_abort\n"
         "pop {r0-r12,lr}\n"
         "subs pc,lr,#0\n"
@@ -128,8 +129,9 @@ void handler_svc()
 }
 void handler_prefetch_abort()
 {
-    kprintf("PREFETCH ABORT\n");
-    halt();
+    kprintf("PREFETCH ABORT at 0x%x\n", faultingAddress);
+    while(1)
+        halt();
 }
 void handler_data_abort()
 {
