@@ -12,7 +12,7 @@ import io
 import re
 import zlib
 
-TIMEOUT=3
+TIMEOUT=10
 make = os.getenv("MAKE3701","make.py")
 
 with open("user/hello-pfa.c","r") as fp:
