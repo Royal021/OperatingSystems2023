@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
     }
 
     while(1){
-        my_halt();
+        //my_halt();
     }
     return 0;
 }

@@ -9,3 +9,5 @@ struct Color{
 
 void video_init();
 void video_draw_character(unsigned char ch, unsigned x, unsigned y, struct Color fg, struct Color bg );
+void * video_get_frambuffer();
+unsigned video_get_framebuffer_size();

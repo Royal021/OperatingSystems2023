@@ -130,15 +130,58 @@ void handler_svc()
     kprintf("SVC INT\n");
     halt();
 }
-void handler_prefetch_abort(unsigned faultingAddress)
+void handler_prefetch_abort(unsigned faultingInstruction)
 {
-    kprintf("PREFETCH ABORT at 0x%x\n", faultingAddress);
+    unsigned fault_flags;
+    __asm__ volatile("mrc p15, 0, %[reg],c5,c0,1" : [reg] "=r"(fault_flags));
+    fault_flags &= 0xf;     //just keep low 4 bits
+
+    kprintf("Prefetch abort at 0x%x: ", faultingInstruction);
+    switch(fault_flags){
+        case 1:
+        case 3:
+            kprintf("Alignment error\n");
+            break;
+        case 5:
+        case 7:
+            kprintf("Page absent\n");
+            break;
+        case 13:
+        case 15:
+            kprintf("Permission problem\n");
+            break;
+        default:
+            kprintf("Unknown problem\n");
+    }
     while(1)
         halt();
 }
 void handler_data_abort(unsigned faultingAddress)
 {
-    kprintf("Data ABORT at 0x%x\n", faultingAddress);
+    unsigned fault_flags;
+    __asm__ volatile(“mrc p15, 0, %[reg],c5,c0,0” : [reg] “=r”(fault_flags));
+    fault_flags &= 0xf;     //just keep low 4 bits
+
+    unsigned fault_address; //the address that couldn’t be accessed
+    __asm__ volatile(“mrc p15,0, %[reg],c6,c0,0” : [reg] “=r” (fault_address) );
+
+    kprintf("Prefetch abort at 0x%x: ", faultingAddress);
+    switch(fault_flags){
+        case 1:
+        case 3:
+            kprintf("Alignment error\n");
+            break;
+        case 5:
+        case 7:
+            kprintf("Page absent\n");
+            break;
+        case 13:
+        case 15:
+            kprintf("Permission problem\n");
+            break;
+        default:
+            kprintf("Unknown problem\n");
+    }
     while(1)
         halt();
 }

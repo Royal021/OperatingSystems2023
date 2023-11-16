@@ -12,58 +12,62 @@ import io
 import re
 import zlib
 
-TIMEOUT=10
-make = os.getenv("MAKE3701","make.py")
+TIMEOUT=3
 
-with open("user/hello-pfa.c","r") as fp:
+with open("user/hello.c","r") as fp:
     ts = fp.read()
 
 async def testIt():
 
     try:
-        with open("user/hello-pfa.c") as fp:
-            tmp=fp.read()
-        idx1=tmp.find("//!!");
-        idx2=tmp.find("//!!",idx1+1)
-        assert idx1 != -1
-        assert idx2 != -1
-        tmp = tmp[:idx1]+tmp[idx2:]
-        with open("user/hello-pfa.c","w") as fp:
-            fp.write(tmp)
+        with open("user/hello.c","w") as fp:
+            fp.write( decompressText(helloNoFault) )
         P = await runIt()
         try:
-            await waitForLine(P,f"Hello!")
+            await waitForLine(P,"Hello!")
             time.sleep(0.5)
             regs,mode = await getRegisters(P)
         finally:
             await quitQemu(P)
-        if regs[15] < 0x400000 or regs[15] > 0x800000:
-            print("Bad pc for no exception: Got",hex(regs[15]))
+
+        if mode != "svc32" and mode != "usr32":
+            print("Bad CPU mode for hello-nofault.c")
             return
-        if mode != "usr32":
-            print("Bad mode for no exception:",mode)
-            return
-            
-        with open("user/hello-pfa.c","w") as fp:
-            fp.write(ts)
+
+        with open("user/hello.c","w") as fp:
+            fp.write( decompressText(helloPfa) )
         P = await runIt()
         try:
-            await waitForLine(P,f"Hello!")
+            await waitForLine(P,"Hello!")
             time.sleep(0.5)
             regs,mode = await getRegisters(P)
         finally:
             await quitQemu(P)
-        if regs[15] >= 0x400000: 
-            print("Bad pc for PFA: Got",hex(regs[15]))
-            return
+
         if mode != "abt32":
-            print("Bad mode:",mode)
+            print("Bad CPU mode for hello-pfa.c")
             return
+
+        with open("user/hello.c","w") as fp:
+            fp.write( decompressText(helloData) )
+        P = await runIt()
+        try:
+            await waitForLine(P,"Hello!")
+            time.sleep(0.5)
+            regs,mode = await getRegisters(P)
+        finally:
+            await quitQemu(P)
+
+        if mode != "abt32":
+            print("Bad CPU mode for hello-da.c")
+            return
+
+
     finally:
-        with open("user/hello-pfa.c","w") as fp:
+        with open("user/hello.c","w") as fp:
             fp.write(ts)
 
-    print("\n\n\nOK!")
+    print("\n\n\nAll OK")
     return
 
 
@@ -85,15 +89,18 @@ async def getRegisters(P):
             break
     data = "\n".join(data)
     regs = re.findall(r"R\d\d=([A-Fa-f0-9]{8})",data)
-    
+
     i = data.find("PSR=")
     assert i != -1,data
     j = data.find("\n",i)
     assert j != -1
     mode = data[i:j].strip().split()[-1]
-    
+
 
     return [int(q,16) for q in regs],mode
+
+def decompressText(data):
+    return bz2.decompress(base64.b64decode(data)).decode()
 
 
 async def waitForLine(P,txt):
@@ -123,7 +130,7 @@ async def runIt():
     python = sys.executable
 
     P = await asyncio.create_subprocess_exec(
-        python, "-u", make,
+        python, "-u", "make.py",
         stdin=asyncio.subprocess.PIPE,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.STDOUT
@@ -165,5 +172,24 @@ async def readline(P):
         if len(line) > 16384:
             raise Exception("Too much data for one line")
 
+helloNoFault=(
+"QlpoOTFBWSZTWSE4PUQAAAjfgEQQeHXgCABAAA4/59+KIACVRCTIZABiGgB6RoGSFPNSfqRk"
+"NGjJo9Royeo8mkacFgjnwVEaEiCHk4H1pZa5hxGczLkxY+aq452JxfulRqgaCBpSsHTwv1es"
+"VAQl2J2DAXj4TMDAYCOfW+im3XQ4TYXdjOpQxulqoAj4sVyD8OjXiVEV4QcWumt4NF+LuSKc"
+"KEgQnB6iAA=="
+)
+helloPfa=(
+"QlpoOTFBWSZTWY2lz4wAAA3fgEQQeHX0mhFCRA4/59+qMADaLDKTJqehPRPSDRpphA000Ymg"
+"YAaaNBpiAAABkAMlMmnqaIGmgyNANABo2owkNhTIkEW6JzohG5yIJ2qQAGEi02x1eemq7FTm"
+"eErcJhheYt7i4sECYUBeq1Ql2UxDlkmlV7Y0SigoUV2CEOTBMHhYEs56w1BWzs1kLlrjOc9y"
+"vGVBSMT7xxNRfQXxmaqjmzN4pyts6TwJeQ1UiMThZw+yG4boMjX50hs1ZomlGAukvWooVQBd"
+"wgBnyzxIKxKtj7DNWj2BtDTeZ6ojQfJsAzUX/F3JFOFCQjaXPjA="
+)
+helloData=(
+"QlpoOTFBWSZTWdr4nesAAAtfgEQQeHX1CgBAAA4/59/KMAC7axGpAABoAaAAyANFTyNqbVPJ"
+"DTyhoaZHqAANIaRMARgARptTCZoogDa56DfC1mDWtCIDdIgSiAxKliGj/N5SmMTjZhWSgUCo"
+"+Oip2MOFy7/RNw3UjadwaGkgi/ODwC8hVXpDDMsFH7VoqsE0SQnoLnksHoUO02IMRiSOkIHz"
+"gP52I6KJXlSxApSd8QAVztQsxj6JrsDvxowNYU73xpqyM+xdyRThQkNr4nes"
+)
 
 asyncio.run(main())
