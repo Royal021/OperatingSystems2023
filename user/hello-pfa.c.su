@@ -1,3 +1,1 @@
-user\hello-pfa.c:7:my_putc	4	static
-user\hello-pfa.c:14:my_halt	0	static
-user\hello-pfa.c:24:main	24	static
+user\hello-pfa.c:8:main	24	static

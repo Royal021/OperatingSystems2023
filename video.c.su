@@ -1,5 +1,7 @@
-video.c:69:video_init	64	static
+video.c:65:video_get_framebuffer	0	static
+video.c:70:video_get_framebuffer_size	0	static
+video.c:78:video_init	64	static
 video.c:36:mailbox_write	24	static
 video.c:47:mailbox_read	24	static
-video.c:107:video_set_pixel	20	static
-video.c:126:video_draw_character	56	static
+video.c:116:video_set_pixel	20	static
+video.c:135:video_draw_character	56	static

@@ -40,13 +40,14 @@ __asm__ (
         "bl handler_undefined\n"
         "pop {r0-r12,lr}\n"
         "subs pc,lr,#0\n"
-    "asm_handler_svc:\n"
-        "ldr sp, =svc_stack\n"
-        "add sp, " STACK_SIZE_STR "\n"
-        "push {r0-r12,lr}\n"
-        "bl handler_svc\n"
-        "pop {r0-r12,lr}\n"
-        "subs pc,lr,#0\n"
+    
+        "asm_handler_svc:\n"
+    "ldr sp, =svc_stack\n"
+    "add sp, " STACK_SIZE "\n"
+    "push {r1-r12,lr}\n"        //changed
+    "bl handler_svc\n"
+    "pop {r1-r12,lr}\n"         //changed
+    "subs pc,lr,#0\n"
     "asm_handler_prefetch_abort:\n"
         "ldr sp, =prefetch_abort_stack\n"
         "add sp," STACK_SIZE_STR "\n"
@@ -125,11 +126,11 @@ void handler_undefined(unsigned faultingAddress)
     while(1)
         halt();
 }
-void handler_svc()
+int handler_svc(int req, unsigned p1, unsigned p2, unsigned p3)
 {
-    kprintf("SVC INT\n");
-    halt();
+    return syscall_handler(req,p1,p2,p3);
 }
+
 void handler_prefetch_abort(unsigned faultingInstruction)
 {
     unsigned fault_flags;
@@ -159,11 +160,11 @@ void handler_prefetch_abort(unsigned faultingInstruction)
 void handler_data_abort(unsigned faultingAddress)
 {
     unsigned fault_flags;
-    __asm__ volatile(“mrc p15, 0, %[reg],c5,c0,0” : [reg] “=r”(fault_flags));
+    __asm__ volatile("mrc p15, 0, %[reg],c5,c0,0" : [reg] "=r"(fault_flags));
     fault_flags &= 0xf;     //just keep low 4 bits
 
     unsigned fault_address; //the address that couldn’t be accessed
-    __asm__ volatile(“mrc p15,0, %[reg],c6,c0,0” : [reg] “=r” (fault_address) );
+    __asm__ volatile("mrc p15,0, %[reg],c6,c0,0" : [reg] "=r" (fault_address) );
 
     kprintf("Prefetch abort at 0x%x: ", faultingAddress);
     switch(fault_flags){

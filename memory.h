@@ -1,5 +1,6 @@
 #pragma once
-
+#include "video.h"
+#include "utils.h"
 #define PAGE_PRESENT            ( 1<<1 )
 #define PAGE_ABSENT             ( 0  )
 #define PAGE_ORDINARY_MEMORY    ( (1<<3) | (1<<2) | (1<<16) )
@@ -10,6 +11,8 @@
 #define PAGE_ACCESS_RWX_RX      ( (2<<10) | PAGE_EXECUTABLE )
 #define PAGE_ACCESS_RWX_RWX     ( (3<<10) | PAGE_EXECUTABLE )
 #define PAGE_FRAME_NUMBER(x)    ( (x) << 20 )
+
+
 
 void memory_barrier();
 void memory_init();

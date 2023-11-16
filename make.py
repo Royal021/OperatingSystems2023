@@ -4,9 +4,6 @@ import os
 import sys
 import lab11
 
-
-
-
 inifile=configparser.ConfigParser()
 inifile.read("config.ini")
 conf=inifile["config"]
@@ -15,7 +12,9 @@ cc=conf["compiler"]
 link=conf["linker"]
 qemu=conf["qemu"]
 python=conf["python"]
+
 userlinker=conf["userlinker"]
+
 
 cflags=[
     "-std=c11",                     #Use C-11 standard
@@ -43,13 +42,11 @@ linkflags=[
     "-o", "kernel.elf"              #output file
 ]
 
-
-
 usercflags = cflags[:]
-
 userlinkflags=[
     "-T", "userlinkerscript.txt"
 ]
+
 
 def doIt(cmd):
     try:
@@ -67,14 +64,28 @@ for filename in os.listdir("."):
 
 doIt( [link] + linkflags + objectfiles )
 
+ar = conf["ar"] #you can add this above if want
+
+libfiles=[]
+for filename in os.listdir( os.path.join("user","libc")):
+    if filename.endswith(".c"):
+        filename = os.path.join("user","libc",filename)
+        obj=filename+".o"
+        doIt( [cc] + usercflags + ["-c", "-o", obj, filename] )
+        libfiles.append(obj)
+libc = os.path.join("user","libc.a")
+doIt( [ar] + ["rcs" , libc] + libfiles )
+
+##stuff from slide 35 10/31/2023 (Happy Halloween!)
 for filename in os.listdir("user"):
     if filename.endswith(".c"):
         filename = os.path.join("user",filename)
         obj=filename+".o"
         exe=filename.replace(".c",".exe")
         doIt( [cc] + usercflags + ["-c", "-o", obj, filename] )
-        doIt( [userlinker] + userlinkflags + [obj, "-o", exe ])
+        doIt( [userlinker] + userlinkflags + ["-o", exe, obj, libc ])
 
+##From 36 
 doIt( [python, "fool.zip", "sd.img",
     "create", "64",
     "cp", "user/hello.exe", "HELLO.EXE"
@@ -85,6 +96,7 @@ doIt( [ qemu,
     "-M", "raspi0",             #machine (raspberry pi 0)
     "-kernel", "kernel.elf",    #kernel file
     "-echr", "126",             #escape character (~)
-    "-serial", "mon:stdio",      #connect serial to console
-    "-drive", "file=sd.img,if=sd,format=raw"
+    "-serial", "mon:stdio",     #connect serial to console
+    "-drive", "file=sd.img,if=sd,format=raw" #STUFF FROM SLIDE 40
+
 ])

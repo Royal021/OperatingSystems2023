@@ -62,6 +62,15 @@ static u32 mailbox_read(u32 channel){
 volatile u8* framebuffer;
 u32 pitch;
 
+void* video_get_framebuffer()
+{
+    return (void*)framebuffer;
+}
+
+unsigned video_get_framebuffer_size()
+{
+    return pitch * HEIGHT;
+}
 
 struct Pixel foregroundColor;
 struct Pixel backgroundColor;

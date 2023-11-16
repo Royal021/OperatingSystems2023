@@ -33,24 +33,44 @@ void innitalize_page_table(unsigned* page_table)
         {
             page_table[i] = PAGE_ACCESS_RWX_NONE | PAGE_PRESENT | PAGE_ORDINARY_MEMORY | PAGE_FRAME_NUMBER(i);
         }
-        
+        else if(i>=4 && i<=7)
+        {
+            page_table[i] = PAGE_ACCESS_RWX_RWX | PAGE_PRESENT | PAGE_ORDINARY_MEMORY | PAGE_FRAME_NUMBER(i);
+        }
+        else if(i>=8 && i<=511)
+        {
+            page_table[i] =  PAGE_ACCESS_NONE_NONE | PAGE_ORDINARY_MEMORY | PAGE_FRAME_NUMBER(i);
+        }
+        else if(i==512)
+        {
+            page_table[i] = PAGE_ACCESS_RWX_NONE | PAGE_PRESENT | PAGE_DEVICE_MEMORY | PAGE_FRAME_NUMBER(i);
+        }
+        else if(i==514)
+        {
+            page_table[i] = PAGE_ACCESS_RWX_NONE | PAGE_PRESENT | PAGE_DEVICE_MEMORY | PAGE_FRAME_NUMBER(i);
+        }
+        else if(i==515)
+        {
+            page_table[i] = PAGE_ACCESS_RWX_NONE | PAGE_PRESENT | PAGE_DEVICE_MEMORY | PAGE_FRAME_NUMBER(i);
+        }
         else
         {
-            return;
+            page_table[i] = PAGE_ABSENT | PAGE_FRAME_NUMBER(i);
         }
     }
 
-    //u32 x = (u32) video_get_framebuffer();
-    // x /= 1024;
-    // x /= 1024;
-    //page_table[x] = PAGE_ACCESS_RWX_RWX | PAGE_PRESENT | PAGE_ORDINARY_MEMORY | PAGE_FRAME_NUMBER(x); 
-    // u32 np = get_framebuffer_size()/1024/1024;
-    //if(get_framebuffer_size() % (1024*1024))
-    //    np++;
-    // for(u32 j = 0; j<np; j++)
-    //{
-    //    page_table[x+j] = PAGE_ACCESS_RWX_RWX | PAGE_PRESENT | PAGE_ORDINARY_MEMORY | PAGE_FRAME_NUMBER(x+j);
-    //}
+    u32 x = (u32) video_get_framebuffer();
+    x /= 1024;
+    x /= 1024;
+    page_table[x] = PAGE_ACCESS_RWX_RWX | PAGE_PRESENT | PAGE_ORDINARY_MEMORY | PAGE_FRAME_NUMBER(x); 
+    u32 np = video_get_framebuffer_size();
+    np = np/(1024*1024);
+    if(video_get_framebuffer_size() % (1024*1024))
+        np++;
+    for(u32 j = 0; j<np; j++)
+    {
+        page_table[x+j] = PAGE_ACCESS_RWX_RWX | PAGE_PRESENT | PAGE_ORDINARY_MEMORY | PAGE_FRAME_NUMBER(x+j);
+    }
 }
 
 

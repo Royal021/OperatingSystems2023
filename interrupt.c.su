@@ -3,10 +3,10 @@ interrupt.c:109:halt	0	static
 interrupt.c:117:handler_reset	8	static
 interrupt.c:122:handler_undefined	16	static
 interrupt.c:128:handler_svc	8	static
-interrupt.c:133:handler_prefetch_abort	16	static
-interrupt.c:139:handler_data_abort	16	static
-interrupt.c:145:handler_reserved	8	static
-interrupt.c:150:handler_irq	16	static
-interrupt.c:159:handler_fiq	8	static
-interrupt.c:169:interrupt_enable	0	static
-interrupt.c:179:register_interrupt_handler	16	static
+interrupt.c:133:handler_prefetch_abort	24	static
+interrupt.c:159:handler_data_abort	24	static
+interrupt.c:188:handler_reserved	8	static
+interrupt.c:193:handler_irq	16	static
+interrupt.c:202:handler_fiq	8	static
+interrupt.c:212:interrupt_enable	0	static
+interrupt.c:222:register_interrupt_handler	16	static

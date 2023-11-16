@@ -1,1 +1,7 @@
-memory.c:2:memory_barrier	0	static
+memory.c:5:memory_barrier	0	static
+memory.c:16:memory_init	16	static
+memory.c:25:innitalize_page_table	32	static
+memory.c:86:set_page_table	16	static
+memory.c:77:page_table_enable_checks	0	static
+memory.c:95:invalidate_tlb	0	static
+memory.c:103:enable_mmu	8	static
