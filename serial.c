@@ -1,12 +1,8 @@
-//serial.c
-
 #include "serial.h"
 #include "utils.h"
-
-
 #define UART_BASE   (PERIPHERAL_BASE + 0x00201000)
-#define CONTROL   ( (volatile u32*)(UART_BASE+0x30) )
 
+#define CONTROL   ( (volatile u32*)(UART_BASE+0x30) )
 #define CONTROL_ENABLE_TRANSMIT     (1<<8)
 #define CONTROL_ENABLE_RECEIVE      (1<<9)
 #define CONTROL_ENABLE_UART         (1)
@@ -20,11 +16,9 @@
 
 #define DATA  ( (volatile u32*)(UART_BASE+0x00) )
 #define FLAGS ( (volatile u32*)(UART_BASE+0x18) )
-
 //transmit and receive FIFO's
 #define FLAG_TFIFO_FULL             (1<<5)
 #define FLAG_RFIFO_EMPTY            (1<<4)
-
 
 void serial_init()
 {
@@ -49,15 +43,8 @@ void serial_init()
 
 void serial_putc(char ch)
 {
-    while((*FLAGS & FLAG_TFIFO_FULL) != 0)
-    {
-    }
-
+    while( *FLAGS & FLAG_TFIFO_FULL )
+    ;
     *DATA = ch;
 
-
-    //check FLAGS register
-    //wait until FLAG_TFIFO_FULL is zero
-    //Then write character to DATA register
-    //kprintf("We the People of the United States")
 }

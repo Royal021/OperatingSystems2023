@@ -14,36 +14,62 @@ import zlib
 
 TIMEOUT=3
 
-
-with open("testsuite.c","r") as fp:
+with open("user/hello.c","r") as fp:
     ts = fp.read()
-
-if zlib.crc32(ts.strip().encode()) != 0x9fa9d320:
-    print("testsuite.c doesn't match what we expect")
-    sys.exit(1)
 
 async def testIt():
 
     try:
-        with open("testsuite.c") as fp:
+        with open("user/hello.c") as fp:
             tmp=fp.read()
-        idx=tmp.find("//!!");
-        assert idx != -1
-        r = random.randint(0,10000)
-        tmp = tmp[:idx]+f'kprintf("{r}");'+tmp[idx:]
-        with open("testsuite.c","w") as fp:
+        idx1=tmp.find("//!!");
+        assert idx1 != -1
+        r = random.randint(0,1000)
+        tmp = tmp[:idx1]+f'printf("{r}");\n'+tmp[idx1:]
+        with open("user/hello.c","w") as fp:
             fp.write(tmp)
         P = await runIt()
         try:
-            await waitForLine(P,f"{r}All OK")
+            await waitForLine(P,f"{r}Hello!")
+            time.sleep(0.5)
+            regs,mode = await getRegisters(P)
         finally:
             await quitQemu(P)
     finally:
-        with open("testsuite.c","w") as fp:
+        with open("user/hello.c","w") as fp:
             fp.write(ts)
 
     print("\n\n\nOK!")
     return
+
+
+async def getRegisters(P):
+    P.stdin.write(b"\ninfo registers\n~c\ninfo registers\n\n")
+    await P.stdin.drain()
+    data=[]
+    inMonitor=False
+    while True:
+        line = (await readline(P)).strip()
+        if not inMonitor:
+            if line.startswith("(qemu)"):
+                inMonitor=True
+            else:
+                continue
+        if not line.startswith("(qemu)") and " monitor " not in line and line != "":
+            data.append(line)
+        if line.startswith("(qemu)") and len(data) > 0:
+            break
+    data = "\n".join(data)
+    regs = re.findall(r"R\d\d=([A-Fa-f0-9]{8})",data)
+    
+    i = data.find("PSR=")
+    assert i != -1,data
+    j = data.find("\n",i)
+    assert j != -1
+    mode = data[i:j].strip().split()[-1]
+    
+
+    return [int(q,16) for q in regs],mode
 
 
 async def waitForLine(P,txt):

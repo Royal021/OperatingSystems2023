@@ -1,4 +1,5 @@
-#include "memory.h"
+//memory.c
+
 void memory_barrier()
 {
     __asm__ volatile (
@@ -8,4 +9,19 @@ void memory_barrier()
         :                   //no outputs
         : [zero] "r"(0)     //inputs
     );
+}
+
+void __aeabi_memclr(void* ptr, unsigned size)
+{
+    char* p = (char*) ptr;
+    while(size>0){
+        *p=0;
+        p++;
+        size--;
+    }
+}
+
+void __aeabi_memclr8(void* ptr, unsigned size)
+{
+    __aeabi_memclr(ptr,size);
 }

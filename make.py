@@ -2,7 +2,6 @@ import configparser
 import subprocess
 import os
 import sys
-import lab11
 
 inifile=configparser.ConfigParser()
 inifile.read("config.ini")
@@ -12,6 +11,8 @@ cc=conf["compiler"]
 link=conf["linker"]
 qemu=conf["qemu"]
 python=conf["python"]
+userlinker=conf["userlinker"]
+ar=conf["ar"]
 
 cflags=[
     "-std=c11",                     #Use C-11 standard
@@ -33,10 +34,17 @@ cflags=[
     "-Wno-format-extra-args"        #ignore extra printf args
 ]
 
+
 linkflags=[
     "-T", "linkerscript.txt",       #linker script
     "-Map", "kernel.map",           #make a map file (debugging)
     "-o", "kernel.elf"              #output file
+]
+
+usercflags = cflags[:]
+
+userlinkflags=[
+    "-T", "userlinkerscript.txt"
 ]
 
 def doIt(cmd):
@@ -50,22 +58,35 @@ objectfiles=[]
 for filename in os.listdir("."):
     if filename.endswith(".c"):
         obj=filename+".o"
-        doIt( [cc] + cflags + ["-c", "-o", obj, filename] )
+        doIt( [cc] + cflags + [ "-c", "-o", obj, filename] )
         objectfiles.append(obj)
 
 doIt( [link] + linkflags + objectfiles )
 
+
+
+libfiles=[]
+for filename in os.listdir( os.path.join("user","libc")):
+    if filename.endswith(".c"):
+        filename = os.path.join("user","libc",filename)
+        obj=filename+".o"
+        doIt( [cc] + usercflags + ["-c", "-o", obj, filename] )
+        libfiles.append(obj)
+libc = os.path.join("user","libc.a")
+doIt( [ar] + ["rcs", libc] + libfiles )
+
+
+for filename in os.listdir("user"):
+    if filename.endswith(".c"):
+        filename = os.path.join("user",filename)
+        obj=filename+".o"
+        exe=filename.replace(".c",".exe")
+        doIt( [cc] + usercflags + ["-c", "-o", obj, filename] )
+        doIt( [userlinker] + userlinkflags + ["-o", exe, obj, libc ])
+
 doIt( [python,"fool.zip",
     "sd.img", "create","64",
-    "cp","article7.txt","ARTICLE7.TXT",
-    "cp","article1.txt","ARTICLE1.TXT",
-    "cp","article2.txt","ARTICLE2.TXT",
-    "cp","article3.txt","ARTICLE3.TXT",
-    "cp","article4.txt","ARTICLE4.TXT",
-    "cp","article5.txt","ARTICLE5.TXT",
-    "cp","article6.txt","ARTICLE6.TXT",
-    "cp","billofrights.txt","BILL.TXT",
-    "cp","const.txt","CONST.C",
+    "cp","user/hello.exe", "HELLO.EXE"
 ])
 
 doIt( [ qemu,
@@ -73,6 +94,6 @@ doIt( [ qemu,
     "-M", "raspi0",             #machine (raspberry pi 0)
     "-kernel", "kernel.elf",    #kernel file
     "-echr", "126",             #escape character (~)
-    "-serial", "mon:stdio",      #connect serial to console
-    "-drive", "file=sd.img,if=sd,format=raw"
+    "-serial", "mon:stdio",     #connect serial to console
+    "-drive", "file=sd.img,if=sd,format=raw"    #SD card
 ])

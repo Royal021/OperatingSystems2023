@@ -1,11 +1,17 @@
 #pragma once
+
+//need typedef for u32
 #include "utils.h"
-#include "etec3701_10x20.h"
-#include "memory.h"
-typedef unsigned char u8;
-struct Color{
-    u8 r,g,b,i;
+
+
+#pragma pack(push,1)
+struct Pixel{
+    u8 r,g,b;
 };
+#pragma pack(pop)
 
 void video_init();
-void video_draw_character(unsigned char ch, unsigned x, unsigned y, struct Color fg, struct Color bg );
+void video_draw_character(char ch, unsigned x, unsigned y,
+                          struct Pixel fg, struct Pixel bg);
+void video_clear_screen(struct Pixel color);
+void video_scroll(unsigned rowcount);

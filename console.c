@@ -1,101 +1,125 @@
-#include "console.h"
+#include "serial.h"
+#include "video.h"
 
-int doingColor = 0;
+#define USE_COLOR 1
 
-void console_putc(unsigned char ch)
+#define CHAR_WIDTH 10
+#define CHAR_HEIGHT 20
+
+static int row=0;
+static int col=0;
+
+
+static struct Pixel fg = {
+    .r=172,
+    .g=172,
+    .b=172
+};
+
+static struct Pixel bg = {
+    .r=0,
+    .g=0,
+    .b=172
+};
+
+struct Pixel rgb(int x){
+    struct Pixel p;
+    u8 on,off;
+    if( x & 8 ){
+        on=255;
+        off=82;
+    } else {
+        on=172;
+        off=0;
+    }
+
+    p.r = (x&4) ? on:off;
+    p.g = (x&2) ? on:off;
+    p.b = (x&1) ? on:off;
+    return p;
+}
+
+void console_putc(char c)
 {
-    
-    static unsigned int col = 1;
-    static unsigned int row;
-    static struct Color curr_fg = {255,255,255};
-    static struct Color curr_bg;
-    static unsigned int max_col = 81;
-    serial_putc(ch);    
+    static int nextIsEscape=0;
 
+    serial_putc(c);
 
-    if(doingColor)
-    {
-        curr_fg.i = ch & 8;
-        curr_fg.r = getValue(curr_fg.i, ch & 4);
-        curr_fg.g = getValue(curr_fg.i, ch & 2);
-        curr_fg.b = getValue(curr_fg.i, ch & 1);
-        curr_bg.i = ch & 128;
-        curr_bg.r = getValue(curr_bg.i, ch & 64);
-        curr_bg.g = getValue(curr_bg.i, ch & 32);
-        curr_bg.b = getValue(curr_bg.i, ch & 16);
-
-        doingColor = 0;  
+    if( nextIsEscape ){
+        nextIsEscape=0;
+        #if USE_COLOR
+            int b = (c>>4) & 0xf;
+            int f = c&0xf;
+            bg = rgb(b);
+            fg = rgb(f);
+        #endif
         return;
     }
 
-    if(col==max_col)
-    {
-        col=1; 
-        row++;
-    }
-    if (ch == '\n')
-    {
-        row++;
-        col = 1; 
-    }
-    else if (ch == '\r')
-    {
-        col=1;
-    }
-    else if(ch == '\f')
-    {
-        col = 1; 
-        row=0;
-        kmemset(framebuffer,0,pitch*HEIGHT);
-    }
-    else if(ch == '\e')
-    {
-        doingColor = 1;
-        return; 
-    }
-    else if(ch=='\x7f')
-    {
-        if(row ==0 && col == 1 )
-            return;
-        
-        else if(col > 1 )
-        {
-            col -=1; 
-            video_draw_character(' ',col*CHAR_WIDTH,row*CHAR_HEIGHT, curr_fg,curr_bg);  
-        }
-        else
-        {
-            row-=1; 
-            col = 80; 
-            video_draw_character(' ',col*CHAR_WIDTH,row*CHAR_HEIGHT, curr_fg,curr_bg);
-        }
-    }
-    else if (ch=='\t')
-    {
-        col+=8-(col-1)%8;
-    }
-    else
-    {
-        video_draw_character(ch, col*CHAR_WIDTH,row*CHAR_HEIGHT, curr_fg,curr_bg);
-        col++;
-    }
-    if(col>=max_col)
-        {
+    switch(c){
+        case '\n':
             row++;
-            col=1; 
+            col=0;
+            break;
+        case '\r':
+            col=0;
+            break;
+        case '\t':
+        {
+            int amt = 8 - (col%8);
+            col+=amt;
+            if( col >= 80 ){
+                col = 0;
+                row++;
+            }
+            break;
         }
-
-    if(row ==30)
-    {
-        row = 29;
-         kmemcpy(framebuffer, framebuffer+pitch* CHAR_HEIGHT, (600-CHAR_HEIGHT)*pitch);
-         for(int f = 0;f<80;f++)
-         {
-                video_draw_character(' ', col*CHAR_WIDTH,row*CHAR_HEIGHT, curr_fg,curr_bg);
-                col++;
-         }
-         col = 1;
-        // row = 29;
+        case '\f':
+            row=0;
+            col=0;
+            video_clear_screen(bg);
+            break;
+        case '\x7f':
+            col--;
+            if( col<0 ){
+                row--;
+                col=79;
+                if( row < 0 ){
+                    row=0;
+                    col=0;
+                }
+            }
+            video_draw_character( ' ',
+                                (unsigned)(col*CHAR_WIDTH),
+                                (unsigned)(row*CHAR_HEIGHT),
+                                fg,bg
+            );
+            break;
+        case '\e':
+            nextIsEscape=1;
+            break;
+        default:
+            video_draw_character(c,
+                                (unsigned)(col*CHAR_WIDTH),
+                                (unsigned)(row*CHAR_HEIGHT),
+                                fg,bg);
+            col++;
+            if( col == 80 ){
+                row++;
+                col=0;
+            }
     }
-    
+
+    if( row == 30 ){
+        row=29;
+        col=0;
+        video_scroll(CHAR_HEIGHT);
+        unsigned y = (unsigned)(row*CHAR_HEIGHT);
+        unsigned x=0;
+        for(int i=0;i<80;++i,x+=CHAR_WIDTH){
+            video_draw_character(' ', x,y, fg,bg );
+        }
+    }
+
+
 }

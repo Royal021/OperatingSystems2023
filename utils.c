@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "kprintf.h"
 
 extern void* _start_bss;
 extern void* _end_bss;
@@ -13,72 +14,67 @@ void bss_init()
 void kmemset(void* p, u8 val, u32 count)
 {
     u8* c = (u8*)p;
-    for(u32 i=0; i<count; i++, c++)
-    {
-        *c = val;
+    while(count>0){
+        *c=val;
+        c++;
+        count--;
     }
 }
 
-void kmemcpy( void* dest, const void* src, unsigned count)
+void kmemcpy(void* dest, const void* src, unsigned count)
 {
-    //frame
-    //precondition, no overlap or src>dest
-    char *d = (char*) dest;
-    char *s = (char*) src;
-    while(count-->0)
-    {
-        *d++ = *s++;
+    char* d = (char*) dest;
+    char* s = (char*) src;
+    while(count>0){
+        *d=*s;
+        d++;
+        s++;
+        count--;
     }
 }
 
-
-u8 getValue(u8 i, u8 color)
-{
-
-    if(!color && !i)
-        return 0;
-    if(!color && i)
-        return 82;
-    if(color && !i)
-        return 172;
-    else
-        return 255;
+void halt(){
+    __asm__ volatile(
+        "mov r0,#0\n"
+        "mcr p15,0,r0,c7,c0,4"
+        : : : "r0"
+    );
 }
 
-void panic(const char *s)
-{
-    kprintf("PANIC PANIC PANIC AT THE DISCO\n");
-    while(1){;}
+void panic(const char* msg){
+    kprintf("\n\nPANIC: %s\n",msg);
+    while(1){
+        halt();
+    }
 }
 
 char toupper(char c)
 {
-    if( c>= 'a' && c <= 'z')
-    {
-        c-=32;
-    }
-    return c;
+    if( c >= 'a' && c <= 'z' )
+        return c-32;
+    else
+        return c;
 }
 
-//compare blocks of memory pointed to by a and b , look at count bytes
-//return negative if a<b, zero if a == b, positive if a>b
 int kmemcmp(const void* a, const void* b, unsigned count)
 {
-    char *ap = (char*) a;
-    char *bp = (char*) b;
+    char* aa = (char*) a;
+    char* bb = (char*) b;
     while(count>0){
-        if(*ap<*bp)
+        if( *aa < *bb )
             return -1;
-        if(*ap>*bp)
+        if( *aa > *bb )
             return 1;
-        --count;
-        ap++;
-        bp++;
+        aa++;
+        bb++;
+        count--;
     }
     return 0;
 }
 
-u32 Min32(u32 X,u32 Y) 
+unsigned min(unsigned a, unsigned b)
 {
-   return (((X) < (Y)) ? (X) : (Y));
+    if(a<=b)
+        return a;
+    return b;
 }

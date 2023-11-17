@@ -1,97 +1,82 @@
 #pragma once
 
-#include "timer.h"
+
 #include "utils.h"
-#include "errno.h"
 
-#define EMMC_BASE  (PERIPHERAL_BASE+0x00300000)
-#define CONTROL0  ( (volatile u32*)(EMMC_BASE+0x28) )
-#define CONTROL1   ( (volatile u32*)(EMMC_BASE+0x2c) )
+#pragma pack(push,1)
+struct VBR{
+    char jmp[3];
+    char oem[8];
+    u16 bytes_per_sector;
+    u8 sectors_per_cluster;
+    u16 reserved_sectors;
+    u8 num_fats;
+    u16 UNUSED_num_root_dir_entries;
+    u16 UNUSED_num_sectors_small;
+    u8 id ;
+    u16 UNUSED_sectors_per_fat_12_16;
+    u16 sectors_per_track;
+    u16 num_heads;
+    u32 first_sector;
+    u32 num_sectors;
+    u32 sectors_per_fat;
+    u16 flags;
+    u16 version;
+    u32 root_cluster;
+    u16 fsinfo_sector;
+    u16 backup_boot_sector;
+    char reservedField[12];
+    u8 drive_number;
+    u8 flags2;
+    u8 signature;
+    u32 serial_number;
+    char label[11];
+    char identifier[8];
+    char code[420];
+    u16 checksum;
+};
 
-//If a bit in here is 1, the corresponding interrupt is enabled
-#define INTERRUPT_MASK    ( (volatile u32*)(EMMC_BASE+0x34) )
-#define INTERRUPT_ENABLE  ( (volatile u32*)(EMMC_BASE+0x38) )
-
-//all the non-reserved bits in the interrupt register
-#define INTERRUPT_FLAGS_ALL_EVENTS          (0x017ff137)
-
-#define COMMAND_INDEX(x)        ( x<<24 )
-#define COMMAND_GO_IDLE         ( COMMAND_INDEX(0) )
-
-#define COMMAND_HAS_RESPONSE_6_BYTES            ( 2<<16 )
-#define COMMAND_SEND_INTERFACE_CONDITION    \
-    ( COMMAND_INDEX(8) | COMMAND_HAS_RESPONSE_6_BYTES )
-
-#define APP_COMMAND_SEND_OPERATING_CONDITION    \
-    ( COMMAND_INDEX(41) | COMMAND_HAS_RESPONSE_6_BYTES )
-
-#define COMMAND_HAS_RESPONSE_17_BYTES           ( 1<<16 )
-#define COMMAND_SEND_CARD_ID                    ( COMMAND_INDEX(2) |\
-                                        COMMAND_HAS_RESPONSE_17_BYTES)
-#define COMMAND_SEND_RELATIVE_ADDRESS           ( COMMAND_INDEX(3) |\
-                                        COMMAND_HAS_RESPONSE_6_BYTES)
-
-#define COMMAND_HAS_RESPONSE_6_BYTES_WITH_BUSY  ( 3<<16 )
-#define COMMAND_CARD_SELECT                     ( COMMAND_INDEX(7) |\
-                                COMMAND_HAS_RESPONSE_6_BYTES_WITH_BUSY )
+#pragma pack(pop)
 
 
-#define STATUS                      ( (volatile u32*)(EMMC_BASE+0x24) )
-#define DATA                        ( (volatile u32*)(EMMC_BASE+0x20) )
-#define BLOCK_SIZE_AND_COUNT        ( (volatile u32*)(EMMC_BASE+0x04) )
-#define STATUS_READ_AVAILABLE       (1<<9)
-#define STATUS_DATA_INHIBIT         (1<<1)
-#define MAKE_BLOCK_SIZE_AND_COUNT( size,count )  ( (count<<16) | size )
-#define COMMAND_INVOLVES_DATA                   ( 1<<21 )
-#define COMMAND_READS_FROM_CARD                 ( 1<<4  )
-#define APP_COMMAND_SEND_SCR               (\
-             COMMAND_INDEX(51) |            \
-             COMMAND_INVOLVES_DATA |        \
-             COMMAND_HAS_RESPONSE_6_BYTES | \
-             COMMAND_READS_FROM_CARD        )
 
-#define STATUS_CMD_INHIBIT  (1)
-#define INTERRUPT_FLAGS     ( (volatile u32*)(EMMC_BASE+0x30) )
 
-#define ARG1     ( (volatile u32*)(EMMC_BASE+0x08) )
-#define COMMAND  ( (volatile u32*)(EMMC_BASE+0x0c) )
+#pragma pack(push,1)
+struct DirEntry {
+    char base[8];
+    char ext[3];
+    unsigned char attributes;
+    unsigned char reserved;
+    unsigned char creationTimeSecondsTenths;
+    unsigned short creationTime;
+    unsigned short creationDate;
+    unsigned short lastAccessDate;
+    unsigned short clusterHigh;
+    unsigned short lastModifiedTime;
+    unsigned short lastModifiedDate;
+    unsigned short clusterLow;
+    unsigned int size;
+};
+#pragma pack(pop)
 
-#define INDEX_FROM_COMMAND(x)                   ( (x>>24) & 0x3f )
 
-#define INTERRUPT_FLAGS_COMMAND_DONE        (1   )
-#define RESPONSE0                   ( (volatile u32*)(EMMC_BASE+0x10) )
-#define RESPONSE1                   ( (volatile u32*)(EMMC_BASE+0x14) )
-#define RESPONSE2                   ( (volatile u32*)(EMMC_BASE+0x18) )
-#define RESPONSE3                   ( (volatile u32*)(EMMC_BASE+0x1c) )
+#pragma pack(push,1)
+struct LFNEntry {
+	unsigned char sequenceNumber;
+	char name0[10];
+	char attributes;	//always 15
+	char zero;		//always zero
+	char checksum;
+	char name1[12];
+	unsigned short alsozero;	//always zero
+	char name2[4];
+};
+#pragma pack(pop)
 
-#define HOST_INFO                   ( (volatile u32*)(EMMC_BASE+0xfc) )
+extern struct VBR vbr;
+extern u32 fat[];
 
-//interrupt flags; called INTERRUPT in documentation
-//This tells which interrupt(s) are being raised.
-#define INTERRUPT_FLAGS_COMMAND_ERROR       (1<<24)
-#define INTERRUPT_FLAGS_DATA_END_ERROR      (1<<22)
-#define INTERRUPT_FLAGS_DATA_CRC_ERROR      (1<<21)
-#define INTERRUPT_FLAGS_DATA_TIMEOUT        (1<<20)
-#define INTERRUPT_FLAGS_BAD_INDEX           (1<<19)
-#define INTERRUPT_FLAGS_COMMAND_END_ERROR   (1<<18)
-#define INTERRUPT_FLAGS_COMMAND_CRC_ERROR   (1<<17)
-#define INTERRUPT_FLAGS_COMMAND_TIMEOUT     (1<<16)
-#define INTERRUPT_FLAGS_GENERIC_ERROR       (1<<15)
-//non-error events
-#define INTERRUPT_FLAGS_DATA_TRANSFER_DONE  (1<<1)
-#define INTERRUPT_FLAGS_BLOCK_GAP           (1<<2)
-#define INTERRUPT_FLAGS_WRITE_READY         (1<<4)
-#define INTERRUPT_FLAGS_READ_READY          (1<<5)
-#define INTERRUPT_FLAGS_CARD_IRQ            (1<<8)
-#define INTERRUPT_FLAGS_CLOCK_RETUNE        (1<<12)
-#define INTERRUPT_FLAGS_BOOT_ACK            (1<<13)
-#define INTERRUPT_FLAGS_BOOT_END            (1<<14)
-
-//all the error bits in the interrupt register
-#define INTERRUPT_FLAGS_ALL_ERROR_BITS      (0x017e8000)
-
-void delay_millisec(unsigned num);
 void sd_init();
-int sd_write_sector(unsigned sector, const void* buffer);
 int sd_read_sector(unsigned sector, void* buffer);
-int disc_read_sectors( unsigned sector, unsigned count, void *buffer);
+int sd_read_sectors(unsigned sector, unsigned count, void* buffer);
+unsigned clusterNumberToSectorNumber( unsigned clnum );

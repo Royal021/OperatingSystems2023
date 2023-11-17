@@ -1,0 +1,5 @@
+[config]
+compiler=c:/program files/llvm/bin/clang.exe
+linker=c:/program files/llvm/bin/lld-link.exe
+python=c:/users/jhudson2/appdata/local/programs/python/python39/python.exe
+qemu=/usr/bin/qemu-system-i386

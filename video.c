@@ -1,4 +1,8 @@
+#include "utils.h"
 #include "video.h"
+#include "memory.h"
+#include "etec3701_10x20.h"
+#include "kprintf.h"
 
 #define VIDEO_MAILBOX  (PERIPHERAL_BASE + 0x0000b880)
 #define VIDEO_STATUS   ( (volatile u32*)(VIDEO_MAILBOX+0x18) )
@@ -8,8 +12,11 @@
 #define MAILBOX_FULL        ((u32)(1<<31))
 #define MAILBOX_EMPTY       ((u32)(1<<30))
 
-#define WIDTH 800
-#define HEIGHT 600
+#define SCREEN_WIDTH  800
+#define SCREEN_HEIGHT 600
+
+static volatile u8* framebuffer;
+static u32 pitch;
 
 #pragma pack(push,1)
 struct FBInfo{
@@ -26,11 +33,6 @@ struct FBInfo{
 };
 #pragma pack(pop)
 
-#pragma pack(push,1)
-struct Pixel{
-    u8 r,g,b;
-};
-#pragma pack(pop)
 
 
 static void mailbox_write( u32 channel, u32 data)
@@ -58,90 +60,72 @@ static u32 mailbox_read(u32 channel){
     }
 }
 
+void video_set_pixel( unsigned x, unsigned y, struct Pixel pix)
+{
+    struct Pixel* p = (struct Pixel*)(framebuffer + pitch*y);
+    p += x;
+    *p = pix;
+}
 
-volatile u8* framebuffer;
-u32 pitch;
 
+void video_draw_character(char ch, unsigned x, unsigned y,
+                          struct Pixel fg, struct Pixel bg)
+{
+    unsigned idx = (unsigned)(ch);
+    idx &= 0xff;
+    for(unsigned i=0;i<CHAR_HEIGHT;++i){
+        unsigned mask = 1<<(CHAR_WIDTH-1);
+        for(unsigned j=0;j<CHAR_WIDTH;++j,mask>>=1){
+            if( font_data[idx][i] & mask ){
+                video_set_pixel(x+j, y+i, fg );
+            } else
+                video_set_pixel(x+j, y+i, bg );
+        }
+    }
+}
 
-struct Pixel foregroundColor;
-struct Pixel backgroundColor;
+void video_clear_screen(struct Pixel color)
+{
+    volatile u8* p = framebuffer;
+    for(int y=0;y<SCREEN_HEIGHT;++y, p+=pitch){
+        struct Pixel* pix = (struct Pixel*) p;
+        for(int x=0;x<SCREEN_WIDTH;++x,pix++){
+            *pix = color;
+        }
+    }
+}
+
 
 void video_init()
 {
-    struct FBInfo f __attribute__((aligned(16)));
-    f.width = WIDTH; 
-    f.height = HEIGHT;
-    f.virtualWidth = f.width;
-    f.virtualHeight = f.height;
-    f.depth = 24;
-    f.pitch = 0;
-    f.xoffset = 0;
-    f.yoffset = 0;
-    f.pointer = 0;
-    f.size = 0;
+    struct FBInfo finfo __attribute__((aligned(16)))= {
+        .width = SCREEN_WIDTH,
+        .virtualWidth = SCREEN_WIDTH,
+        .height = SCREEN_HEIGHT,
+        .virtualHeight = SCREEN_HEIGHT,
+        .depth = 24
+    };
 
-    foregroundColor.r = 172;
-    foregroundColor.g = 172;
-    foregroundColor.b = 172;
-
-    backgroundColor.r = 0;
-    backgroundColor.g = 0;
-    backgroundColor.b = 172;
-
-    int running = 1;
-    while(running)
-    {
-        unsigned write_address = (unsigned)&f;
-        
-        mailbox_write(1, write_address>>4);
-        if(mailbox_read(1) ==0 && f.pointer != 0)
-        {
-            running=0;
-        }
+    u32 tmp = (u32) &finfo;
+    while(1){
+        mailbox_write(1, tmp>>4);
+        u32 v = mailbox_read(1);
+        if( v == 0 && finfo.pointer )
+            break;
     }
-    framebuffer = ( u8*) f.pointer;
-    pitch = f.pitch;
-} 
 
-
-void video_set_pixel( unsigned x, unsigned y, struct Pixel pix)
-{
-    if(x >= WIDTH)
-        return;
-    if(y >= HEIGHT)
-        return;
-
-    // go to start of row that we are drawing into
-    volatile struct Pixel* row = (volatile struct Pixel*)(framebuffer + y * pitch);
-    
-    row[x] = pix;
+    framebuffer = finfo.pointer;
+    pitch = finfo.pitch;
 }
 
-//return true if bit ii is 1 in value x
-#define IS_BIT_SET(x,i) ((1<<i) & x)
-
-
-
-
-void video_draw_character(unsigned char ch, unsigned x, unsigned y, struct Color fg, struct Color bg )
+void video_scroll(unsigned rowcount)
 {
-    foregroundColor.r = fg.r;
-    foregroundColor.g = fg.g;
-    foregroundColor.b = fg.b;
-    backgroundColor.r = bg.r;
-    backgroundColor.g = bg.g;
-    backgroundColor.b = bg.b;
-    for(unsigned row=0; row<CHAR_HEIGHT;++row)
-    {
-        for(unsigned col=0; col<CHAR_WIDTH;++col)
-        {
-            unsigned xx = x-col-1;
-            unsigned yy = y+row;
-            
-            video_set_pixel(xx,yy, 
-                IS_BIT_SET(font_data[ch][row],col) ?
-                    foregroundColor : backgroundColor
-            );
-        }
+    char* d = (char*) framebuffer;
+    char* s = (char*) (framebuffer + rowcount * pitch );
+    unsigned num = SCREEN_WIDTH*3;
+    for(unsigned y=rowcount;y<SCREEN_HEIGHT;y++){
+        kmemcpy(d,s,num);
+        d+=pitch;
+        s+=pitch;
     }
 }
