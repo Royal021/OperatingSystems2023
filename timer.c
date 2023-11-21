@@ -10,7 +10,7 @@ void timer_init()
 
 }
 
-void timer_interrupt()
+void timer_interrupt(unsigned registers[])
 {
     u32 v = *CONTROL_STATUS;
     if(v & 2)
@@ -19,7 +19,7 @@ void timer_interrupt()
         //WRITE 2 TO CONTROL STATUS
         *CONTROL_STATUS =2;
         jiffies+=1;
-
+        schedule(registers); //defined in sched.c
     }
 }
 

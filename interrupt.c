@@ -41,13 +41,16 @@ __asm__ (
         "pop {r0-r12,lr}\n"
         "subs pc,lr,#0\n"
     
-        "asm_handler_svc:\n"
-    "ldr sp, =svc_stack\n"
-    "add sp, " STACK_SIZE "\n"
-    "push {r1-r12,lr}\n"        //changed
-    "bl handler_svc\n"
-    "pop {r1-r12,lr}\n"         //changed
-    "subs pc,lr,#0\n"
+    "asm_handler_svc:\n"
+        "mrs r13, cpsr\n"       //get cpsr to r13 (banked sp)
+        "orr r13, #0x80\n"      //toggle bit 7 (IRQ inhibit)
+        "msr cpsr, r13\n"       //set cpsr
+        "ldr sp, =svc_stack\n"
+        "add sp, " STACK_SIZE "\n"
+        "push {r1-r12,lr}\n"        //changed
+        "bl handler_svc\n"
+        "pop {r1-r12,lr}\n"         //changed
+        "subs pc,lr,#0\n"
     "asm_handler_prefetch_abort:\n"
         "ldr sp, =prefetch_abort_stack\n"
         "add sp," STACK_SIZE_STR "\n"
@@ -79,6 +82,7 @@ __asm__ (
         "add sp, " STACK_SIZE_STR "\n"
         "sub lr, #4\n"
         "push {r0-r12,lr}\n"
+        "mov r0, sp\n"              
         "bl handler_irq\n"
         "pop {r0-r12,lr}\n"
         "subs pc,lr,#0\n"
@@ -191,13 +195,10 @@ void handler_reserved()
     kprintf("RESERVED\n");
     halt();
 }
-void handler_irq()
+void handler_irq(unsigned registers[])
 {
-    //kprintf("IRQ\n");
-    for(int i =0; i<numHandlers;i++)
-    {
-        //what needs to be done
-        handlers[i]();
+    for(int i=0;i<numHandlers;++i){
+        handlers[i](registers);
     }
 }
 void handler_fiq()

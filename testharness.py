@@ -14,58 +14,53 @@ import zlib
 
 TIMEOUT=3
 
-with open("user/hello.c","r") as fp:
-    ts = fp.read()
+with open("user/a.c","r") as fp:
+    adata = fp.read()
 
 async def testIt():
 
+    r = random.randrange( ord('A'), ord('Z') )
+    r = chr(r)
+
+    ok=[False]*3
+    spurious=False
+
     try:
-        with open("user/hello.c","w") as fp:
-            fp.write( decompressText(helloNoFault) )
+        with open("user/a.c","w") as fp:
+            fp.write( adata.replace('"A"',f'"{r}"') )
         P = await runIt()
         try:
-            await waitForLine(P,"Hello!")
-            time.sleep(0.5)
-            regs,mode = await getRegisters(P)
+            await waitForLine(P,"qemu-system-arm")
+            while True:
+                data = await readData(P,100)
+                if r*5 in data:
+                    ok[0]=True
+                if "B"*5 in data:
+                    ok[1]=True
+                if "C"*5 in data:
+                    ok[2]=True
+                for x in "ADEFGHIJKLMNOPQRSTUVWXYZ":
+                    if x != r and x*5 in data:
+                        spurious=True
+                        break
+                        return
+                if False not in ok:
+                    break
+
         finally:
             await quitQemu(P)
-
-        if mode != "svc32" and mode != "usr32":
-            print("Bad CPU mode for hello-nofault.c")
-            return
-
-        with open("user/hello.c","w") as fp:
-            fp.write( decompressText(helloPfa) )
-        P = await runIt()
-        try:
-            await waitForLine(P,"Hello!")
-            time.sleep(0.5)
-            regs,mode = await getRegisters(P)
-        finally:
-            await quitQemu(P)
-
-        if mode != "abt32":
-            print("Bad CPU mode for hello-pfa.c")
-            return
-
-        with open("user/hello.c","w") as fp:
-            fp.write( decompressText(helloData) )
-        P = await runIt()
-        try:
-            await waitForLine(P,"Hello!")
-            time.sleep(0.5)
-            regs,mode = await getRegisters(P)
-        finally:
-            await quitQemu(P)
-
-        if mode != "abt32":
-            print("Bad CPU mode for hello-da.c")
-            return
-
 
     finally:
-        with open("user/hello.c","w") as fp:
-            fp.write(ts)
+        with open("user/a.c","w") as fp:
+            fp.write(adata)
+
+    if spurious:
+        print("\n\n\nSpurious letters?")
+        return
+
+    if False in ok:
+        print("\n\n\nBad")
+        return
 
     print("\n\n\nAll OK")
     return
@@ -172,24 +167,23 @@ async def readline(P):
         if len(line) > 16384:
             raise Exception("Too much data for one line")
 
-helloNoFault=(
-"QlpoOTFBWSZTWSE4PUQAAAjfgEQQeHXgCABAAA4/59+KIACVRCTIZABiGgB6RoGSFPNSfqRk"
-"NGjJo9Royeo8mkacFgjnwVEaEiCHk4H1pZa5hxGczLkxY+aq452JxfulRqgaCBpSsHTwv1es"
-"VAQl2J2DAXj4TMDAYCOfW+im3XQ4TYXdjOpQxulqoAj4sVyD8OjXiVEV4QcWumt4NF+LuSKc"
-"KEgQnB6iAA=="
-)
-helloPfa=(
-"QlpoOTFBWSZTWY2lz4wAAA3fgEQQeHX0mhFCRA4/59+qMADaLDKTJqehPRPSDRpphA000Ymg"
-"YAaaNBpiAAABkAMlMmnqaIGmgyNANABo2owkNhTIkEW6JzohG5yIJ2qQAGEi02x1eemq7FTm"
-"eErcJhheYt7i4sECYUBeq1Ql2UxDlkmlV7Y0SigoUV2CEOTBMHhYEs56w1BWzs1kLlrjOc9y"
-"vGVBSMT7xxNRfQXxmaqjmzN4pyts6TwJeQ1UiMThZw+yG4boMjX50hs1ZomlGAukvWooVQBd"
-"wgBnyzxIKxKtj7DNWj2BtDTeZ6ojQfJsAzUX/F3JFOFCQjaXPjA="
-)
-helloData=(
-"QlpoOTFBWSZTWdr4nesAAAtfgEQQeHX1CgBAAA4/59/KMAC7axGpAABoAaAAyANFTyNqbVPJ"
-"DTyhoaZHqAANIaRMARgARptTCZoogDa56DfC1mDWtCIDdIgSiAxKliGj/N5SmMTjZhWSgUCo"
-"+Oip2MOFy7/RNw3UjadwaGkgi/ODwC8hVXpDDMsFH7VoqsE0SQnoLnksHoUO02IMRiSOkIHz"
-"gP52I6KJXlSxApSd8QAVztQsxj6JrsDvxowNYU73xpqyM+xdyRThQkNr4nes"
-)
+
+async def readData(P,amount):
+    line=""
+    while True:
+        task = asyncio.create_task( P.stdout.read(amount) )
+        done,pending = await asyncio.wait( [task] , timeout=TIMEOUT )
+        if len(done) == 0:
+            raise Exception("Timeout: No output produced")
+        c = done.pop().result()
+        if len(c) == 0:
+            return line
+        line += c.decode(errors="backslashreplace")
+        if len(line) >= amount:
+            print(line)
+            return line
+        amount -= len(c)
+        if len(line) > 65536:
+            raise Exception("Too much data for one read")
 
 asyncio.run(main())

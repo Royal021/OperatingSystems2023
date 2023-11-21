@@ -35,6 +35,17 @@ void kmain()
     kprintf("exec returned %d\n", rv);
     //we should not get here
     panic("Could not exec!");
+    int rv = spawn("A.EXE" );
+    if( rv < 0 )
+        panic("Cannot run init task A");
+    rv = spawn("B.EXE" );
+    if( rv < 0 )
+        panic("Cannot run init task B");
+    rv = spawn("C.EXE" );
+    if( rv < 0 )
+        panic("Cannot run init task C");
+    sched_enable();
     while(1){
+        halt();
     }
 }

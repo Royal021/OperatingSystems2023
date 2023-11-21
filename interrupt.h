@@ -11,7 +11,7 @@
 #define DISABLE1     ( (volatile u32*)(CONTROLLER_BASE+0x220) )
 #define MAX_HANDLERS 8
 
-typedef void (*InterruptHandler)(void);
+typedef void (*InterruptHandler)(unsigned*);
 
 extern void* interrupt_table_begin;
 extern void* interrupt_table_end;

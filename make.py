@@ -86,9 +86,11 @@ for filename in os.listdir("user"):
         doIt( [userlinker] + userlinkflags + ["-o", exe, obj, libc ])
 
 ##From 36 
-doIt( [python, "fool.zip", "sd.img",
-    "create", "64",
-    "cp", "user/hello.exe", "HELLO.EXE"
+doIt( [python,"fool.zip",
+    "sd.img", "create","64",
+    "cp","user/a.exe", "A.EXE",
+    "cp","user/b.exe", "B.EXE",
+    "cp","user/c.exe", "C.EXE"
 ])
 
 doIt( [ qemu,
