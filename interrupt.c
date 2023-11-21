@@ -41,13 +41,13 @@ __asm__ (
         "pop {r0-r12,lr}\n"
         "subs pc,lr,#0\n"
     
-        "asm_handler_svc:\n"
-    "ldr sp, =svc_stack\n"
-    "add sp, " STACK_SIZE "\n"
-    "push {r1-r12,lr}\n"        //changed
-    "bl handler_svc\n"
-    "pop {r1-r12,lr}\n"         //changed
-    "subs pc,lr,#0\n"
+    "asm_handler_svc:\n"
+        "ldr sp, =svc_stack\n"
+        "add sp, " STACK_SIZE "\n"
+        "push {r1-r12,lr}\n"        //changed
+        "bl handler_svc\n"
+        "pop {r1-r12,lr}\n"         //changed
+        "subs pc,lr,#0\n"
     "asm_handler_prefetch_abort:\n"
         "ldr sp, =prefetch_abort_stack\n"
         "add sp," STACK_SIZE_STR "\n"
